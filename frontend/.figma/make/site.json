@@ -1,0 +1,10 @@
+{
+  "description": "Generates tailored screen designs based on user prompts to streamline UI planning and enhance design efficiency for developers and designers.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

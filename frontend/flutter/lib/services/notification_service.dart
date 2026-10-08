@@ -1,0 +1,157 @@
+import 'package:flutter/foundation.dart';
+
+import 'trip_service.dart';
+
+enum NotificationKind { itineraryChange, general }
+
+class AppNotification {
+  const AppNotification({
+    required this.id,
+    required this.kind,
+    required this.emoji,
+    required this.title,
+    required this.body,
+  });
+
+  final String id;
+  final NotificationKind kind;
+  final String emoji;
+  final String title;
+  final String body;
+}
+
+/// 홈 배지와 알림함이 함께 사용하는 앱 내부 알림 상태입니다.
+///
+/// 현재 MVP에서는 Backend에 실제 저장된 Trip의 시작일을 기준으로
+/// D-7, D-1, D-Day 알림만 생성합니다.
+class NotificationService {
+  NotificationService._();
+
+  static final List<AppNotification> notices = <AppNotification>[];
+
+  static final ValueNotifier<Set<String>> _readIds = ValueNotifier(<String>{});
+
+  static ValueListenable<Set<String>> get readIds => _readIds;
+
+  static bool isUnread(String id) => !_readIds.value.contains(id);
+
+  static int get unreadCount =>
+      notices.where((item) => isUnread(item.id)).length;
+
+  static int get unreadItineraryCount => notices
+      .where(
+        (item) =>
+            item.kind == NotificationKind.itineraryChange && isUnread(item.id),
+      )
+      .length;
+
+  static int get unreadGeneralCount => notices
+      .where(
+        (item) => item.kind == NotificationKind.general && isUnread(item.id),
+      )
+      .length;
+
+  static Future<void> refreshFromTrips() async {
+    final trips = await TripService().list();
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    final nextNotices = <AppNotification>[];
+
+    for (final trip in trips) {
+      final startDate = trip.startDate;
+      if (startDate == null) {
+        continue;
+      }
+
+      final status = trip.status.toUpperCase();
+
+      if (status == 'CANCELLED' ||
+          status == 'COMPLETED' ||
+          status == 'IN_PROGRESS' ||
+          status == 'ARCHIVED') {
+        continue;
+      }
+
+      final startDay = DateTime(startDate.year, startDate.month, startDate.day);
+
+      final daysUntilStart = startDay.difference(today).inDays;
+      final tripName = _tripName(trip);
+
+      if (daysUntilStart == 7) {
+        nextNotices.add(
+          AppNotification(
+            id: 'trip-${trip.tripId}-d7',
+            kind: NotificationKind.general,
+            emoji: '✈️',
+            title: '여행 D-7',
+            body: '$tripName이 7일 남았어요.',
+          ),
+        );
+      } else if (daysUntilStart == 1) {
+        nextNotices.add(
+          AppNotification(
+            id: 'trip-${trip.tripId}-d1',
+            kind: NotificationKind.general,
+            emoji: '🧳',
+            title: '여행 D-1',
+            body: '$tripName이 내일 시작돼요.',
+          ),
+        );
+      } else if (daysUntilStart == 0) {
+        nextNotices.add(
+          AppNotification(
+            id: 'trip-${trip.tripId}-day',
+            kind: NotificationKind.general,
+            emoji: '🎉',
+            title: '오늘 여행이 시작돼요',
+            body: '$tripName 일정이 오늘 시작돼요.',
+          ),
+        );
+      }
+    }
+
+    notices
+      ..clear()
+      ..addAll(nextNotices);
+
+    final activeIds = notices.map((item) => item.id).toSet();
+
+    _readIds.value = _readIds.value
+        .where((id) => activeIds.contains(id))
+        .toSet();
+  }
+
+  static String _tripName(TripListItem trip) {
+    final title = trip.title?.trim();
+    if (title != null && title.isNotEmpty) {
+      return title;
+    }
+
+    final destination = trip.destination?.trim();
+    if (destination != null && destination.isNotEmpty) {
+      return '$destination 여행';
+    }
+
+    return '여행';
+  }
+
+  // 현재 실제 협업 일정 변경 이벤트가 없으므로
+  // 기존 호출부 호환성만 유지하고 알림은 생성하지 않습니다.
+  static void addEditStarted({required String place}) {}
+
+  static void addEditCompleted({required String place}) {}
+
+  static void markRead(String id) {
+    if (!isUnread(id)) {
+      return;
+    }
+
+    _readIds.value = {..._readIds.value, id};
+  }
+
+  static void markAllRead() {
+    _readIds.value = notices.map((item) => item.id).toSet();
+  }
+}

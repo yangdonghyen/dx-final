@@ -1,0 +1,6 @@
+﻿{
+  "item_templates": [
+    {"sequence": 1, "item_type": "PLACE", "place_id": 101, "title": "Mock cultural visit", "start_time": "10:00", "end_time": "11:30", "recommendation_reason": "Deterministic mock itinerary item"},
+    {"sequence": 2, "item_type": "PLACE", "place_id": 104, "title": "Mock cafe rest", "start_time": "12:00", "end_time": "13:00", "recommendation_reason": "Deterministic mock rest item"}
+  ]
+}

@@ -1,0 +1,38 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+local.properties
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local test infrastructure and recovery copies
+.task71_mysql/
+.pytest_tmp/
+**/.pytest_tmp/
+*.backup_*
+*.bak
+*.bak-*
+
+# Flutter / Dart
+.dart_tool/
+build/
+frontend/flutter/.dart_define.dev.json
+
+# Node
+node_modules/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

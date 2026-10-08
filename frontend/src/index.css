@@ -1,0 +1,358 @@
+/* 전역 디자인 토큰, 모바일 터치 보정, 스크롤바 숨김과 공통 카드/시니어 모드 스타일을 정의한다. */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans KR", system-ui, sans-serif;
+  --color-primary: #4169d8;
+  --color-primary-light: #eef2ff;
+  --color-primary-dark: #2f4fbf;
+  --color-surface: #ffffff;
+  --color-bg: #f7f8ff;
+  --color-muted: #8b92a5;
+  --color-border: #e8eaf2;
+  --color-danger: #ff4b4b;
+  --color-success: #2dbe88;
+  --color-warning: #ffb020;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "Noto Sans KR", system-ui, sans-serif;
+  background: #f7f8ff;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.gradient-bg {
+  background: linear-gradient(
+    160deg,
+    #f0f4ff 0%,
+    #f7f0ff 30%,
+    #f0faff 60%,
+    #f7f8ff 100%
+  );
+}
+
+.card-shadow {
+  box-shadow:
+    0 2px 12px rgba(65, 105, 216, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.senior-mode {
+  font-size: 110%;
+}
+
+/* 비 오는 계획에서는 오늘의 여행 제목부터 일정 목록 바탕까지 정적인 흐린 날 배경을 이어준다. */
+.weather-rain-gradient {
+  background: linear-gradient(180deg, #cbd5e1 0%, #e2e8f0 48%, #f1f5f9 100%);
+}
+
+.weather-sun-glow {
+  position: absolute;
+  top: -42px;
+  right: -32px;
+  width: 116px;
+  height: 116px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 228, 119, 0.68) 0%, rgba(255, 230, 137, 0.25) 46%, transparent 70%);
+  animation: weather-sun-breathe 3.6s ease-in-out infinite;
+}
+
+@keyframes weather-sun-breathe {
+  0%, 100% { transform: scale(0.92); opacity: 0.5; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-sun-glow { animation: none; }
+}
+
+/* 더운 날에는 일정 카드 뒤로 은은한 햇살과 따뜻한 반사광을 보여준다. */
+.weather-travel-sun {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 600;
+  height: 262px;
+  overflow: hidden;
+  background: radial-gradient(ellipse 74% 44% at 94% 0%, rgba(255, 210, 84, 0.30), transparent 68%);
+}
+
+.weather-sunbeam {
+  position: absolute;
+  top: -16%;
+  right: 7%;
+  width: 56%;
+  height: 78%;
+  transform: rotate(24deg);
+  transform-origin: top right;
+  background: linear-gradient(90deg, transparent, rgba(255, 222, 123, 0.32), transparent);
+  animation: weather-sunbeam-shimmer 4.6s ease-in-out infinite;
+}
+
+.weather-sunbeam-secondary {
+  right: 33%;
+  opacity: 0.55;
+  animation-delay: -2.3s;
+}
+
+@keyframes weather-sunbeam-shimmer {
+  0%, 100% { opacity: 0.28; transform: rotate(24deg) translateX(0); }
+  50% { opacity: 0.65; transform: rotate(24deg) translateX(-14px); }
+}
+/* 오른쪽 상단에서 햇살이 맺히고 여러 갈래 빛이 아래로 비치는 효과 */
+.weather-sun-orb {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 94px;
+  height: 94px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 42% 42%, rgba(255, 253, 213, 0.98) 0 10%, rgba(255, 226, 116, 0.78) 32%, rgba(255, 196, 67, 0.22) 58%, transparent 72%);
+  box-shadow: 0 0 28px rgba(255, 205, 82, 0.56), 0 0 64px rgba(255, 222, 122, 0.34);
+  animation: weather-sun-orb-pulse 3.2s ease-in-out infinite;
+}
+
+.weather-sunbeam-tertiary {
+  right: 56%;
+  width: 42%;
+  opacity: 0.46;
+  animation-delay: -1.15s;
+}
+
+@keyframes weather-sun-orb-pulse {
+  0%, 100% { transform: scale(0.93); opacity: 0.72; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-sun-orb { animation: none; }
+}
+/* Plan C: 지도 타일 위, 경로·마커 아래에서 퍼지는 햇살 */
+.weather-map-sun {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 650;
+  overflow: hidden;
+  background: radial-gradient(ellipse 74% 62% at 88% 6%, rgba(255, 229, 117, 0.66), rgba(255, 209, 76, 0.26) 38%, transparent 71%);
+  animation: weather-map-sun-glow 4.2s ease-in-out infinite;
+}
+
+.weather-map-sun-core {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 253, 220, 0.95) 0 12%, rgba(255, 223, 115, 0.68) 38%, rgba(255, 201, 66, 0.12) 68%, transparent 74%);
+  animation: weather-map-sun-core 3.2s ease-in-out infinite;
+}
+
+.weather-map-sun-ray {
+  position: absolute;
+  top: -46%;
+  right: -12%;
+  width: 52%;
+  height: 142%;
+  transform: rotate(28deg);
+  transform-origin: top right;
+  background: linear-gradient(90deg, transparent, rgba(255, 240, 174, 0.38), transparent);
+  animation: weather-map-sun-ray 4.8s ease-in-out infinite;
+}
+
+.weather-map-sun-ray-two {
+  right: 24%;
+  width: 36%;
+  opacity: 0.6;
+  animation-delay: -2.4s;
+}
+
+@keyframes weather-map-sun-glow {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes weather-map-sun-core {
+  0%, 100% { transform: scale(0.9); opacity: 0.76; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@keyframes weather-map-sun-ray {
+  0%, 100% { opacity: 0.22; transform: rotate(28deg) translateX(0); }
+  50% { opacity: 0.7; transform: rotate(28deg) translateX(-16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-map-sun,
+  .weather-map-sun-core,
+  .weather-map-sun-ray { animation: none; }
+}
+/* Plan C 지도 중앙을 감싸는 확산 햇살 */
+.weather-map-sun {
+  background: radial-gradient(ellipse 92% 100% at 50% 52%, rgba(255, 237, 169, 0.68) 0%, rgba(255, 216, 92, 0.30) 35%, rgba(255, 222, 121, 0.10) 58%, transparent 78%);
+  mix-blend-mode: screen;
+}
+
+.weather-map-sun-core {
+  top: 50%;
+  right: auto;
+  left: 50%;
+  width: 218px;
+  height: 218px;
+  margin: -109px 0 0 -109px;
+  background: radial-gradient(circle, rgba(255, 254, 224, 0.72) 0%, rgba(255, 231, 142, 0.48) 30%, rgba(255, 205, 73, 0.18) 56%, transparent 74%);
+  box-shadow: 0 0 42px rgba(255, 218, 114, 0.58), 0 0 104px rgba(255, 222, 132, 0.36);
+}
+
+.weather-map-sun-ray {
+  top: -35%;
+  right: auto;
+  left: 16%;
+  width: 68%;
+  height: 178%;
+  transform: rotate(7deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 244, 195, 0.36), transparent);
+}
+
+.weather-map-sun-ray-two {
+  top: -30%;
+  right: auto;
+  left: 30%;
+  width: 46%;
+}
+
+@keyframes weather-map-sun-core {
+  0%, 100% { transform: scale(0.9); opacity: 0.72; }
+  50% { transform: scale(1.07); opacity: 1; }
+}
+
+@keyframes weather-map-sun-ray {
+  0%, 100% { opacity: 0.20; transform: rotate(7deg) translateY(-4px); }
+  50% { opacity: 0.64; transform: rotate(7deg) translateY(14px); }
+}
+/* Plan C: 빛줄기 대신 지도 뒤에서 감싸는 화창한 후광 */
+.weather-map-sun {
+  background: radial-gradient(ellipse 96% 108% at 50% 52%, rgba(255, 247, 203, 0.60) 0%, rgba(255, 227, 126, 0.35) 38%, rgba(255, 220, 117, 0.13) 60%, transparent 80%);
+  mix-blend-mode: soft-light;
+}
+
+.weather-map-sun-core {
+  width: 286px;
+  height: 286px;
+  margin: -143px 0 0 -143px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 253, 225, 0.68) 0%, rgba(255, 235, 158, 0.36) 36%, rgba(255, 212, 94, 0.08) 62%, transparent 76%);
+  box-shadow: 0 0 54px rgba(255, 229, 141, 0.42), 0 0 128px rgba(255, 232, 161, 0.28);
+  filter: blur(5px);
+}
+
+.weather-map-sun-ray { display: none; }
+
+@keyframes weather-map-sun-glow {
+  0%, 100% { opacity: 0.66; }
+  50% { opacity: 0.98; }
+}
+
+@keyframes weather-map-sun-core {
+  0%, 100% { transform: scale(0.94); opacity: 0.62; }
+  50% { transform: scale(1.04); opacity: 0.92; }
+}
+/* Plan C 후광을 지도 타일 위에서 확실히 보이도록 보강 */
+.weather-map-sun {
+  z-index: 850;
+  background: radial-gradient(ellipse 98% 112% at 50% 52%, rgba(255, 249, 214, 0.82) 0%, rgba(255, 229, 133, 0.54) 36%, rgba(255, 211, 91, 0.22) 60%, transparent 82%);
+  mix-blend-mode: normal;
+  box-shadow: inset 0 0 54px rgba(255, 239, 170, 0.36);
+}
+
+.weather-map-sun-core {
+  background: radial-gradient(circle, rgba(255, 253, 229, 0.88) 0%, rgba(255, 235, 159, 0.54) 36%, rgba(255, 210, 91, 0.15) 64%, transparent 78%);
+  box-shadow: 0 0 68px rgba(255, 225, 121, 0.64), 0 0 148px rgba(255, 228, 146, 0.42);
+  filter: blur(3px);
+}
+/* Plan C: 햇살은 지도 카드 뒤에 두고, 타일만 살짝 투과시켜 후광이 비치게 한다. */
+.weather-map-sun {
+  z-index: 0;
+  background: radial-gradient(ellipse 100% 112% at 50% 52%, rgba(255, 249, 215, 0.92) 0%, rgba(255, 226, 121, 0.72) 38%, rgba(255, 207, 77, 0.30) 62%, transparent 84%);
+  box-shadow: inset 0 0 70px rgba(255, 235, 155, 0.52);
+}
+
+.weather-map-sun-tiles {
+  background: transparent !important;
+}
+
+.weather-map-sun-tiles .leaflet-tile-pane {
+  opacity: 0.76;
+  filter: saturate(1.06) brightness(1.04);
+}
+/* Plan C: 오늘의 여행 제목 뒤에서 은은하게 밝아지는 햇살 후광 */
+.weather-title-halo {
+  pointer-events: none;
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  z-index: 0;
+  width: 210px;
+  height: 72px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: radial-gradient(ellipse, rgba(255, 248, 205, 0.90) 0%, rgba(255, 224, 116, 0.42) 42%, transparent 74%);
+  filter: blur(2px);
+  animation: weather-title-halo-pulse 3.4s ease-in-out infinite;
+}
+
+@keyframes weather-title-halo-pulse {
+  0%, 100% { transform: translateX(-50%) scale(0.92); opacity: 0.54; }
+  50% { transform: translateX(-50%) scale(1.08); opacity: 0.96; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-title-halo { animation: none; }
+}
+/* Plan C: 헤더에 보이는 햇님이 지도 뒤 후광으로 이어지게 한다. */
+.weather-header-sun {
+  pointer-events: none;
+  position: absolute;
+  top: 2px;
+  right: 18px;
+  z-index: 3;
+  width: 92px;
+  height: 92px;
+  border-radius: 999px;
+  background: radial-gradient(circle at 42% 40%, #fffde0 0 12%, #ffe57d 37%, rgba(255, 197, 58, 0.74) 64%, rgba(255, 197, 58, 0) 74%);
+  box-shadow: 0 0 20px rgba(255, 206, 75, 0.78), 0 0 48px rgba(255, 224, 126, 0.50);
+  animation: weather-header-sun-shine 3.6s ease-in-out infinite;
+}
+
+@keyframes weather-header-sun-shine {
+  0%, 100% { transform: scale(0.94); opacity: 0.76; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .weather-header-sun { animation: none; }
+}

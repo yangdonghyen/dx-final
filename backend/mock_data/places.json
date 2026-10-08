@@ -1,0 +1,10 @@
+﻿{
+  "places": [
+    {"external_provider": "KAKAO", "external_id": "mock-place-101", "name": "Gyeongbokgung Mock", "category": "CULTURE", "address": "Mock Seoul Jongno", "latitude": 37.5796, "longitude": 126.9770, "phone": null, "source_url": "mock://places/101"},
+    {"external_provider": "KAKAO", "external_id": "mock-place-102", "name": "National Museum Mock", "category": "CULTURE", "address": "Mock Seoul Yongsan", "latitude": 37.5238, "longitude": 126.9805, "phone": null, "source_url": "mock://places/102"},
+    {"external_provider": "KAKAO", "external_id": "mock-place-103", "name": "Craft Museum Mock", "category": "EXHIBITION", "address": "Mock Seoul Jongno", "latitude": 37.5765, "longitude": 126.9880, "phone": null, "source_url": "mock://places/103"},
+    {"external_provider": "KAKAO", "external_id": "mock-place-104", "name": "Test Cafe Mock", "category": "CAFE", "address": "Mock Seoul Mapo", "latitude": 37.5563, "longitude": 126.9236, "phone": null, "source_url": "mock://places/104"},
+    {"external_provider": "KAKAO", "external_id": "mock-place-105", "name": "Bukchon Village Mock", "category": "HISTORY", "address": "Mock Seoul Jongno", "latitude": 37.5826, "longitude": 126.9830, "phone": null, "source_url": "mock://places/105"},
+    {"external_provider": "KAKAO", "external_id": "mock-place-106", "name": "Changdeokgung Mock", "category": "HISTORY", "address": "Mock Seoul Jongno", "latitude": 37.5794, "longitude": 126.9910, "phone": null, "source_url": "mock://places/106"}
+  ]
+}

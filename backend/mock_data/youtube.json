@@ -1,0 +1,6 @@
+﻿{
+  "videos": [
+    {"video_id": "mock-seoul-trip", "title": "\uc11c\uc6b8 \ubb38\ud654 \uc5ec\ud589 (Mock)", "description": "\ud14c\uc2a4\ud2b8 \uc804\uc6a9 \ubb38\ud654\uc640 \uce74\ud398 \uc5ec\ud589 \uc601\uc0c1", "tags": ["CULTURE", "CAFE"], "channel_id": "mock-channel-travel", "channel_title": "Mock Travel Channel"},
+    {"video_id": "mock-no-tags", "title": "Unicode \ud14c\uc2a4\ud2b8 \uc601\uc0c1", "description": "\ud0dc\uadf8 \uc5c6\ub294 \ud14c\uc2a4\ud2b8 \uc804\uc6a9 \uc601\uc0c1", "tags": [], "channel_id": "mock-channel-empty", "channel_title": "Mock Empty Tags"}
+  ]
+}
