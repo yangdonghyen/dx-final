@@ -1,0 +1,24 @@
+{
+  "_note": "SYNTHETIC test data for the Mock pipeline only. These are not real places; names carry [가상]. Coordinates only spread them over districts so area and meal supply logic can be exercised. Never use with -Provider Real.",
+  "부산": [
+    {"external_id": "FIXTURE-busan-01", "name": "[가상] 해운대 해변 산책로", "category": "여행 > 관광,명소 > 해수욕장,해변", "address": "부산광역시 해운대구 가상로 1", "latitude": 35.1587, "longitude": 129.1604},
+    {"external_id": "FIXTURE-busan-02", "name": "[가상] 해운대 전망대", "category": "여행 > 관광,명소 > 전망대", "address": "부산광역시 해운대구 가상로 2", "latitude": 35.1630, "longitude": 129.1700},
+    {"external_id": "FIXTURE-busan-03", "name": "[가상] 중구 근대역사관", "category": "문화,예술 > 문화시설 > 박물관", "address": "부산광역시 중구 가상로 3", "latitude": 35.1030, "longitude": 129.0320},
+    {"external_id": "FIXTURE-busan-04", "name": "[가상] 중구 시장 골목", "category": "여행 > 관광,명소 > 테마거리", "address": "부산광역시 중구 가상로 4", "latitude": 35.0980, "longitude": 129.0280},
+    {"external_id": "FIXTURE-busan-05", "name": "[가상] 영도 해안공원", "category": "여행 > 공원", "address": "부산광역시 영도구 가상로 5", "latitude": 35.0790, "longitude": 129.0800},
+    {"external_id": "FIXTURE-busan-06", "name": "[가상] 해운대 국밥", "category": "음식점 > 한식 > 국밥", "address": "부산광역시 해운대구 가상로 6", "latitude": 35.1600, "longitude": 129.1620},
+    {"external_id": "FIXTURE-busan-07", "name": "[가상] 중구 밀면", "category": "음식점 > 한식 > 냉면", "address": "부산광역시 중구 가상로 7", "latitude": 35.1010, "longitude": 129.0300},
+    {"external_id": "FIXTURE-busan-08", "name": "[가상] 영도 생선구이", "category": "음식점 > 한식 > 해물,생선", "address": "부산광역시 영도구 가상로 8", "latitude": 35.0800, "longitude": 129.0790},
+    {"external_id": "FIXTURE-busan-09", "name": "[가상] 영도 바다 카페", "category": "음식점 > 카페", "address": "부산광역시 영도구 가상로 9", "latitude": 35.0810, "longitude": 129.0810}
+  ],
+  "제주": [
+    {"external_id": "FIXTURE-jeju-01", "name": "[가상] 제주시 민속박물관", "category": "문화,예술 > 문화시설 > 박물관", "address": "제주특별자치도 제주시 가상로 1", "latitude": 33.5000, "longitude": 126.5300},
+    {"external_id": "FIXTURE-jeju-02", "name": "[가상] 제주시 오름 산책로", "category": "여행 > 관광,명소 > 오름", "address": "제주특별자치도 제주시 가상로 2", "latitude": 33.4600, "longitude": 126.6000},
+    {"external_id": "FIXTURE-jeju-03", "name": "[가상] 서귀포 폭포 공원", "category": "여행 > 공원", "address": "제주특별자치도 서귀포시 가상로 3", "latitude": 33.2460, "longitude": 126.5600},
+    {"external_id": "FIXTURE-jeju-04", "name": "[가상] 서귀포 올레 전망대", "category": "여행 > 관광,명소 > 전망대", "address": "제주특별자치도 서귀포시 가상로 4", "latitude": 33.2400, "longitude": 126.5100},
+    {"external_id": "FIXTURE-jeju-05", "name": "[가상] 한림 식물원", "category": "여행 > 관광,명소 > 식물원", "address": "제주특별자치도 제주시 한림읍 가상로 5", "latitude": 33.3900, "longitude": 126.2400},
+    {"external_id": "FIXTURE-jeju-06", "name": "[가상] 성산 해안길", "category": "여행 > 관광,명소 > 해안도로", "address": "제주특별자치도 서귀포시 성산읍 가상로 6", "latitude": 33.4580, "longitude": 126.9300},
+    {"external_id": "FIXTURE-jeju-07", "name": "[가상] 서귀포 고기국수", "category": "음식점 > 한식 > 국수", "address": "제주특별자치도 서귀포시 가상로 7", "latitude": 33.2500, "longitude": 126.5600},
+    {"external_id": "FIXTURE-jeju-08", "name": "[가상] 한림 해물뚝배기", "category": "음식점 > 한식 > 해물,생선", "address": "제주특별자치도 제주시 한림읍 가상로 8", "latitude": 33.4100, "longitude": 126.2600}
+  ]
+}

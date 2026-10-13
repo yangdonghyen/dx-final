@@ -29,7 +29,7 @@ def run(validation):
     svc,s=validation; plan=SimpleNamespace(plan_id=1,last_validated_at=None); trip=SimpleNamespace(start_date=date(2026,1,1),end_date=date(2026,1,2)); return svc.validate(plan,trip),s,plan
 
 def test_validation_marks_valid_items(validation):
-    _,s,plan=run(validation); s.items=[item(1)]; findings=svc=None
+    _,s,plan=run(validation); s.places[1]=SimpleNamespace(name="Museum", category="CULTURE", verification_status="VERIFIED", opening_hours={"thursday": {"open": "09:00", "close": "17:00"}}); s.items=[item(1)]; findings=svc=None
     # rerun after fixture data is populated
     findings=validation[0].validate(plan,SimpleNamespace(start_date=date(2026,1,1),end_date=date(2026,1,2)))
     assert findings==[] and s.items[0].validation_status=='VALID' and plan.last_validated_at
@@ -66,3 +66,14 @@ def test_final_validation_marks_verified_hours_mismatch_as_critical(validation):
     findings = svc.validate(SimpleNamespace(plan_id=1, last_validated_at=None), SimpleNamespace(start_date=date(2026, 1, 1), end_date=date(2026, 1, 2)))
 
     assert any(kind == "OUTSIDE_OPENING_HOURS" and severity == "CRITICAL" for _, kind, severity, _ in findings)
+
+
+def test_final_validation_marks_unknown_hours_as_warning_without_claiming_closed(validation):
+    svc, s = validation
+    s.places[1] = SimpleNamespace(name="Museum", category="CULTURE", verification_status="UNKNOWN", opening_hours=None)
+    s.items = [item(1, visit_date=date(2026, 1, 1), start_time=time(10), end_time=time(11))]
+
+    findings = svc.validate(SimpleNamespace(plan_id=1, last_validated_at=None), SimpleNamespace(start_date=date(2026, 1, 1), end_date=date(2026, 1, 2)))
+
+    assert any(kind == "OPENING_HOURS_UNKNOWN" and severity == "WARNING" for _, kind, severity, _ in findings)
+    assert s.items[0].validation_status == "WARNING"

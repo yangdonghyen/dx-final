@@ -16,6 +16,20 @@ def test_application_import_and_health_without_mysql(client):
     assert response.json() == {"status": "ok"}
 
 
+def test_request_logging_is_sanitised_and_returns_request_id(client, caplog):
+    caplog.set_level("INFO", logger="app.http")
+    response = client.get("/api/v1/health", headers={
+        "X-Request-ID": "http-contract-test",
+        "Authorization": "Bearer must-not-be-logged",
+    })
+    assert response.status_code == 200
+    assert response.headers["X-Request-ID"] == "http-contract-test"
+    record = next(row.getMessage() for row in caplog.records if "http_request" in row.getMessage())
+    assert "request_id=http-contract-test" in record
+    assert "method=GET" in record and "endpoint=/api/v1/health" in record and "status=200" in record
+    assert "must-not-be-logged" not in record
+
+
 def test_docs_include_task_three_endpoints(client):
     response = client.get("/docs")
     assert response.status_code == 200

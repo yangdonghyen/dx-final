@@ -8,6 +8,7 @@ from app.schemas.trip import TripSelectedPlaceResponse
 
 PlanStatus = Literal["DRAFT", "CONFIRMED", "ARCHIVED"]
 PlanValidationStatus = Literal["VALID", "WARNING", "UNKNOWN"]
+TravelStatus = Literal["KNOWN", "UNKNOWN", "NONE"]
 PlanEditOperation = Literal[
     "DELETE_PLACE",
     "REPLACE_PLACE",
@@ -29,6 +30,11 @@ class PlanItemResponse(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     category: str | None = None
+    # Optional route facts; NULL minutes mean UNKNOWN, never zero.
+    transport_mode_from_previous: str | None = None
+    travel_minutes_from_previous: int | None = None
+    travel_distance_meters_from_previous: int | None = None
+    travel_status: TravelStatus | None = None
 
 
 class PlanDayResponse(BaseModel):

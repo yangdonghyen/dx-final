@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -13,6 +14,9 @@ class ApiClient {
           ),
       _client = client ?? http.Client();
 
+  /// Ordinary API calls. AI plan calls pass a longer [timeout] themselves.
+  static const defaultTimeout = Duration(seconds: 60);
+
   final String baseUrl;
   final http.Client _client;
 
@@ -21,6 +25,7 @@ class ApiClient {
     Map<String, dynamic>? body,
     String? accessToken,
     bool sendBody = true,
+    Duration timeout = defaultTimeout,
   }) async {
     final response = await _client.post(
       Uri.parse('$baseUrl$path'),
@@ -29,18 +34,22 @@ class ApiClient {
         if (accessToken != null) 'Authorization': 'Bearer $accessToken',
       },
       body: sendBody ? jsonEncode(body ?? <String, dynamic>{}) : null,
-    );
+    ).timeout(timeout);
 
     return _decode(response);
   }
 
-  Future<Map<String, dynamic>> get(String path, {String? accessToken}) async {
+  Future<Map<String, dynamic>> get(
+    String path, {
+    String? accessToken,
+    Duration timeout = defaultTimeout,
+  }) async {
     final response = await _client.get(
       Uri.parse('$baseUrl$path'),
       headers: {
         if (accessToken != null) 'Authorization': 'Bearer $accessToken',
       },
-    );
+    ).timeout(timeout);
 
     return _decode(response);
   }
@@ -48,13 +57,14 @@ class ApiClient {
   Future<Map<String, dynamic>> delete(
     String path, {
     String? accessToken,
+    Duration timeout = defaultTimeout,
   }) async {
     final response = await _client.delete(
       Uri.parse('$baseUrl$path'),
       headers: {
         if (accessToken != null) 'Authorization': 'Bearer $accessToken',
       },
-    );
+    ).timeout(timeout);
 
     return _decode(response);
   }

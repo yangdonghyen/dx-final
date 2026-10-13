@@ -1,0 +1,8 @@
+﻿image_id,attempt_no,timestamp,model_used,http_status,status,error_code,error_status,error_message,quota_metric,quota_limit,quota_dimension,retry_after,request_duration_sec,backoff_sec,fallback_reason,pred_region,pred_city,pred_place,confidence,error
+001,1,,gemini-3.8-flash,,success,,,,,,,,,,,서울특별시,종로구,광화문,1.0,
+002,1,,gemini-3.8-flash,,success,,,,,,,,,,,경상북도,경주시,첨성대,0.99,
+003,1,,gemini-3.8-flash,,failure,,,,,,,,,,,,,,,HTTP_503
+004,1,,gemini-3.8-flash,,failure,,,,,,,,,,,,,,,HTTP_503
+005,1,,gemini-3.8-flash,,success,,,,,,,,,,,서울특별시,종로구,북촌한옥마을 (가회동 골목길),0.98,
+003,2,,gemini-3.8-flash,,failure,,,,,,,,,,,,,,,HTTP_429
+004,2,,gemini-3.8-flash,,failure,,,,,,,,,,,,,,,HTTP_429

@@ -107,3 +107,4 @@ def test_specific_unique_and_sensitive_column_rules():
     assert "resolved" not in tables["plan_validation_issues"].c
     assert all("confidence" not in table.c for table in tables.values())
     assert all("image" not in name for name in tables["docent_analyses"].c.keys())
+

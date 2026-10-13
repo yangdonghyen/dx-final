@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../core/theme/app_theme.dart';
+import '../../services/place_search_service.dart';
 import '../../services/youtube_saved_discovery_service.dart';
+import '../preference/youtube_recommended_place_detail_screen.dart'
+    show regionFromAddress;
 import '../preference/youtube_saved_detail_screen.dart';
-import '../discovery/place_detail_screen.dart';
 import '../discovery/camera_screen.dart';
 import '../preference/youtube_saved_screen.dart';
+import '../trip/trip_places_screen.dart';
 
 enum _SearchMode { region, link }
 
-/// 직접 입력 검색과 원본 웹의 지역 행사·축제 태그를 제공한다.
+/// 직접 입력 검색. 지역·장소는 서버의 실제 장소 검색(GET /api/v1/places/search)
+/// 결과만 보여 주고, 목업 장소나 확인하지 않은 시설 정보는 만들지 않는다.
 class TextSearchScreen extends StatefulWidget {
   const TextSearchScreen({
     super.key,
@@ -41,11 +45,29 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   String? linkError;
   bool linkLoading = false;
 
+  final PlaceSearchService _placeSearch = PlaceSearchService();
+  Future<List<PlaceSearchResult>>? _searchFuture;
+  String _searchedQuery = '';
+
+  /// 입력을 마쳤을 때만 서버에 검색합니다(글자마다 호출하지 않음).
+  void _startSearch(String value) {
+    final trimmed = value.trim();
+    setState(() {
+      query = value;
+      _searchedQuery = trimmed;
+      _searchFuture = trimmed.isEmpty ? null : _placeSearch.search(trimmed);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     query = widget.initialQuery;
     controller.text = query;
+    if (query.trim().isNotEmpty) {
+      _searchedQuery = query.trim();
+      _searchFuture = _placeSearch.search(_searchedQuery);
+    }
     mode = widget.startWithLink ? _SearchMode.link : _SearchMode.region;
     if (widget.initialLink.isNotEmpty) {
       linkController.text = widget.initialLink;
@@ -55,14 +77,6 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
     }
   }
 
-  static const places = [
-    ('안목해변', '강원 강릉시', '🌊', '강릉커피축제', '축제 진행 중'),
-    ('황리단길', '경북 경주시', '🏯', '신라문화제', '축제 진행 중'),
-    ('애월 해안도로', '제주 제주시', '🚗', '제주들불축제', '축제 진행 중'),
-    ('광안리해수욕장', '부산 수영구', '🌃', '부산불꽃축제', '행사 진행 중'),
-    ('전주 한옥마을', '전북 전주시', '🏘️', '전주비빔밥축제', '축제 진행 중'),
-  ];
-
   @override
   void dispose() {
     controller.dispose();
@@ -70,29 +84,12 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
     super.dispose();
   }
 
-  List<(String, String, String, String, String)> _findPlaces(String input) {
-    final normalized = input.trim();
-    if (normalized.isEmpty) return [];
-    return places
-        .where(
-          (place) =>
-              place.$1.contains(normalized) ||
-              place.$2.contains(normalized) ||
-              normalized.contains(place.$1) ||
-              place.$2
-                  .split(' ')
-                  .any(
-                    (part) => normalized.contains(
-                      part.replaceFirst(RegExp(r'[시도군구]$'), ''),
-                    ),
-                  ),
-        )
-        .toList();
-  }
-
   /// YouTube 주소에서 영상 ID를 꺼냅니다. YouTube 링크가 아니면 null입니다.
   static String? _youtubeVideoId(Uri uri) {
-    final host = uri.host.toLowerCase().replaceFirst(RegExp(r'^(www|m|music)\.'), '');
+    final host = uri.host.toLowerCase().replaceFirst(
+      RegExp(r'^(www|m|music)\.'),
+      '',
+    );
     final segments = uri.pathSegments.where((part) => part.isNotEmpty).toList();
     String? id;
     if (host == 'youtu.be') {
@@ -115,7 +112,9 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
     if (raw == null || raw.isEmpty) return 0;
     final plain = int.tryParse(raw.replaceAll('s', ''));
     if (plain != null) return plain;
-    final match = RegExp(r'^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$').firstMatch(raw);
+    final match = RegExp(
+      r'^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$',
+    ).firstMatch(raw);
     if (match == null) return 0;
     int part(int index) => int.tryParse(match.group(index) ?? '') ?? 0;
     return part(1) * 3600 + part(2) * 60 + part(3);
@@ -214,25 +213,180 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: selected ? AppColors.primary : const Color(0xFFE5E7EB), width: selected ? 2 : 1),
+          border: Border.all(
+            color: selected ? AppColors.primary : const Color(0xFFE5E7EB),
+            width: selected ? 2 : 1,
+          ),
         ),
-        child: Row(children: [
-          Icon(icon, color: iconColor ?? AppColors.primary, size: 27),
-          const SizedBox(width: 13),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
-            const SizedBox(height: 2),
-            Text(description, style: const TextStyle(fontSize: 13, color: Color(0xFF6B7280))),
-          ])),
-          Icon(selected ? Icons.check_circle_rounded : Icons.chevron_right_rounded, color: AppColors.primary),
-        ]),
+        child: Row(
+          children: [
+            Icon(icon, color: iconColor ?? AppColors.primary, size: 27),
+            const SizedBox(width: 13),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    description,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF6B7280),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              selected
+                  ? Icons.check_circle_rounded
+                  : Icons.chevron_right_rounded,
+              color: AppColors.primary,
+            ),
+          ],
+        ),
       ),
     ),
   );
+
+  /// 검색어와 같은 도시·지역이 실제 결과 주소에 있을 때만 그 지역을 돌려줍니다.
+  String? _matchedRegion(List<PlaceSearchResult> places) {
+    final wanted = _searchedQuery
+        .replaceAll(RegExp(r'\s+'), '')
+        .replaceFirst(RegExp(r'(특별자치시|특별자치도|특별시|광역시|시|군|도)$'), '');
+    if (wanted.length < 2) return null;
+    for (final place in places) {
+      final region = regionFromAddress(place.address);
+      if (region != null && (region == wanted || wanted.startsWith(region))) {
+        return region;
+      }
+    }
+    return null;
+  }
+
+  void _openTrip({String? destination, Set<String> places = const {}}) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) =>
+            TripPlacesScreen(destination: destination, initialPlaces: places),
+      ),
+    );
+  }
+
+  Widget _searchResults() => FutureBuilder<List<PlaceSearchResult>>(
+    future: _searchFuture,
+    builder: (context, snapshot) {
+      if (_searchFuture == null) {
+        return const Text('가고 싶은 여행지 이름이나 지역을 입력해주세요.');
+      }
+      if (snapshot.connectionState != ConnectionState.done) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(vertical: 32),
+          child: Center(child: CircularProgressIndicator()),
+        );
+      }
+      if (snapshot.hasError) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('장소를 검색하지 못했어요. 인터넷 연결이나 로그인을 확인한 뒤 다시 시도해 주세요.'),
+            const SizedBox(height: 8),
+            OutlinedButton(
+              onPressed: () => _startSearch(_searchedQuery),
+              child: const Text('다시 검색'),
+            ),
+          ],
+        );
+      }
+      final places = snapshot.data ?? const <PlaceSearchResult>[];
+      final region = _matchedRegion(places);
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (region != null) ...[
+            _RegionResult(
+              region: region,
+              onTap: () => _openTrip(destination: region),
+            ),
+            const SizedBox(height: 18),
+          ],
+          Text(
+            '관련 장소 ${places.length}곳',
+            style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 12),
+          if (places.isEmpty)
+            const Text('일치하는 장소가 없어요. 다른 지역이나 짧은 검색어로 찾아보세요.')
+          else
+            ...places.map(
+              (place) =>
+                  _PlaceResult(place: place, onTap: () => _showPlace(place)),
+            ),
+        ],
+      );
+    },
+  );
+
+  /// 검색 결과의 이름·주소만 보여 줍니다. 영업시간·시설 정보는 확인되지 않아 표시하지 않습니다.
+  void _showPlace(PlaceSearchResult place) {
+    final region = regionFromAddress(place.address);
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                place.name,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                place.address ?? place.region ?? '주소 정보 없음',
+                style: const TextStyle(color: Color(0xFF6B7280)),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '지도 검색으로 확인된 장소예요. 영업시간·시설 정보는 아직 확인되지 않았어요.',
+                style: TextStyle(fontSize: 13, color: Color(0xFF6B7280)),
+              ),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () {
+                    Navigator.of(sheetContext).pop();
+                    _openTrip(destination: region, places: {place.name});
+                  },
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size.fromHeight(54),
+                  ),
+                  child: Text(
+                    region == null ? '이 장소로 여행 만들기' : '$region 여행 만들기',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final normalized = query.trim();
-    final filtered = _findPlaces(normalized);
 
     if (widget.resultsOnly) {
       return Scaffold(
@@ -247,17 +401,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
         ),
         body: ListView(
           padding: const EdgeInsets.all(20),
-          children: [
-            Text(
-              '검색 결과 ${filtered.length}곳',
-              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
-            ),
-            const SizedBox(height: 12),
-            if (filtered.isEmpty)
-              const Text('일치하는 여행지가 없어요. 다른 지역이나 짧은 검색어로 찾아보세요.')
-            else
-              ...filtered.map((place) => _PlaceResult(place: place)),
-          ],
+          children: [_searchResults()],
         ),
       );
     }
@@ -297,15 +441,16 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
           if (mode == _SearchMode.region) ...[
             TextField(
               controller: controller,
+              textInputAction: TextInputAction.search,
               onChanged: (value) => setState(() => query = value),
-              onSubmitted: (value) => setState(() => query = value),
+              onSubmitted: _startSearch,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
                 hintText: '예: 강릉, 제주, 안목해변',
                 suffixIcon: IconButton(
                   onPressed: () {
                     controller.clear();
-                    setState(() => query = '');
+                    _startSearch('');
                   },
                   icon: const Icon(Icons.close),
                 ),
@@ -316,21 +461,14 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
               const Text(
                 '가고 싶은 여행지 이름이나 지역을 입력해주세요.',
                 style: TextStyle(color: Color(0xFF6B7280)),
-              ),
-            if (normalized.isNotEmpty) ...[
-              Text(
-                '검색 결과 ${filtered.length}곳',
-                style: const TextStyle(
-                  fontSize: 19,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 12),
-              if (filtered.isEmpty)
-                const Text('일치하는 여행지가 없어요. 다른 지역이나 짧은 검색어로 찾아보세요.')
-              else
-                ...filtered.map((place) => _PlaceResult(place: place)),
-            ],
+              )
+            else if (_searchFuture == null || normalized != _searchedQuery)
+              const Text(
+                '검색 버튼(엔터)을 누르면 실제 장소를 찾아드려요.',
+                style: TextStyle(color: Color(0xFF6B7280)),
+              )
+            else
+              _searchResults(),
           ] else ...[
             TextField(
               controller: linkController,
@@ -406,21 +544,76 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
             title: '이미지에서 장소 찾기',
             description: '사진에서 장소를 추출',
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CameraScreen(galleryOnly: true)),
+              MaterialPageRoute(
+                builder: (_) => const CameraScreen(galleryOnly: true),
+              ),
             ),
           ),
           const SizedBox(height: 24),
-
         ],
       ),
     );
   }
 }
 
-class _PlaceResult extends StatelessWidget {
-  const _PlaceResult({required this.place});
+class _RegionResult extends StatelessWidget {
+  const _RegionResult({required this.region, required this.onTap});
 
-  final (String, String, String, String, String) place;
+  final String region;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    color: const Color(0xFFEFF0FF),
+    borderRadius: BorderRadius.circular(20),
+    child: InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.location_city_rounded,
+              color: AppColors.primary,
+              size: 32,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    region,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    '이 지역으로 여행 만들기',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right_rounded, color: AppColors.primary),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+class _PlaceResult extends StatelessWidget {
+  const _PlaceResult({required this.place, required this.onTap});
+
+  final PlaceSearchResult place;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -432,19 +625,7 @@ class _PlaceResult extends StatelessWidget {
         side: const BorderSide(color: Color(0xFFE5E7EB)),
       ),
       child: InkWell(
-        // 검색 결과 카드를 누르면 해당 장소 정보를 상세 페이지로 전달
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => PlaceDetailScreen(
-                placeName: place.$1,
-                location: place.$2,
-                emoji: place.$3,
-                tags: _tagsFor(place.$1),
-              ),
-            ),
-          );
-        },
+        onTap: onTap,
         borderRadius: BorderRadius.circular(20),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -452,42 +633,20 @@ class _PlaceResult extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${place.$3}  ${place.$1}',
+                '📍  ${place.name}',
                 style: const TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.w900,
                 ),
               ),
-
               const SizedBox(height: 4),
-
-              Text(place.$2, style: const TextStyle(color: Color(0xFF6B7280))),
-
-              const SizedBox(height: 10),
-
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 7,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF3D6),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  '🎉 ${place.$5} · ${place.$4}',
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF8A5200),
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
+              Text(
+                place.address ?? place.region ?? '주소 정보 없음',
+                style: const TextStyle(color: Color(0xFF6B7280)),
               ),
-
-              const SizedBox(height: 11),
-
+              const SizedBox(height: 10),
               const Text(
-                '장소 자세히 보기 →',
+                '장소 확인하기 →',
                 style: TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.bold,
@@ -499,12 +658,4 @@ class _PlaceResult extends StatelessWidget {
       ),
     );
   }
-}
-
-List<String> _tagsFor(String placeName) {
-  if (placeName.contains('애월')) return const ['바다', '드라이브', '휴식'];
-  if (placeName.contains('안목')) return const ['바다', '카페', '산책'];
-  if (placeName.contains('황리단')) return const ['맛집', '전통', '카페'];
-  if (placeName.contains('광안리')) return const ['바다', '야경', '맛집'];
-  return const ['전통문화', '맛집', '체험'];
 }

@@ -1,0 +1,1182 @@
+{
+  "run_at": "2026-10-13T09:20:57",
+  "trip_label": "부산 (trip 76 기준)",
+  "source_trip_id": 76,
+  "provider": "real",
+  "model": {
+    "model": "hf.co/LGAI-EXAONE/EXAONE-3.5-7.8B-Instruct-GGUF:Q4_K_M",
+    "num_ctx": 8192,
+    "ai_timeout_seconds": 180.0
+  },
+  "isolated_target": {
+    "host": "127.0.0.1",
+    "port": 34000,
+    "database": "initial_plan_eval_332c264111ee"
+  },
+  "error": null,
+  "timing": {
+    "total_generation_ms": 90029,
+    "ollama_output_ms": 59829,
+    "ollama_prompt_tokens": 2601,
+    "ollama_output_tokens": 831,
+    "ollama_calls": 1
+  },
+  "ollama_calls": [
+    {
+      "call": 1,
+      "elapsed_ms": 87751,
+      "load_ms": 11589,
+      "prompt_tokens": 2601,
+      "prompt_ms": 16293,
+      "output_tokens": 831,
+      "output_ms": 59829,
+      "total_ms": 87737,
+      "done_reason": "stop",
+      "result": "valid",
+      "error_code": null,
+      "validation_reason": null,
+      "will_retry": false
+    }
+  ],
+  "candidate_diagnostics": {
+    "seeded": {
+      "source": "seeded export places",
+      "total": 8,
+      "non_food": 4,
+      "food": 2,
+      "cafe": 2,
+      "trip_days": 2,
+      "recommended_non_food": 4,
+      "status": "식당이 점심·저녁 수(4곳)보다 적음",
+      "non_food_places": [
+        "광안리해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "용호별빛공원 (여행 > 공원)",
+        "해운대해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "감천문화마을 (여행 > 관광,명소)"
+      ],
+      "sight_types": [
+        "공원",
+        "관광,명소",
+        "해수욕장,해변"
+      ],
+      "areas": 4,
+      "area_sizes": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "restaurants": 2,
+      "targets": {
+        "sights": 4,
+        "restaurants": 4,
+        "areas": 2
+      },
+      "shortfall": {
+        "sights": 0,
+        "restaurants": 2,
+        "areas": 0
+      },
+      "problems": [
+        "RESTAURANTS_FEWER_THAN_MEALS"
+      ]
+    },
+    "model_input": {
+      "source": "candidates sent to the model",
+      "total": 8,
+      "non_food": 4,
+      "food": 2,
+      "cafe": 2,
+      "trip_days": 2,
+      "recommended_non_food": 4,
+      "status": "식당이 점심·저녁 수(4곳)보다 적음",
+      "non_food_places": [
+        "광안리해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "용호별빛공원 (여행 > 공원)",
+        "해운대해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "감천문화마을 (여행 > 관광,명소)"
+      ],
+      "sight_types": [
+        "공원",
+        "관광,명소",
+        "해수욕장,해변"
+      ],
+      "areas": 4,
+      "area_sizes": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "restaurants": 2,
+      "targets": {
+        "sights": 4,
+        "restaurants": 4,
+        "areas": 2
+      },
+      "shortfall": {
+        "sights": 0,
+        "restaurants": 2,
+        "areas": 0
+      },
+      "problems": [
+        "RESTAURANTS_FEWER_THAN_MEALS"
+      ]
+    }
+  },
+  "service_warnings": [
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit",
+    "Opening hours are not verified for this visit"
+  ],
+  "quality_warnings": [],
+  "critical_errors": [],
+  "score": {
+    "areas": {
+      "장소 정확성(25)": 23.0,
+      "동선·이동시간(25)": 24.1,
+      "시간표 현실성(20)": 15.0,
+      "관심사·다양성(15)": 15.0,
+      "시니어·휴식(15)": 15.0
+    },
+    "total": 92.1,
+    "unverified": [
+      "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+      "이동시간: 1/7구간 실측 없음(UNKNOWN은 9점 중 3점만 인정)",
+      "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+    ],
+    "facts": {
+      "visits": 8,
+      "non_food_visits": 4,
+      "restaurants": 2,
+      "interests_covered": [
+        "CAFE",
+        "REST"
+      ],
+      "days": 2
+    }
+  },
+  "score_v2": {
+    "version": "v2",
+    "areas": {
+      "장소 정확성(25)": 23.0,
+      "동선·이동시간(25)": 24.0,
+      "시간표 현실성(20)": 15.0,
+      "관심사·다양성(15)": 15.0,
+      "시니어·휴식(15)": 15.0
+    },
+    "total": 92.0,
+    "unverified": [
+      "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+      "이동시간: 1/7구간 실측 없음(UNKNOWN은 9점 중 2점)",
+      "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+    ],
+    "facts": {
+      "visits": 8,
+      "non_food_visits": 4,
+      "sight_areas": 4,
+      "sight_types": [
+        "공원",
+        "관광,명소",
+        "해수욕장,해변"
+      ],
+      "interests_covered": [
+        "CAFE",
+        "REST"
+      ],
+      "days": 2
+    }
+  },
+  "score_v2_changes": [
+    "이름·카테고리 일치는 서버가 강제하므로 5점→2점, 남는 3점은 같은 위치 중복이 없을 때만",
+    "관광 적합성: 식당만 있는 날 -3, 같은 위치 -2",
+    "일자 간 다양성: 방문 관광지의 권역 수(반경 2km) ÷ 일수, 반복 권역 -4",
+    "이동시간 UNKNOWN은 9점 중 2점만 인정, 미검증 장거리 구간당 -1.5",
+    "식사 규칙: 경고당 -2.5(점심·저녁 누락 포함), 과밀한 날은 체류 점수 -2",
+    "관심사는 이름이 아니라 카테고리로만 인정, 유형 다양성은 비음식 관광 유형 수 × 2 (최대 6)",
+    "시니어: 휴식은 REST와 카페만 인정, 연속 관광 -2, 날짜 간 불균형 -2"
+  ],
+  "candidate_mode": "export",
+  "candidate_source": "과거 여행에 쓰인 장소만 (검색 보충 없음)",
+  "route_metrics": {
+    "provider": "kakao",
+    "source": "Kakao API; only selected by explicit --route-provider kakao",
+    "provider_calls": 16,
+    "provider_elapsed_ms": 2226,
+    "provider_known": 16,
+    "provider_unknown": 0,
+    "provider_call_details": [
+      {
+        "mode": "CAR",
+        "elapsed_ms": 102,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 107,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 95,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 84,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 232,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 201,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 119,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 96,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 102,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 100,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 153,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 194,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 162,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 128,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 137,
+        "status": "KNOWN"
+      },
+      {
+        "mode": "CAR",
+        "elapsed_ms": 214,
+        "status": "KNOWN"
+      }
+    ],
+    "cache_external_calls": 16,
+    "cache_candidate_calls": 16,
+    "stored_known_legs": 6,
+    "stored_unknown_legs": 0
+  },
+  "supply_ok": false,
+  "passes_80": false,
+  "passes_80_v1": true,
+  "generated": {
+    "trip": {
+      "trip_id": 76,
+      "destination": "부산",
+      "start_date": "2026-10-26",
+      "end_date": "2026-10-27",
+      "transport_mode": "CAR"
+    },
+    "plan_items": [
+      {
+        "item_id": 1,
+        "plan_id": 1,
+        "place_id": 401,
+        "visit_date": "2026-10-26",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "감천문화마을",
+        "start_time": "09:00:00",
+        "end_time": "11:30:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 2,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-26",
+        "sequence_no": 2,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "11:30:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "휴식 선호에 맞춰 서버가 직전 방문 시간 일부를 휴식으로 배정했습니다. 휴식 시설은 확인되지 않았습니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 3,
+        "plan_id": 1,
+        "place_id": 368,
+        "visit_date": "2026-10-26",
+        "sequence_no": 3,
+        "item_type": "MEAL",
+        "title": "진미회집",
+        "start_time": "12:30:00",
+        "end_time": "13:30:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 30,
+        "travel_distance_meters_from_previous": 17146,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 4,
+        "plan_id": 1,
+        "place_id": 348,
+        "visit_date": "2026-10-26",
+        "sequence_no": 4,
+        "item_type": "PLACE",
+        "title": "용호별빛공원",
+        "start_time": "14:00:00",
+        "end_time": "16:00:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 13,
+        "travel_distance_meters_from_previous": 3508,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 5,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-26",
+        "sequence_no": 5,
+        "item_type": "FREE_TIME",
+        "title": "자유 시간",
+        "start_time": "16:00:00",
+        "end_time": "18:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 6,
+        "plan_id": 1,
+        "place_id": 512,
+        "visit_date": "2026-10-26",
+        "sequence_no": 6,
+        "item_type": "PLACE",
+        "title": "스타벅스 광안비치점",
+        "start_time": "18:10:00",
+        "end_time": "19:40:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 10,
+        "travel_distance_meters_from_previous": 3398,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 7,
+        "plan_id": 1,
+        "place_id": 396,
+        "visit_date": "2026-10-27",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "해운대해수욕장",
+        "start_time": "09:00:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 8,
+        "plan_id": 1,
+        "place_id": 469,
+        "visit_date": "2026-10-27",
+        "sequence_no": 2,
+        "item_type": "MEAL",
+        "title": "해목",
+        "start_time": "12:09:00",
+        "end_time": "13:09:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 9,
+        "travel_distance_meters_from_previous": 1806,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 9,
+        "plan_id": 1,
+        "place_id": 163,
+        "visit_date": "2026-10-27",
+        "sequence_no": 3,
+        "item_type": "PLACE",
+        "title": "광안리해수욕장",
+        "start_time": "13:39:00",
+        "end_time": "16:09:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 16,
+        "travel_distance_meters_from_previous": 5035,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 10,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-27",
+        "sequence_no": 4,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "16:09:00",
+        "end_time": "16:39:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "휴식 선호에 맞춰 서버가 직전 방문 시간 일부를 휴식으로 배정했습니다. 휴식 시설은 확인되지 않았습니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 11,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-27",
+        "sequence_no": 5,
+        "item_type": "FREE_TIME",
+        "title": "자유 시간",
+        "start_time": "16:39:00",
+        "end_time": "18:09:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      },
+      {
+        "item_id": 12,
+        "plan_id": 1,
+        "place_id": 548,
+        "visit_date": "2026-10-27",
+        "sequence_no": 6,
+        "item_type": "PLACE",
+        "title": "공차 부산해운대점",
+        "start_time": "18:25:00",
+        "end_time": "19:55:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 16,
+        "travel_distance_meters_from_previous": 4940,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-13 09:20:57",
+        "updated_at": "2026-10-13 09:20:57"
+      }
+    ],
+    "places": [
+      {
+        "place_id": 163,
+        "name": "광안리해수욕장",
+        "category": "여행 > 관광,명소 > 해수욕장,해변",
+        "region": null,
+        "address": "부산 수영구 광안동 192-20",
+        "latitude": "35.1531933",
+        "longitude": "129.1189761",
+        "kakao_place_id": "8202423",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/8202423",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 07:06:17",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 348,
+        "name": "용호별빛공원",
+        "category": "여행 > 공원",
+        "region": "광안리해수욕장",
+        "address": "부산 남구 용호동 5-5",
+        "latitude": "35.1328179",
+        "longitude": "129.1200264",
+        "kakao_place_id": "1405707951",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/1405707951",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 03:48:31",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 368,
+        "name": "진미회집",
+        "category": "음식점 > 한식 > 해물,생선 > 회",
+        "region": "광안리해수욕장",
+        "address": "부산 수영구 광안동 196-2",
+        "latitude": "35.1526097",
+        "longitude": "129.1175126",
+        "kakao_place_id": "7952028",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/7952028",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 03:48:32",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 396,
+        "name": "해운대해수욕장",
+        "category": "여행 > 관광,명소 > 해수욕장,해변",
+        "region": null,
+        "address": "부산 해운대구 우동",
+        "latitude": "35.1585232",
+        "longitude": "129.1598547",
+        "kakao_place_id": "7913306",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/7913306",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 07:06:17",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 401,
+        "name": "감천문화마을",
+        "category": "여행 > 관광,명소",
+        "region": null,
+        "address": "부산 사하구 감천동 1-17",
+        "latitude": "35.0974087",
+        "longitude": "129.0105608",
+        "kakao_place_id": "21362956",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/21362956",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 07:06:17",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 469,
+        "name": "해목",
+        "category": "음식점 > 일식",
+        "region": "부산",
+        "address": "부산 해운대구 우동 542-30",
+        "latitude": "35.1618140",
+        "longitude": "129.1596608",
+        "kakao_place_id": "977177107",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/977177107",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 01:30:23",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 512,
+        "name": "스타벅스 광안비치점",
+        "category": "음식점 > 카페 > 커피전문점 > 스타벅스",
+        "region": "부산",
+        "address": "부산 수영구 광안동 193-4",
+        "latitude": "35.1531898",
+        "longitude": "129.1179369",
+        "kakao_place_id": "681789486",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/681789486",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 07:07:47",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      },
+      {
+        "place_id": 548,
+        "name": "공차 부산해운대점",
+        "category": "음식점 > 카페 > 공차",
+        "region": "부산",
+        "address": "부산 해운대구 중동 1417-2",
+        "latitude": "35.1598252",
+        "longitude": "129.1611269",
+        "kakao_place_id": "653251334",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/653251334",
+        "opening_hours": "null",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-12 07:07:49",
+        "created_at": "2026-10-13 09:19:27",
+        "updated_at": "2026-10-13 09:19:27"
+      }
+    ],
+    "validation_issues": [
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      },
+      {
+        "issue_type": "OPENING_HOURS_UNKNOWN",
+        "severity": "WARNING",
+        "message": "Opening hours are not verified for this visit"
+      }
+    ]
+  },
+  "model_input_place_ids": [
+    163,
+    348,
+    396,
+    512,
+    548,
+    401,
+    368,
+    469
+  ],
+  "route_optimization": {
+    "applied": true,
+    "moves": [
+      {
+        "kind": "swap",
+        "visit_date": "2026-10-26",
+        "sequence": 1,
+        "from_place_id": 163,
+        "to_place_id": 401,
+        "gain_seconds": 1786
+      },
+      {
+        "kind": "swap",
+        "visit_date": "2026-10-27",
+        "sequence": 3,
+        "from_place_id": 401,
+        "to_place_id": 163,
+        "gain_seconds": 1786
+      }
+    ],
+    "before_m": 35686,
+    "after_m": 24077,
+    "longest_leg_before_m": 15351,
+    "longest_leg_after_m": 11502,
+    "metric": "ROUTE_SECONDS",
+    "route_seconds_before": 7224,
+    "route_seconds_after": 5438,
+    "rest_breaks": [
+      {
+        "visit_date": "2026-10-26",
+        "after_place_id": 401,
+        "start": "11:30",
+        "end": "12:00"
+      },
+      {
+        "visit_date": "2026-10-27",
+        "after_place_id": 163,
+        "start": "16:00",
+        "end": "16:30"
+      }
+    ],
+    "far_meals": []
+  },
+  "route_risk": [
+    {
+      "visit_date": "2026-10-26",
+      "from": "감천문화마을",
+      "to": "진미회집",
+      "straight_km": 11.5,
+      "gap_min": 60,
+      "verified_minutes": 30,
+      "verified_distance_meters": 17146,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-26",
+      "from": "진미회집",
+      "to": "용호별빛공원",
+      "straight_km": 2.2,
+      "gap_min": 30,
+      "verified_minutes": 13,
+      "verified_distance_meters": 3508,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-26",
+      "from": "용호별빛공원",
+      "to": "스타벅스 광안비치점",
+      "straight_km": 2.3,
+      "gap_min": 130,
+      "verified_minutes": 10,
+      "verified_distance_meters": 3398,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "해운대해수욕장",
+      "to": "해목",
+      "straight_km": 0.4,
+      "gap_min": 9,
+      "verified_minutes": 9,
+      "verified_distance_meters": 1806,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "해목",
+      "to": "광안리해수욕장",
+      "straight_km": 3.8,
+      "gap_min": 30,
+      "verified_minutes": 16,
+      "verified_distance_meters": 5035,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "광안리해수욕장",
+      "to": "공차 부산해운대점",
+      "straight_km": 3.9,
+      "gap_min": 136,
+      "verified_minutes": 16,
+      "verified_distance_meters": 4940,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    }
+  ],
+  "baseline_route_risk": [
+    {
+      "visit_date": "2026-10-26",
+      "from": "스타벅스 광안비치점",
+      "to": "진미회집",
+      "straight_km": 0.1,
+      "gap_min": 30,
+      "verified_minutes": 1,
+      "verified_distance_meters": 75,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-26",
+      "from": "진미회집",
+      "to": "감천문화마을",
+      "straight_km": 11.5,
+      "gap_min": 151,
+      "verified_minutes": 31,
+      "verified_distance_meters": 17077,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-26",
+      "from": "감천문화마을",
+      "to": "광안리해수욕장",
+      "straight_km": 11.6,
+      "gap_min": -542,
+      "verified_minutes": null,
+      "verified_distance_meters": null,
+      "route_fact_status": "UNKNOWN",
+      "needs_check": true
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "공차 부산해운대점",
+      "to": "해목",
+      "straight_km": 0.3,
+      "gap_min": 30,
+      "verified_minutes": 2,
+      "verified_distance_meters": 409,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "해목",
+      "to": "용호별빛공원",
+      "straight_km": 4.8,
+      "gap_min": 150,
+      "verified_minutes": 26,
+      "verified_distance_meters": 10582,
+      "route_fact_status": "KNOWN",
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-27",
+      "from": "용호별빛공원",
+      "to": "해운대해수욕장",
+      "straight_km": 4.6,
+      "gap_min": -546,
+      "verified_minutes": null,
+      "verified_distance_meters": null,
+      "route_fact_status": "UNKNOWN",
+      "needs_check": true
+    }
+  ],
+  "replay_source": null,
+  "baseline": {
+    "manual_score": null,
+    "manual_warnings": null,
+    "score": {
+      "areas": {
+        "장소 정확성(25)": 23.0,
+        "동선·이동시간(25)": 24.1,
+        "시간표 현실성(20)": 15.0,
+        "관심사·다양성(15)": 15.0,
+        "시니어·휴식(15)": 15.0
+      },
+      "total": 92.1,
+      "unverified": [
+        "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+        "이동시간: 1/7구간 실측 없음(UNKNOWN은 9점 중 3점만 인정)",
+        "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+      ],
+      "facts": {
+        "visits": 8,
+        "non_food_visits": 4,
+        "restaurants": 2,
+        "interests_covered": [
+          "CAFE",
+          "REST"
+        ],
+        "days": 2
+      }
+    },
+    "score_v2": {
+      "version": "v2",
+      "areas": {
+        "장소 정확성(25)": 23.0,
+        "동선·이동시간(25)": 24.0,
+        "시간표 현실성(20)": 15.0,
+        "관심사·다양성(15)": 15.0,
+        "시니어·휴식(15)": 15.0
+      },
+      "total": 92.0,
+      "unverified": [
+        "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+        "이동시간: 1/7구간 실측 없음(UNKNOWN은 9점 중 2점)",
+        "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+      ],
+      "facts": {
+        "visits": 8,
+        "non_food_visits": 4,
+        "sight_areas": 4,
+        "sight_types": [
+          "공원",
+          "관광,명소",
+          "해수욕장,해변"
+        ],
+        "interests_covered": [
+          "CAFE",
+          "REST"
+        ],
+        "days": 2
+      }
+    },
+    "quality_warnings": [],
+    "plan_items": [
+      {
+        "item_id": 345,
+        "plan_id": 26,
+        "place_id": 163,
+        "visit_date": "2026-10-26",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "광안리해수욕장",
+        "start_time": "9:00:00",
+        "end_time": "11:30:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 346,
+        "plan_id": 26,
+        "place_id": 512,
+        "visit_date": "2026-10-26",
+        "sequence_no": 2,
+        "item_type": "PLACE",
+        "title": "스타벅스 광안비치점",
+        "start_time": "11:31:00",
+        "end_time": "12:01:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 1,
+        "travel_distance_meters_from_previous": 71,
+        "recommendation_reason": "검증된 Kakao 카페와 네이버 검색의 실제 방문 후기에서 언급된 전망 특징을 기존 휴식 시간에 연결했습니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 347,
+        "plan_id": 26,
+        "place_id": 368,
+        "visit_date": "2026-10-26",
+        "sequence_no": 3,
+        "item_type": "MEAL",
+        "title": "진미회집",
+        "start_time": "12:31:00",
+        "end_time": "14:01:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 1,
+        "travel_distance_meters_from_previous": 75,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 348,
+        "plan_id": 26,
+        "place_id": null,
+        "visit_date": "2026-10-26",
+        "sequence_no": 4,
+        "item_type": "FREE_TIME",
+        "title": "광안리 주변 산책",
+        "start_time": "14:01:00",
+        "end_time": "16:01:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 349,
+        "plan_id": 26,
+        "place_id": 401,
+        "visit_date": "2026-10-26",
+        "sequence_no": 5,
+        "item_type": "PLACE",
+        "title": "감천문화마을",
+        "start_time": "16:32:00",
+        "end_time": "18:02:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 31,
+        "travel_distance_meters_from_previous": 17077,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 350,
+        "plan_id": 26,
+        "place_id": 396,
+        "visit_date": "2026-10-27",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "해운대해수욕장",
+        "start_time": "9:00:00",
+        "end_time": "11:30:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 351,
+        "plan_id": 26,
+        "place_id": 548,
+        "visit_date": "2026-10-27",
+        "sequence_no": 2,
+        "item_type": "PLACE",
+        "title": "공차 부산해운대점",
+        "start_time": "11:36:00",
+        "end_time": "12:06:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 6,
+        "travel_distance_meters_from_previous": 1224,
+        "recommendation_reason": "검증된 Kakao 카페를 기존 휴식 시간에 연결했습니다. 영업시간 정보가 없으면 영업 중이라고 단정하지 않습니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 352,
+        "plan_id": 26,
+        "place_id": 469,
+        "visit_date": "2026-10-27",
+        "sequence_no": 3,
+        "item_type": "MEAL",
+        "title": "해목",
+        "start_time": "12:36:00",
+        "end_time": "14:06:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 2,
+        "travel_distance_meters_from_previous": 409,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 353,
+        "plan_id": 26,
+        "place_id": null,
+        "visit_date": "2026-10-27",
+        "sequence_no": 4,
+        "item_type": "FREE_TIME",
+        "title": "해운대 해변 휴식",
+        "start_time": "14:06:00",
+        "end_time": "16:06:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      },
+      {
+        "item_id": 354,
+        "plan_id": 26,
+        "place_id": 348,
+        "visit_date": "2026-10-27",
+        "sequence_no": 5,
+        "item_type": "PLACE",
+        "title": "용호별빛공원",
+        "start_time": "16:36:00",
+        "end_time": "18:06:00",
+        "transport_mode_from_previous": "CAR",
+        "travel_minutes_from_previous": 26,
+        "travel_distance_meters_from_previous": 10582,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 16:07:51",
+        "updated_at": "2026-10-12 16:07:51"
+      }
+    ]
+  },
+  "limitations": [
+    "export에는 기존 일정에 쓰인 장소 8곳만 있고, 당시 EXAONE에 전달된 전체 후보 목록은 없습니다.",
+    "후보 모드: export = 과거 여행에 쓰인 장소만 (검색 보충 없음).",
+    "route_provider=unavailable(기존과 동일)이라 이동시간은 실측되지 않습니다.",
+    "장소 실존·영업시간은 확인하지 않았으며 정상으로 간주하지 않았습니다. 점수는 잠정입니다.",
+    "자동 점수는 리뷰 문서 6.3 기준의 근사치입니다. 수동 점수(47/54)와 직접 비교하지 말고 같은 채점기로 계산한 기존 일정 점수와 비교하세요."
+  ]
+}

@@ -1,0 +1,1 @@
+﻿image_id,image_path,place_id,ground_truth_detail,ground_truth_parent,capture_type,note,primary_candidate,candidate_2,candidate_3,candidate_4,ordered_candidates,top1_correct,top4_correct,recognized,confidence,place_verified,verified_place,api_status,http_status,error_code,elapsed_seconds,attempt_count,retry_count

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import '../../services/active_trip_service.dart';
 import '../../services/weather_background_service.dart';
@@ -188,10 +189,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
       '소나기',
     }.contains(weather.current.condition);
     return ListView(
-      padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
+      padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), ResponsiveLayout.sectionSpacing(context), ResponsiveLayout.pageHorizontal(context), 16),
       children: [
         Container(
-          padding: const EdgeInsets.all(22),
+          padding: EdgeInsets.all(ResponsiveLayout.isCompact(context) ? 16 : 22),
           decoration: BoxDecoration(
             color: const Color(0xFF173B76),
             borderRadius: BorderRadius.circular(24),
@@ -347,11 +348,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
               FilledButton(
                 onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => TodayTravelScreen(
-                      plan: _plan,
-                      transport: ActiveTripService.transport,
-                      places: ActiveTripService.places,
-                    ),
+                    // 날씨 계획은 안내 문구일 뿐이라, 저장된 실제 일정을 엽니다.
+                    builder: (_) => const TodayTravelScreen(),
                   ),
                 ),
                 style: FilledButton.styleFrom(
@@ -362,7 +360,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   ),
                 ),
                 child: const Text(
-                  '이 일정으로 여행 보기',
+                  '오늘 일정 보기',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
                 ),
               ),
@@ -457,12 +455,19 @@ class _Metric extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 2),
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 20,
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
+        SizedBox(
+          width: double.infinity,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              maxLines: 1,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
           ),
         ),
       ],

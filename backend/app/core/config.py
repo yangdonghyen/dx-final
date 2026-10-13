@@ -52,9 +52,15 @@ class Settings(BaseSettings):
     kakao_mobility_base_url: str = "https://apis-navi.kakaomobility.com"
     kakao_map_base_url: str = "https://dapi.kakao.com"
     kakao_map_walking_route_mode: KakaoWalkRouteMode = "BROAD_FIRST"
+    # Real route lookups per HTTP request; candidate filtering gets the smaller share.
+    route_max_calls_per_request: int = Field(default=40, ge=0)
+    route_max_candidate_calls_per_request: int = Field(default=16, ge=0)
     naver_client_id: str = ""
     naver_client_secret: SecretStr = SecretStr("")
     naver_redirect_uri: str = ""
+    # Deliberately separate from NAVER Login OAuth credentials above.
+    naver_api_hub_client_id: str = ""
+    naver_api_hub_client_secret: SecretStr = SecretStr("")
     youtube_api_key: SecretStr = SecretStr("")
     tour_api_key: SecretStr = SecretStr("")
     tour_api_base_url: str = ""
@@ -68,14 +74,28 @@ class Settings(BaseSettings):
     exaone_model: str = ""
     exaone_num_ctx: int = Field(default=8192, ge=2048)
     external_api_timeout_seconds: float = Field(default=10, gt=0)
+    # A Tour hours lookup issues detailCommon2 + detailIntro2; image data is not fetched.
+    tour_hours_max_places_per_request: int = Field(default=8, ge=0, le=30)
     ai_api_timeout_seconds: float = Field(default=60, gt=0)
     plan_regeneration_preview_ttl_minutes: int = Field(default=30, gt=0, le=1440)
+    # Meal start-time windows (HH:MM-HH:MM) the server checks plans against.
+    plan_breakfast_window: str = "07:00-09:30"
+    plan_lunch_window: str = "11:00-14:00"
+    plan_dinner_window: str = "17:00-20:00"
     # Optional public origin for share links; the request's own origin is used when empty.
     public_share_base_url: str = ""
 
     @field_validator("mysql_host", "mysql_database", "mysql_user")
     @classmethod
     def strip_mysql_fields(cls, value: str) -> str:
+        return value.strip()
+
+    @field_validator("plan_breakfast_window", "plan_lunch_window", "plan_dinner_window")
+    @classmethod
+    def validate_meal_window(cls, value: str) -> str:
+        from app.services.plan_quality_rules import parse_window
+
+        parse_window(value)
         return value.strip()
 
     @field_validator("cors_allowed_origins")

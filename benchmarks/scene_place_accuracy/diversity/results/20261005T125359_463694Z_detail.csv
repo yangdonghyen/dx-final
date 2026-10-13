@@ -1,0 +1,56 @@
+﻿image_id,image_path,place_id,ground_truth_detail,ground_truth_parent,capture_type,note,primary_candidate,candidate_2,candidate_3,candidate_4,ordered_candidates,top1_correct,top4_correct,recognized,confidence,place_verified,verified_place,api_status,http_status,error_code,elapsed_seconds,attempt_count,retry_count
+DIV001,images/DIV001.jpg,gyeongbokgung,경복궁,,representative,,Gyeonghoeru Pavilion,Gyeongbokgung Palace,,,"[""Gyeonghoeru Pavilion"", ""Gyeongbokgung Palace""]",False,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""경복궁"", ""address"": ""서울 종로구 세종로 1-1"", ""road_address"": ""서울 종로구 사직로 161"", ""latitude"": 37.577613288258206, ""longitude"": 126.97689786832184, ""category"": ""여행 > 관광,명소 > 문화유적 > 고궁,궁"", ""source"": ""KAKAO""}",success,200,,18.356,1,0
+DIV002,images/DIV002.jpg,changdeokgung,창덕궁,,representative,,Juhamnu Pavilion and Eosumun Gate (Changdeokgung Palace),Changdeokgung Huwon (Secret Garden),,,"[""Juhamnu Pavilion and Eosumun Gate (Changdeokgung Palace)"", ""Changdeokgung Huwon (Secret Garden)""]",False,False,True,HIGH,False,null,success,200,,14.813,1,0
+DIV003,images/DIV003.jpg,changgyeonggung,창경궁,,representative,,,,,,,,,,,,,failure,503,GEMINI_UNAVAILABLE,89.334,3,2
+DIV004,images/DIV004.jpg,deoksugung,덕수궁,,representative,,Deoksugung,Daehanmun Gate,,,"[""Deoksugung"", ""Daehanmun Gate""]",True,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""덕수궁 대한문"", ""address"": ""서울 중구 정동 5-1"", ""road_address"": ""서울 중구 세종대로 99"", ""latitude"": 37.5650416322942, ""longitude"": 126.976542945622, ""category"": ""여행 > 관광,명소 > 문화유적"", ""source"": ""KAKAO""}",success,200,,7.464,1,0
+DIV005,images/DIV005.jpg,jongmyo,종묘,,representative,,Jongmyo Shrine,,,,"[""Jongmyo Shrine""]",True,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""종묘"", ""address"": ""서울 종로구 훈정동 1-2"", ""road_address"": ""서울 종로구 종로 157"", ""latitude"": 37.5761080433804, ""longitude"": 126.994212979827, ""category"": ""여행 > 관광,명소 > 문화유적 > 사당,제단"", ""source"": ""KAKAO""}",success,200,,98.929,3,2
+DIV006,images/DIV006.jpg,n_seoul_tower,N서울타워,,representative,,Seoul,Myeong-dong,,,"[""Seoul"", ""Myeong-dong""]",False,False,True,HIGH,True,"{""verified"": true, ""place_name"": ""남산케이블카"", ""address"": ""서울 중구 회현동1가 산 1-19"", ""road_address"": ""서울 중구 소파로 83"", ""latitude"": 37.55658072049463, ""longitude"": 126.98403099725546, ""category"": ""여행 > 관광,명소 > 케이블카"", ""source"": ""KAKAO""}",success,200,,66.726,2,1
+DIV007,images/DIV007.jpg,ddp,동대문디자인플라자,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.011,3,2
+DIV008,images/DIV008.jpg,seoul_city_hall,서울특별시청,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.246,3,2
+DIV009,images/DIV009.jpg,seoul_olympic_park,올림픽공원,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.273,3,2
+DIV010,images/DIV010.jpg,bukchon_hanok_village,북촌한옥마을,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.374,3,2
+DIV011,images/DIV011.jpg,incheon_bridge,인천대교,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,10.961,3,2
+DIV012,images/DIV012.jpg,songdo_central_park,송도센트럴파크,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.816,3,2
+DIV013,images/DIV013.jpg,suwon_hwaseong,수원화성,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.777,3,2
+DIV014,images/DIV014.jpg,korean_folk_village,한국민속촌,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.377,3,2
+DIV015,images/DIV015.jpg,garden_of_morning_calm,아침고요수목원,,representative,,The Garden of Morning Calm,Jade Garden,,,"[""The Garden of Morning Calm"", ""Jade Garden""]",True,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""아침고요수목원 입구"", ""address"": ""경기 가평군 상면 행현리 622-4"", ""road_address"": ""경기 가평군 상면 수목원로 427"", ""latitude"": 37.744427009497784, ""longitude"": 127.35274471288426, ""category"": ""교통,수송 > 입출구"", ""source"": ""KAKAO""}",success,200,,6.914,1,0
+DIV016,images/DIV016.jpg,nami_island,남이섬,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.414,3,2
+DIV017,images/DIV017.jpg,seoraksan,설악산,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.317,3,2
+DIV018,images/DIV018.jpg,gangneung_gyeongpo_beach,경포해변,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.436,3,2
+DIV019,images/DIV019.jpg,jeongdongjin,정동진,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.82,3,2
+DIV020,images/DIV020.jpg,pyeongchang_alpensia,알펜시아,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.197,3,2
+DIV021,images/DIV021.jpg,woljeongsa,월정사,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.325,3,2
+DIV022,images/DIV022.jpg,andong_hahoe,안동하회마을,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.455,3,2
+DIV023,images/DIV023.jpg,bulguksa,불국사,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.268,3,2
+DIV024,images/DIV024.jpg,seokguram,석굴암,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.171,3,2
+DIV025,images/DIV025.jpg,cheomseongdae,첨성대,,representative,,Cheomseongdae,Gyeongju Historic Areas,,,"[""Cheomseongdae"", ""Gyeongju Historic Areas""]",True,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""경주역사유적지구"", ""address"": ""경북 경주시 인왕동 443"", ""latitude"": 35.83207497900486, ""longitude"": 129.2227407118701, ""category"": ""여행 > 관광,명소 > 관광단지"", ""source"": ""KAKAO""}",success,200,,11.458,2,1
+DIV026,images/DIV026.jpg,donggung_wolji,동궁과 월지,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.02,3,2
+DIV027,images/DIV027.jpg,pohang_space_walk,스페이스워크,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.05,3,2
+DIV028,images/DIV028.jpg,ulleungdo,울릉도,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.964,3,2
+DIV029,images/DIV029.jpg,dokdo,독도,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.356,3,2
+DIV030,images/DIV030.jpg,haeinsa,해인사,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.093,3,2
+DIV031,images/DIV031.jpg,tongyeong_cable_car,통영케이블카,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.117,3,2
+DIV032,images/DIV032.jpg,windy_hill,바람의 언덕,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.649,3,2
+DIV033,images/DIV033.jpg,jinhae_gunhangje,진해군항제,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.369,3,2
+DIV034,images/DIV034.jpg,busan_gwangandaegyo,광안대교,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.686,3,2
+DIV035,images/DIV035.jpg,haeundae_beach,해운대해수욕장,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.946,3,2
+DIV036,images/DIV036.jpg,gamcheon_culture_village,감천문화마을,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.212,3,2
+DIV037,images/DIV037.jpg,haedong_yonggungsa,해동용궁사,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.284,3,2
+DIV038,images/DIV038.jpg,busan_tower,부산타워,,representative,,Jung-gu,Busan Tower,Jungang-dong,,"[""Jung-gu"", ""Busan Tower"", ""Jungang-dong""]",False,True,True,HIGH,True,"{""verified"": true, ""place_name"": ""덕수궁"", ""address"": ""서울 중구 정동 5-1"", ""road_address"": ""서울 중구 세종대로 99"", ""latitude"": 37.5655638710672, ""longitude"": 126.974894754989, ""category"": ""여행 > 관광,명소 > 문화유적 > 고궁,궁"", ""source"": ""KAKAO""}",success,200,,14.596,3,2
+DIV039,images/DIV039.jpg,taejongdae,태종대,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.063,3,2
+DIV040,images/DIV040.jpg,daejeon_expo_bridge,엑스포다리,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.998,3,2
+DIV041,images/DIV041.jpg,hanbat_arboretum,한밭수목원,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.324,3,2
+DIV042,images/DIV042.jpg,cheongnamdae,청남대,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.356,3,2
+DIV043,images/DIV043.jpg,beopjusa,법주사,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.182,3,2
+DIV044,images/DIV044.jpg,danyang_dodam_sambong,도담삼봉,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.089,3,2
+DIV045,images/DIV045.jpg,gongju_gongsanseong,공주 공산성,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.255,3,2
+DIV046,images/DIV046.jpg,buyeo_baesanjeong,부여 부소산성,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.691,3,2
+DIV047,images/DIV047.jpg,taean_anmyeondo,안면도,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.223,3,2
+DIV048,images/DIV048.jpg,jeonju_hanok_village,전주한옥마을,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.061,3,2
+DIV049,images/DIV049.jpg,jeonju_pungnammun,풍남문,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.567,3,2
+DIV050,images/DIV050.jpg,naejangsan,내장산,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.213,3,2
+DIV051,images/DIV051.jpg,gunsan_modern_history_museum,군산근대역사박물관,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.281,3,2
+DIV052,images/DIV052.jpg,suncheon_bay,순천만습지,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,7.987,3,2
+DIV053,images/DIV053.jpg,yeosu_expo,여수세계박람회장,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.313,3,2
+DIV054,images/DIV054.jpg,hyangiram,향일암,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,8.202,3,2
+DIV055,images/DIV055.jpg,boseong_tea_fields,보성녹차밭,,representative,,,,,,,,,,,,,failure,429,GEMINI_RATE_LIMITED,12.141,3,2

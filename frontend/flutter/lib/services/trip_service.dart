@@ -161,6 +161,7 @@ class TripService {
     String? destination,
     String? transportMode,
     List<String>? interestCodes,
+    String? travelStyle,
   }) async {
     final body = <String, dynamic>{};
 
@@ -184,6 +185,10 @@ class TripService {
 
     if (interestCodes != null && interestCodes.isNotEmpty) {
       body['interest_codes'] = interestCodes;
+    }
+
+    if (travelStyle != null) {
+      body['trip_preferences'] = {'travel_style': travelStyle};
     }
 
     final response = await _apiClient.post(

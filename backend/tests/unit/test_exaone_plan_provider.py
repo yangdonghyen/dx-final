@@ -5,7 +5,7 @@ from datetime import date
 import pytest
 
 from app.core.exceptions import AppError
-from app.services.external.ai.exaone_plan_provider import ExaonePlanGenerationProvider, MAX_RAW_RESPONSE_LOG_CHARS, PLAN_FORMAT, REGENERATION_PROMPT
+from app.services.external.ai.exaone_plan_provider import ExaonePlanGenerationProvider, MAX_RAW_RESPONSE_LOG_CHARS, PLAN_FORMAT, PLAN_SYSTEM_PROMPT, REGENERATION_PROMPT
 
 
 class Client:
@@ -213,7 +213,7 @@ def test_rejects_invalid_model_responses(content):
     assert error.value.code == "EXAONE_INVALID_RESPONSE"
 
 
-def test_logs_only_truncated_raw_content_and_parse_diagnostic(caplog):
+def test_does_not_log_raw_content_and_keeps_parse_diagnostic(caplog):
     raw_content = "x" * (MAX_RAW_RESPONSE_LOG_CHARS + 1)
     provider, _ = _provider(raw_content)
     caplog.set_level(logging.INFO, logger="uvicorn.error")
@@ -223,15 +223,20 @@ def test_logs_only_truncated_raw_content_and_parse_diagnostic(caplog):
 
     assert error.value.code == "EXAONE_INVALID_RESPONSE"
 
-    raw_records = [
-        record.getMessage()
-        for record in caplog.records
-        if record.getMessage().startswith("EXAONE raw response content:")
-    ]
+    messages = [record.getMessage() for record in caplog.records]
 
-    expected_raw = f"EXAONE raw response content: {'x' * MAX_RAW_RESPONSE_LOG_CHARS}"
+    # AI 응답 원문은 로그에 기록하지 않는다.
+    assert not any(
+        "EXAONE raw response content:" in message
+        for message in messages
+    )
+    assert not any("x" * 100 in message for message in messages)
 
-    assert raw_records == [expected_raw, expected_raw]
+    # 원문 대신 파싱 오류 진단은 유지한다.
+    assert sum(
+        message.startswith("EXAONE response validation failed:")
+        for message in messages
+    ) == 2
 
     diagnostic_records = [
         record.getMessage()
@@ -407,6 +412,17 @@ def test_regeneration_prompt_names_revision_rules_and_existing_output_schema():
         assert required_text in REGENERATION_PROMPT
 
 
+def test_initial_prompt_distinguishes_rest_from_location_unknown_free_time():
+    for required_text in (
+        "no more than two non-food PLACE visits",
+        "REST is a planned rest interval",
+        "FREE_TIME is only an unscheduled, location-unknown flexible interval",
+        "Do not label FREE_TIME as a nearby walk",
+        "short geographic gap",
+    ):
+        assert required_text in PLAN_SYSTEM_PROMPT
+
+
 def test_payload_preserves_anchor_metadata_for_the_model_prompt():
     provider, client = _provider()
     trip, preferences, companions, interests, preference_context, places = _inputs()
@@ -432,7 +448,7 @@ def test_request_sets_context_size_and_limits_days_to_trip_dates():
     provider.generate_plan(*_inputs("2026-10-11"))
 
     call = client.calls[0]
-    assert call["options"] == {"temperature": 0, "num_ctx": 8192}
+    assert call["options"] == {"temperature": 0, "num_ctx": 8192, "num_predict": 256 + 2 * 768}
     days_schema = call["format_schema"]["properties"]["days"]
     assert days_schema["minItems"] == days_schema["maxItems"] == 2
     assert days_schema["items"]["properties"]["visit_date"]["enum"] == ["2026-10-10", "2026-10-11"]

@@ -26,3 +26,5 @@ def get_current_user(claims: Annotated[dict, Depends(get_access_claims)], db: DB
     if user.status != "ACTIVE": raise AppError("USER_INACTIVE", "User is inactive", 403)
     return user
 CurrentUser = Annotated[object, Depends(get_current_user)]
+
+

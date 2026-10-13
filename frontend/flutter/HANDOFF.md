@@ -219,3 +219,38 @@
 - Both home-screen notification buttons observe the same unread state. Their red badge count updates after each read, and the entire red badge is hidden when the unread count reaches zero.
 - Validation: `flutter analyze lib/screens/home/home_screen.dart lib/screens/my/notifications_screen.dart lib/services/notification_service.dart` passed.
 - Scope: read state lasts while the app process is running. Persisting it across app restarts or receiving device push notifications still requires backend/local-storage integration.
+
+## 2026-10-12 긴 사용자명 표시 안정화
+
+### 완료
+- 홈 화면과 마이페이지에서 긴 사용자명을 말줄임표로 생략하지 않고 전체 표시하도록 변경했습니다.
+- 홈 헤더는 사용자명 영역과 알림 버튼 영역을 분리해, 긴 이름이 여러 줄이 되어도 알림 버튼과 겹치지 않게 했습니다.
+- 기본/편한 모드 마이페이지의 사용자명은 프로필 카드 안의 가변 폭 영역에서 줄바꿈되며, 카드 바깥으로 넘치지 않게 했습니다.
+
+### 변경 파일
+- `lib/screens/home/home_screen.dart`
+- `lib/screens/my/profile_screen.dart`
+
+### 확인
+- `git diff --check` 통과.
+- 실기기에서는 앱 완전 종료 후 재실행 또는 새 APK 설치 후 긴 사용자명 표시를 확인합니다.
+
+## 2026-10-12 AI 초안·저장 목록 반응형 보완
+
+### 완료
+- AI 코스 초안의 DAY 1을 확정 일정과 같은 흐름으로 통일했습니다. 초안은 이제 `10:00 숙소 체크인 · 짐 보관 → 11:00 선택 장소 → 13:00 점심 식사 · 지역 맛집 → 14:30 다음 장소/산책 → 18:30 숙소 복귀 · 휴식` 순서와 설명을 표시합니다.
+- 편한 모드 저장 장소 카드에서 지역·태그·삭제 버튼이 좁은 기기에서 가로로 충돌하던 구성을 줄바꿈 가능한 레이아웃으로 변경했고, 카드 높이를 늘려 내용이 잘리지 않도록 조정했습니다.
+
+### 변경 파일
+- `lib/screens/trip/trip_places_screen.dart`
+- `lib/screens/preference/youtube_saved_screen.dart`
+- `lib/core/layout/app_responsive.dart`
+
+### 확인
+- `dart format lib/screens/trip/trip_places_screen.dart` 완료.
+- `git diff --check` 통과.
+- 실제 Android 기기에서는 Hot Restart 후 AI 초안과 확정 DAY 1, 편한 모드 저장 카드의 긴 지역명·태그·삭제 버튼 줄바꿈을 확인합니다.
+
+### dx-all 반영 메모 (2026-10-12)
+- 백엔드 연동판에서는 AI 코스 초안이 실제 일정 생성으로 대체돼 있어 목업 초안(`_draftStep`) 변경은 반영하지 않았습니다. 목업 이동시간(예: 도보 10분 · 700m)도 들어오지 않습니다.
+- 저장 장소 화면은 서버 저장 목록 버전을 유지하고, 카드 높이(`savedPlaceExtent` 248/260)만 반영했습니다.

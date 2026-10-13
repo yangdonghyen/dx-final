@@ -1,0 +1,1114 @@
+{
+  "run_at": "2026-10-12T09:23:01",
+  "trip_label": "부산",
+  "source_trip_id": 68,
+  "provider": "replay",
+  "model": {
+    "model": "replay of 20261011_202650_busan_real (no network)",
+    "num_ctx": 8192,
+    "ai_timeout_seconds": 180
+  },
+  "isolated_target": {
+    "host": "127.0.0.1",
+    "port": 34000,
+    "database": "initial_plan_eval_f023b190217e"
+  },
+  "error": null,
+  "timing": {
+    "total_generation_ms": 45,
+    "ollama_output_ms": 0,
+    "ollama_prompt_tokens": 0,
+    "ollama_output_tokens": 0,
+    "ollama_calls": 1
+  },
+  "ollama_calls": [
+    {
+      "call": 1,
+      "elapsed_ms": 0,
+      "load_ms": null,
+      "prompt_tokens": null,
+      "prompt_ms": null,
+      "output_tokens": null,
+      "output_ms": null,
+      "total_ms": null,
+      "done_reason": "stop",
+      "result": "valid",
+      "error_code": null,
+      "validation_reason": null,
+      "will_retry": false
+    }
+  ],
+  "candidate_diagnostics": {
+    "seeded": {
+      "source": "seeded export places",
+      "total": 8,
+      "non_food": 6,
+      "food": 2,
+      "cafe": 0,
+      "trip_days": 2,
+      "recommended_non_food": 4,
+      "status": "비음식 후보가 한 권역(반경 2km)에 집중 / 식당이 점심·저녁 수(4곳)보다 적음",
+      "non_food_places": [
+        "광안리해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "플랜비스튜디오 광안리해수욕장점 (문화,예술 > 사진 > 사진관,포토스튜디오 > 즉석사진 > 플랜비스튜디오)",
+        "해파랑길 1코스 (여행 > 관광,명소 > 도보여행 > 해파랑길)",
+        "세븐테마 카페(세븐테마파크) (여행 > 관광,명소 > 동물원 > 실내동물원)",
+        "광안리만남의광장 (여행 > 관광,명소 > 광장)",
+        "광안리해변테마거리 (여행 > 관광,명소 > 테마거리)"
+      ],
+      "sight_types": [
+        "광장",
+        "실내동물원",
+        "테마거리",
+        "플랜비스튜디오",
+        "해수욕장,해변",
+        "해파랑길"
+      ],
+      "areas": 1,
+      "area_sizes": [
+        6
+      ],
+      "restaurants": 2,
+      "targets": {
+        "sights": 4,
+        "restaurants": 4,
+        "areas": 2
+      },
+      "shortfall": {
+        "sights": 0,
+        "restaurants": 2,
+        "areas": 1
+      },
+      "problems": [
+        "SINGLE_AREA",
+        "RESTAURANTS_FEWER_THAN_MEALS"
+      ]
+    },
+    "model_input": {
+      "source": "candidates sent to the model",
+      "total": 8,
+      "non_food": 6,
+      "food": 2,
+      "cafe": 0,
+      "trip_days": 2,
+      "recommended_non_food": 4,
+      "status": "비음식 후보가 한 권역(반경 2km)에 집중 / 식당이 점심·저녁 수(4곳)보다 적음",
+      "non_food_places": [
+        "광안리해수욕장 (여행 > 관광,명소 > 해수욕장,해변)",
+        "플랜비스튜디오 광안리해수욕장점 (문화,예술 > 사진 > 사진관,포토스튜디오 > 즉석사진 > 플랜비스튜디오)",
+        "해파랑길 1코스 (여행 > 관광,명소 > 도보여행 > 해파랑길)",
+        "세븐테마 카페(세븐테마파크) (여행 > 관광,명소 > 동물원 > 실내동물원)",
+        "광안리만남의광장 (여행 > 관광,명소 > 광장)",
+        "광안리해변테마거리 (여행 > 관광,명소 > 테마거리)"
+      ],
+      "sight_types": [
+        "광장",
+        "실내동물원",
+        "테마거리",
+        "플랜비스튜디오",
+        "해수욕장,해변",
+        "해파랑길"
+      ],
+      "areas": 1,
+      "area_sizes": [
+        6
+      ],
+      "restaurants": 2,
+      "targets": {
+        "sights": 4,
+        "restaurants": 4,
+        "areas": 2
+      },
+      "shortfall": {
+        "sights": 0,
+        "restaurants": 2,
+        "areas": 1
+      },
+      "problems": [
+        "SINGLE_AREA",
+        "RESTAURANTS_FEWER_THAN_MEALS"
+      ]
+    }
+  },
+  "service_warnings": [
+    "1일차 점심(11:00~14:00) 식사 일정이 없어요.",
+    "1일차 관광지가 쉬는 시간 없이 4곳 이상 이어져요.",
+    "1일차 관광 일정이 450분으로 많아요(기준 360분).",
+    "1일차 신선식당까지 직선 5.8km라 이동시간을 확인해야 해요.",
+    "2일차 이재모피자 본점까지 직선 9.9km라 이동시간을 확인해야 해요.",
+    "2일차 해파랑길 1코스까지 직선 9.5km라 이동시간을 확인해야 해요.",
+    "2일차 관광지가 모두 이전 날과 같은 지역(반경 1km)이에요.",
+    "2일차 관광 일정이 240분으로 다른 날(450분)보다 크게 적어요."
+  ],
+  "quality_warnings": [
+    {
+      "code": "MISSING_LUNCH",
+      "severity": "WARNING",
+      "message": "1일차 점심(11:00~14:00) 식사 일정이 없어요."
+    },
+    {
+      "code": "CONSECUTIVE_SIGHTS",
+      "severity": "WARNING",
+      "message": "1일차 관광지가 쉬는 시간 없이 4곳 이상 이어져요."
+    },
+    {
+      "code": "CROWDED_DAY",
+      "severity": "WARNING",
+      "message": "1일차 관광 일정이 450분으로 많아요(기준 360분)."
+    },
+    {
+      "code": "UNVERIFIED_LONG_LEG",
+      "severity": "WARNING",
+      "message": "1일차 신선식당까지 직선 5.8km라 이동시간을 확인해야 해요."
+    },
+    {
+      "code": "UNVERIFIED_LONG_LEG",
+      "severity": "WARNING",
+      "message": "2일차 이재모피자 본점까지 직선 9.9km라 이동시간을 확인해야 해요."
+    },
+    {
+      "code": "UNVERIFIED_LONG_LEG",
+      "severity": "WARNING",
+      "message": "2일차 해파랑길 1코스까지 직선 9.5km라 이동시간을 확인해야 해요."
+    },
+    {
+      "code": "REPEATED_AREA",
+      "severity": "WARNING",
+      "message": "2일차 관광지가 모두 이전 날과 같은 지역(반경 1km)이에요."
+    },
+    {
+      "code": "UNEVEN_DAYS",
+      "severity": "WARNING",
+      "message": "2일차 관광 일정이 240분으로 다른 날(450분)보다 크게 적어요."
+    }
+  ],
+  "critical_errors": [],
+  "score": {
+    "areas": {
+      "장소 정확성(25)": 23.0,
+      "동선·이동시간(25)": 11.0,
+      "시간표 현실성(20)": 13.0,
+      "관심사·다양성(15)": 15.0,
+      "시니어·휴식(15)": 9.5
+    },
+    "total": 71.5,
+    "unverified": [
+      "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+      "이동시간: 7/7구간 실측 없음(UNKNOWN은 9점 중 3점만 인정)",
+      "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+    ],
+    "facts": {
+      "visits": 8,
+      "non_food_visits": 6,
+      "restaurants": 2,
+      "interests_covered": [
+        "CAFE",
+        "CITY",
+        "FOOD"
+      ],
+      "days": 2
+    }
+  },
+  "score_v2": {
+    "version": "v2",
+    "areas": {
+      "장소 정확성(25)": 23.0,
+      "동선·이동시간(25)": 8.0,
+      "시간표 현실성(20)": 10.5,
+      "관심사·다양성(15)": 12.0,
+      "시니어·휴식(15)": 5.0
+    },
+    "total": 58.5,
+    "unverified": [
+      "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+      "이동시간: 7/7구간 실측 없음(UNKNOWN은 9점 중 2점)",
+      "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+    ],
+    "facts": {
+      "visits": 8,
+      "non_food_visits": 6,
+      "sight_areas": 1,
+      "sight_types": [
+        "광장",
+        "실내동물원",
+        "테마거리",
+        "플랜비스튜디오",
+        "해수욕장,해변",
+        "해파랑길"
+      ],
+      "interests_covered": [
+        "CITY",
+        "FOOD"
+      ],
+      "days": 2
+    }
+  },
+  "score_v2_changes": [
+    "이름·카테고리 일치는 서버가 강제하므로 5점→2점, 남는 3점은 같은 위치 중복이 없을 때만",
+    "관광 적합성: 식당만 있는 날 -3, 같은 위치 -2",
+    "일자 간 다양성: 방문 관광지의 권역 수(반경 2km) ÷ 일수, 반복 권역 -4",
+    "이동시간 UNKNOWN은 9점 중 2점만 인정, 미검증 장거리 구간당 -1.5",
+    "식사 규칙: 경고당 -2.5(점심·저녁 누락 포함), 과밀한 날은 체류 점수 -2",
+    "관심사는 이름이 아니라 카테고리로만 인정, 유형 다양성은 비음식 관광 유형 수 × 2 (최대 6)",
+    "시니어: 휴식은 REST와 카페만 인정, 연속 관광 -2, 날짜 간 불균형 -2"
+  ],
+  "candidate_mode": "export",
+  "candidate_source": "과거 여행에 쓰인 장소만 (검색 보충 없음)",
+  "supply_ok": false,
+  "passes_80": false,
+  "passes_80_v1": false,
+  "generated": {
+    "trip": {
+      "trip_id": 68,
+      "destination": "부산",
+      "start_date": "2026-10-29",
+      "end_date": "2026-10-30",
+      "transport_mode": "CAR"
+    },
+    "plan_items": [
+      {
+        "item_id": 1,
+        "plan_id": 1,
+        "place_id": 163,
+        "visit_date": "2026-10-29",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "광안리해수욕장",
+        "start_time": "09:00:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 2,
+        "plan_id": 1,
+        "place_id": 307,
+        "visit_date": "2026-10-29",
+        "sequence_no": 2,
+        "item_type": "PLACE",
+        "title": "세븐테마 카페(세븐테마파크)",
+        "start_time": "12:30:00",
+        "end_time": "14:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 3,
+        "plan_id": 1,
+        "place_id": 310,
+        "visit_date": "2026-10-29",
+        "sequence_no": 3,
+        "item_type": "PLACE",
+        "title": "광안리만남의광장",
+        "start_time": "14:30:00",
+        "end_time": "16:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 4,
+        "plan_id": 1,
+        "place_id": 311,
+        "visit_date": "2026-10-29",
+        "sequence_no": 4,
+        "item_type": "PLACE",
+        "title": "광안리해변테마거리",
+        "start_time": "16:30:00",
+        "end_time": "18:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 5,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-29",
+        "sequence_no": 5,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "18:00:00",
+        "end_time": "19:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 6,
+        "plan_id": 1,
+        "place_id": 146,
+        "visit_date": "2026-10-29",
+        "sequence_no": 6,
+        "item_type": "MEAL",
+        "title": "신선식당",
+        "start_time": "19:30:00",
+        "end_time": "21:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 7,
+        "plan_id": 1,
+        "place_id": 173,
+        "visit_date": "2026-10-30",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "플랜비스튜디오 광안리해수욕장점",
+        "start_time": "10:00:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 8,
+        "plan_id": 1,
+        "place_id": 149,
+        "visit_date": "2026-10-30",
+        "sequence_no": 2,
+        "item_type": "MEAL",
+        "title": "이재모피자 본점",
+        "start_time": "12:30:00",
+        "end_time": "14:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 9,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-30",
+        "sequence_no": 3,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "14:30:00",
+        "end_time": "16:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "item_id": 10,
+        "plan_id": 1,
+        "place_id": 306,
+        "visit_date": "2026-10-30",
+        "sequence_no": 4,
+        "item_type": "PLACE",
+        "title": "해파랑길 1코스",
+        "start_time": "16:30:00",
+        "end_time": "18:30:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      }
+    ],
+    "places": [
+      {
+        "place_id": 146,
+        "name": "신선식당",
+        "category": "음식점 > 한식",
+        "region": "부산",
+        "address": "부산 동구 범일동 830-46",
+        "latitude": "35.1395823",
+        "longitude": "129.0607856",
+        "kakao_place_id": "11962918",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/11962918",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-09-29 00:49:10",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 149,
+        "name": "이재모피자 본점",
+        "category": "음식점 > 양식 > 피자",
+        "region": "부산",
+        "address": "부산 중구 신창동1가 2-1",
+        "latitude": "35.1020422",
+        "longitude": "129.0307472",
+        "kakao_place_id": "10070964",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/10070964",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-09-29 00:49:11",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 163,
+        "name": "광안리해수욕장",
+        "category": "여행 > 관광,명소 > 해수욕장,해변",
+        "region": null,
+        "address": "부산 수영구 광안동 192-20",
+        "latitude": "35.1531933",
+        "longitude": "129.1189761",
+        "kakao_place_id": "8202423",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/8202423",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 07:32:10",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 173,
+        "name": "플랜비스튜디오 광안리해수욕장점",
+        "category": "문화,예술 > 사진 > 사진관,포토스튜디오 > 즉석사진 > 플랜비스튜디오",
+        "region": null,
+        "address": "부산 수영구 광안동 192-5",
+        "latitude": "35.1541279",
+        "longitude": "129.1188160",
+        "kakao_place_id": "1959293875",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/1959293875",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 06:41:02",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 306,
+        "name": "해파랑길 1코스",
+        "category": "여행 > 관광,명소 > 도보여행 > 해파랑길",
+        "region": "광안리해수욕장",
+        "address": "부산 수영구 광안동",
+        "latitude": "35.1509768",
+        "longitude": "129.1164806",
+        "kakao_place_id": "26564180",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/26564180",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 03:48:29",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 307,
+        "name": "세븐테마 카페(세븐테마파크)",
+        "category": "여행 > 관광,명소 > 동물원 > 실내동물원",
+        "region": "광안리해수욕장",
+        "address": "부산 수영구 민락동 179-11",
+        "latitude": "35.1547240",
+        "longitude": "129.1199232",
+        "kakao_place_id": "895958045",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/895958045",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 03:48:29",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 310,
+        "name": "광안리만남의광장",
+        "category": "여행 > 관광,명소 > 광장",
+        "region": null,
+        "address": "부산 수영구 민락동 179-19",
+        "latitude": "35.1540352",
+        "longitude": "129.1196826",
+        "kakao_place_id": "2074337020",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/2074337020",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 06:45:05",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      },
+      {
+        "place_id": 311,
+        "name": "광안리해변테마거리",
+        "category": "여행 > 관광,명소 > 테마거리",
+        "region": null,
+        "address": "부산 수영구 민락동",
+        "latitude": "35.1550882",
+        "longitude": "129.1219220",
+        "kakao_place_id": "12644071",
+        "tour_content_id": null,
+        "phone": null,
+        "website": "http://place.map.kakao.com/12644071",
+        "opening_hours": "\"null\"",
+        "closed_days": null,
+        "parking_info": null,
+        "description": null,
+        "verification_status": "UNKNOWN",
+        "details_updated_at": "2026-10-08 06:45:05",
+        "created_at": "2026-10-12 09:23:01",
+        "updated_at": "2026-10-12 09:23:01"
+      }
+    ],
+    "validation_issues": [
+      {
+        "issue_type": "OTHER",
+        "severity": "WARNING",
+        "message": "1일차 점심(11:00~14:00) 식사 일정이 없어요."
+      },
+      {
+        "issue_type": "OTHER",
+        "severity": "WARNING",
+        "message": "1일차 관광지가 쉬는 시간 없이 4곳 이상 이어져요."
+      },
+      {
+        "issue_type": "OTHER",
+        "severity": "WARNING",
+        "message": "1일차 관광 일정이 450분으로 많아요(기준 360분)."
+      },
+      {
+        "issue_type": "TRAVEL_TIME_UNKNOWN",
+        "severity": "WARNING",
+        "message": "1일차 신선식당까지 직선 5.8km라 이동시간을 확인해야 해요."
+      },
+      {
+        "issue_type": "TRAVEL_TIME_UNKNOWN",
+        "severity": "WARNING",
+        "message": "2일차 이재모피자 본점까지 직선 9.9km라 이동시간을 확인해야 해요."
+      },
+      {
+        "issue_type": "TRAVEL_TIME_UNKNOWN",
+        "severity": "WARNING",
+        "message": "2일차 해파랑길 1코스까지 직선 9.5km라 이동시간을 확인해야 해요."
+      },
+      {
+        "issue_type": "OTHER",
+        "severity": "WARNING",
+        "message": "2일차 관광지가 모두 이전 날과 같은 지역(반경 1km)이에요."
+      },
+      {
+        "issue_type": "OTHER",
+        "severity": "WARNING",
+        "message": "2일차 관광 일정이 240분으로 다른 날(450분)보다 크게 적어요."
+      }
+    ]
+  },
+  "model_input_place_ids": [
+    163,
+    173,
+    306,
+    307,
+    310,
+    311,
+    146,
+    149
+  ],
+  "route_optimization": {
+    "applied": true,
+    "moves": [
+      {
+        "kind": "swap",
+        "visit_date": "2026-10-29",
+        "sequence": 2,
+        "from_place_id": 306,
+        "to_place_id": 307,
+        "gain_m": 1009
+      },
+      {
+        "kind": "swap",
+        "visit_date": "2026-10-30",
+        "sequence": 4,
+        "from_place_id": 307,
+        "to_place_id": 306,
+        "gain_m": 1009
+      }
+    ],
+    "before_m": 26726,
+    "after_m": 25717,
+    "longest_leg_before_m": 10004,
+    "longest_leg_after_m": 9884,
+    "rest_breaks": [],
+    "far_meals": [
+      {
+        "visit_date": "2026-10-29",
+        "sequence": 6,
+        "place_id": 146,
+        "nearest_stop_m": 5820
+      },
+      {
+        "visit_date": "2026-10-30",
+        "sequence": 2,
+        "place_id": 149,
+        "nearest_stop_m": 9508
+      }
+    ]
+  },
+  "route_risk": [
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리해수욕장",
+      "to": "세븐테마 카페(세븐테마파크)",
+      "straight_km": 0.2,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "세븐테마 카페(세븐테마파크)",
+      "to": "광안리만남의광장",
+      "straight_km": 0.1,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리만남의광장",
+      "to": "광안리해변테마거리",
+      "straight_km": 0.2,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리해변테마거리",
+      "to": "신선식당",
+      "straight_km": 5.8,
+      "gap_min": 90,
+      "verified_minutes": null,
+      "needs_check": true
+    },
+    {
+      "visit_date": "2026-10-30",
+      "from": "플랜비스튜디오 광안리해수욕장점",
+      "to": "이재모피자 본점",
+      "straight_km": 9.9,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": true
+    },
+    {
+      "visit_date": "2026-10-30",
+      "from": "이재모피자 본점",
+      "to": "해파랑길 1코스",
+      "straight_km": 9.5,
+      "gap_min": 150,
+      "verified_minutes": null,
+      "needs_check": true
+    }
+  ],
+  "baseline_route_risk": [
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리해수욕장",
+      "to": "해파랑길 1코스",
+      "straight_km": 0.3,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "해파랑길 1코스",
+      "to": "광안리만남의광장",
+      "straight_km": 0.4,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리만남의광장",
+      "to": "광안리해변테마거리",
+      "straight_km": 0.2,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": false
+    },
+    {
+      "visit_date": "2026-10-29",
+      "from": "광안리해변테마거리",
+      "to": "신선식당",
+      "straight_km": 5.8,
+      "gap_min": 90,
+      "verified_minutes": null,
+      "needs_check": true
+    },
+    {
+      "visit_date": "2026-10-30",
+      "from": "플랜비스튜디오 광안리해수욕장점",
+      "to": "이재모피자 본점",
+      "straight_km": 9.9,
+      "gap_min": 30,
+      "verified_minutes": null,
+      "needs_check": true
+    },
+    {
+      "visit_date": "2026-10-30",
+      "from": "이재모피자 본점",
+      "to": "세븐테마 카페(세븐테마파크)",
+      "straight_km": 10.0,
+      "gap_min": 150,
+      "verified_minutes": null,
+      "needs_check": true
+    }
+  ],
+  "replay_source": "C:\\dev\\dx-all\\docs\\initial_plan_eval\\20261011_202650_busan_real\\result.json",
+  "baseline": {
+    "manual_score": 54,
+    "manual_warnings": 5,
+    "score": {
+      "areas": {
+        "장소 정확성(25)": 23.0,
+        "동선·이동시간(25)": 11.0,
+        "시간표 현실성(20)": 13.0,
+        "관심사·다양성(15)": 15.0,
+        "시니어·휴식(15)": 9.5
+      },
+      "total": 71.5,
+      "unverified": [
+        "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+        "이동시간: 7/7구간 실측 없음(UNKNOWN은 9점 중 3점만 인정)",
+        "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+      ],
+      "facts": {
+        "visits": 8,
+        "non_food_visits": 6,
+        "restaurants": 2,
+        "interests_covered": [
+          "CAFE",
+          "CITY",
+          "FOOD"
+        ],
+        "days": 2
+      }
+    },
+    "score_v2": {
+      "version": "v2",
+      "areas": {
+        "장소 정확성(25)": 23.0,
+        "동선·이동시간(25)": 8.0,
+        "시간표 현실성(20)": 10.5,
+        "관심사·다양성(15)": 12.0,
+        "시니어·휴식(15)": 5.0
+      },
+      "total": 58.5,
+      "unverified": [
+        "장소 실존·영업 여부: 검증 불가 → 실재 근거 10점 중 최대 8점",
+        "이동시간: 7/7구간 실측 없음(UNKNOWN은 9점 중 2점)",
+        "영업시간: 8/8곳 검증 불가(6점 중 최대 1점)"
+      ],
+      "facts": {
+        "visits": 8,
+        "non_food_visits": 6,
+        "sight_areas": 1,
+        "sight_types": [
+          "광장",
+          "실내동물원",
+          "테마거리",
+          "플랜비스튜디오",
+          "해수욕장,해변",
+          "해파랑길"
+        ],
+        "interests_covered": [
+          "CITY",
+          "FOOD"
+        ],
+        "days": 2
+      }
+    },
+    "quality_warnings": [
+      {
+        "code": "MISSING_LUNCH",
+        "message": "1일차 점심(11:00~14:00) 식사 일정이 없어요."
+      },
+      {
+        "code": "CONSECUTIVE_SIGHTS",
+        "message": "1일차 관광지가 쉬는 시간 없이 4곳 이상 이어져요."
+      },
+      {
+        "code": "CROWDED_DAY",
+        "message": "1일차 관광 일정이 450분으로 많아요(기준 360분)."
+      },
+      {
+        "code": "UNVERIFIED_LONG_LEG",
+        "message": "1일차 신선식당까지 직선 5.8km라 이동시간을 확인해야 해요."
+      },
+      {
+        "code": "UNVERIFIED_LONG_LEG",
+        "message": "2일차 이재모피자 본점까지 직선 9.9km라 이동시간을 확인해야 해요."
+      },
+      {
+        "code": "UNVERIFIED_LONG_LEG",
+        "message": "2일차 세븐테마 카페(세븐테마파크)까지 직선 10.0km라 이동시간을 확인해야 해요."
+      },
+      {
+        "code": "REPEATED_AREA",
+        "message": "2일차 관광지가 모두 이전 날과 같은 지역(반경 1km)이에요."
+      },
+      {
+        "code": "UNEVEN_DAYS",
+        "message": "2일차 관광 일정이 240분으로 다른 날(450분)보다 크게 적어요."
+      }
+    ],
+    "plan_items": [
+      {
+        "item_id": 1,
+        "plan_id": 1,
+        "place_id": 163,
+        "visit_date": "2026-10-29",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "광안리해수욕장",
+        "start_time": "09:00:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 2,
+        "plan_id": 1,
+        "place_id": 306,
+        "visit_date": "2026-10-29",
+        "sequence_no": 2,
+        "item_type": "PLACE",
+        "title": "해파랑길 1코스",
+        "start_time": "12:30:00",
+        "end_time": "14:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 3,
+        "plan_id": 1,
+        "place_id": 310,
+        "visit_date": "2026-10-29",
+        "sequence_no": 3,
+        "item_type": "PLACE",
+        "title": "광안리만남의광장",
+        "start_time": "14:30:00",
+        "end_time": "16:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 4,
+        "plan_id": 1,
+        "place_id": 311,
+        "visit_date": "2026-10-29",
+        "sequence_no": 4,
+        "item_type": "PLACE",
+        "title": "광안리해변테마거리",
+        "start_time": "16:30:00",
+        "end_time": "18:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 5,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-29",
+        "sequence_no": 5,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "18:00:00",
+        "end_time": "19:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 6,
+        "plan_id": 1,
+        "place_id": 146,
+        "visit_date": "2026-10-29",
+        "sequence_no": 6,
+        "item_type": "MEAL",
+        "title": "신선식당",
+        "start_time": "19:30:00",
+        "end_time": "21:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 7,
+        "plan_id": 1,
+        "place_id": 173,
+        "visit_date": "2026-10-30",
+        "sequence_no": 1,
+        "item_type": "PLACE",
+        "title": "플랜비스튜디오 광안리해수욕장점",
+        "start_time": "10:00:00",
+        "end_time": "12:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 8,
+        "plan_id": 1,
+        "place_id": 149,
+        "visit_date": "2026-10-30",
+        "sequence_no": 2,
+        "item_type": "MEAL",
+        "title": "이재모피자 본점",
+        "start_time": "12:30:00",
+        "end_time": "14:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 9,
+        "plan_id": 1,
+        "place_id": null,
+        "visit_date": "2026-10-30",
+        "sequence_no": 3,
+        "item_type": "REST",
+        "title": "휴식",
+        "start_time": "14:30:00",
+        "end_time": "16:00:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "VALID",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      },
+      {
+        "item_id": 10,
+        "plan_id": 1,
+        "place_id": 307,
+        "visit_date": "2026-10-30",
+        "sequence_no": 4,
+        "item_type": "PLACE",
+        "title": "세븐테마 카페(세븐테마파크)",
+        "start_time": "16:30:00",
+        "end_time": "18:30:00",
+        "transport_mode_from_previous": null,
+        "travel_minutes_from_previous": null,
+        "travel_distance_meters_from_previous": null,
+        "recommendation_reason": "여행 일정 후보로 선택된 장소입니다.",
+        "validation_status": "WARNING",
+        "created_at": "2026-10-11 20:26:50",
+        "updated_at": "2026-10-11 20:26:50"
+      }
+    ]
+  },
+  "limitations": [
+    "export에는 기존 일정에 쓰인 장소 8곳만 있고, 당시 EXAONE에 전달된 전체 후보 목록은 없습니다.",
+    "후보 모드: export = 과거 여행에 쓰인 장소만 (검색 보충 없음).",
+    "route_provider=unavailable(기존과 동일)이라 이동시간은 실측되지 않습니다.",
+    "장소 실존·영업시간은 확인하지 않았으며 정상으로 간주하지 않았습니다. 점수는 잠정입니다.",
+    "자동 점수는 리뷰 문서 6.3 기준의 근사치입니다. 수동 점수(47/54)와 직접 비교하지 말고 같은 채점기로 계산한 기존 일정 점수와 비교하세요.",
+    "Replay: 저장된 실제 EXAONE 일정을 다시 입력해 후처리만 비교합니다. 후보 풀은 그 실행의 DB 장소로 다시 계산되므로 당시 모델 입력과 완전히 같지 않을 수 있습니다. '기존 일정' 열은 그 실제 일정입니다."
+  ]
+}

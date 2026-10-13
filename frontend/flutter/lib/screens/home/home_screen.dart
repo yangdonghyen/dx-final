@@ -282,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen>
   void dispose() {
     _rainAlertTimer?.cancel();
     _youtubeSubscription?.cancel();
+    unawaited(YoutubeBridgeService.instance.stop());
     NotificationService.readIds.removeListener(_refreshNotificationBadge);
     InviteLinkService.pendingToken.removeListener(_openPendingInvite);
     ActiveTripService.revision.removeListener(_refreshActiveTrip);
@@ -629,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   ),
                 ],
-                const SizedBox(height: 20),
+                SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
                 SizedBox(
                   width: double.infinity,
                   height: 48,
@@ -711,7 +712,7 @@ class _HomeScreenState extends State<HomeScreen>
                     onTap: _openRainPlan,
                     borderRadius: BorderRadius.circular(16),
                     child: Ink(
-                      padding: const EdgeInsets.all(16),
+                      padding: EdgeInsets.all(ResponsiveLayout.cardPadding(context)),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16),
@@ -907,7 +908,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
             // 오늘 날씨를 요약하고, 누르면 7일 예보 화면으로 이동합니다.
             Material(
               color: const Color(0xFFE9F1FF),
@@ -944,7 +945,7 @@ class _HomeScreenState extends State<HomeScreen>
                             Text(
                               weatherHeadline,
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: ResponsiveLayout.isCompact(context) ? 16 : 18,
                                 fontWeight: FontWeight.w900,
                               ),
                             ),
@@ -965,7 +966,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
             Container(
               width: double.infinity,
               padding: EdgeInsets.all(ResponsiveLayout.pageHorizontal(context)),
@@ -998,7 +999,7 @@ class _HomeScreenState extends State<HomeScreen>
                     '저장한 장소를 바탕으로 나만의 여행을 만들어보세요.',
                     style: TextStyle(color: Color(0xFFE0E7FF), fontSize: 14),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
                   Material(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(17),
@@ -1069,7 +1070,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(18),
@@ -1193,12 +1194,7 @@ class _HomeScreenState extends State<HomeScreen>
       _HomeMenu(
         Icons.today_outlined,
         '오늘의 일정',
-        () => _push(
-          TodayTravelScreen(
-            transport: ActiveTripService.transport,
-            places: ActiveTripService.places,
-          ),
-        ),
+        () => _push(const TodayTravelScreen()),
       ),
       _HomeMenu(
         Icons.camera_alt_outlined,
@@ -1220,14 +1216,14 @@ class _HomeScreenState extends State<HomeScreen>
         ),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), 16, ResponsiveLayout.pageHorizontal(context), 8),
+        padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), ResponsiveLayout.sectionSpacing(context), ResponsiveLayout.pageHorizontal(context), 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                Expanded(child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
@@ -1247,6 +1243,7 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   ],
+                ),
                 ),
                 IconButton.filledTonal(
                   onPressed: () => _push(const NotificationsScreen()),
@@ -1278,7 +1275,7 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
             _section(
               title: '어디로 여행 갈까요?',
               child: Column(
@@ -1293,7 +1290,7 @@ class _HomeScreenState extends State<HomeScreen>
                           onTap: () => _push(const TextSearchScreen()),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: ResponsiveLayout.gap(context)),
                       Expanded(
                         child: _SearchTile(
                           icon: Icons.mic_none_rounded,
@@ -1307,20 +1304,20 @@ class _HomeScreenState extends State<HomeScreen>
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
             const Text(
               '무엇을 도와드릴까요?',
               style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: ResponsiveLayout.gap(context)),
             Expanded(
               child: GridView.builder(
                 itemCount: menus.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 14,
-                  crossAxisSpacing: 14,
-                  childAspectRatio: 1.22,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: ResponsiveLayout.twoColumnCount(context),
+                  mainAxisSpacing: ResponsiveLayout.gap(context),
+                  crossAxisSpacing: ResponsiveLayout.gap(context),
+                  mainAxisExtent: ResponsiveLayout.homeMenuExtent(context),
                 ),
                 itemBuilder: (context, index) {
                   final menu = menus[index];
@@ -1350,19 +1347,19 @@ class _HomeScreenState extends State<HomeScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            width: 58,
-                            height: 58,
+                            width: ResponsiveLayout.isCompact(context) ? 48 : 58,
+                            height: ResponsiveLayout.isCompact(context) ? 48 : 58,
                             decoration: BoxDecoration(
                               color: AppColors.soft,
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(menu.icon, size: 31, color: menuColor),
+                            child: Icon(menu.icon, size: ResponsiveLayout.isCompact(context) ? 27 : 31, color: menuColor),
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: ResponsiveLayout.gap(context)),
                           Text(
                             menu.label,
-                            style: const TextStyle(
-                              fontSize: 18,
+                            style: TextStyle(
+                              fontSize: ResponsiveLayout.isCompact(context) ? 16 : 18,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
@@ -1381,7 +1378,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   /// 제목과 콘텐츠를 흰 카드 안에 담는 편한 모드용 공통 섹션입니다.
   Widget _section({required String title, required Widget child}) => Container(
-    padding: const EdgeInsets.all(16),
+    padding: EdgeInsets.all(ResponsiveLayout.cardPadding(context)),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(24),
@@ -1394,7 +1391,7 @@ class _HomeScreenState extends State<HomeScreen>
           title,
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
         ),
-        const SizedBox(height: 14),
+        SizedBox(height: ResponsiveLayout.gap(context)),
         child,
       ],
     ),
@@ -1499,7 +1496,7 @@ class _YoutubeSearchSheetState extends State<_YoutubeSearchSheet> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: ResponsiveLayout.sectionSpacing(context)),
                         TextField(
                           controller: _urlController,
                           focusNode: _urlFocusNode,
@@ -1539,7 +1536,7 @@ class _YoutubeSearchSheetState extends State<_YoutubeSearchSheet> {
                           '새 영상 링크를 분석하거나 저장한 장소를 확인할 수 있어요.',
                           style: TextStyle(color: Color(0xFF6B7280)),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: ResponsiveLayout.gap(context)),
                         ListTile(
                           leading: const Icon(
                             Icons.link_rounded,

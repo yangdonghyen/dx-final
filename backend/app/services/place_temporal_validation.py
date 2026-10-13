@@ -56,7 +56,33 @@ def verified_hours(place):
     hours = getattr(place, "opening_hours", None)
     if getattr(place, "verification_status", None) != "VERIFIED" or not isinstance(hours, dict):
         return None
-    return hours
+    # Newer enrichment snapshots keep raw provider text and provenance beside a
+    # machine-readable schedule.  Legacy rows remain the flat weekday mapping.
+    schedule = hours.get("schedule")
+    return schedule if isinstance(schedule, dict) else hours
+
+
+def opening_hours_for_date(place, visit_date: date) -> dict | None:
+    """Return only the verified weekday row applicable on ``visit_date``.
+
+    Besides the legacy weekly map, official sources may provide month-bounded
+    periods.  A period is usable only when it explicitly includes the month
+    and contains a weekly map; no seasonal range is inferred.
+    """
+    hours = verified_hours(place)
+    if not isinstance(hours, dict):
+        return None
+    seasonal = hours.get("seasonal")
+    if isinstance(seasonal, list):
+        for period in seasonal:
+            months = period.get("months") if isinstance(period, dict) else None
+            if not isinstance(months, list) or visit_date.month not in months:
+                continue
+            weekly = period.get("weekly")
+            if isinstance(weekly, dict):
+                return next((value for key, value in weekly.items() if WEEKDAYS.get(str(key).casefold()) == visit_date.weekday()), None)
+        return None
+    return next((value for key, value in hours.items() if WEEKDAYS.get(str(key).casefold()) == visit_date.weekday()), None)
 
 
 def _clock(value):
@@ -72,9 +98,11 @@ def opening_hours_match(place, visit_date: date, start: time | None, end: time |
     hours = verified_hours(place)
     if hours is None or start is None or end is None:
         return None
-    day_row = next((value for key, value in hours.items() if WEEKDAYS.get(str(key).casefold()) == visit_date.weekday()), None)
+    day_row = opening_hours_for_date(place, visit_date)
     if not isinstance(day_row, dict):
         return None
+    if day_row.get("closed") is True:
+        return False
     open_time, close_time = _clock(day_row.get("open")), _clock(day_row.get("close"))
     if open_time is None or close_time is None:
         return None

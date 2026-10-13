@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_service.dart';
@@ -119,7 +120,7 @@ class _S extends State<LoginScreen> {
     backgroundColor: Colors.white,
     body: SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(32, 48, 32, 28),
+        padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(c), 48, ResponsiveLayout.pageHorizontal(c), 28),
         children: [
           Center(
             child: Container(
@@ -171,62 +172,75 @@ class _S extends State<LoginScreen> {
                 style: const TextStyle(color: AppColors.primary),
               ),
             ),
-          Row(
-            children: [
-              Semantics(
-                label: '자동 로그인',
-                checked: autoLogin,
-                child: InkWell(
-                  onTap: () => setState(() => autoLogin = !autoLogin),
-                  borderRadius: BorderRadius.circular(8),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Checkbox(
-                          value: autoLogin,
-                          onChanged: (value) =>
-                              setState(() => autoLogin = value ?? false),
-                          visualDensity: VisualDensity.compact,
-                        ),
-                        const Text('자동 로그인', style: TextStyle(fontSize: 13)),
-                      ],
+          Padding(
+            padding: const EdgeInsets.only(top: 4, bottom: 8),
+            child: Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              runSpacing: 4,
+              spacing: 8,
+              children: [
+                Semantics(
+                  label: '자동 로그인',
+                  checked: autoLogin,
+                  child: InkWell(
+                    onTap: () => setState(() => autoLogin = !autoLogin),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Checkbox(
+                            value: autoLogin,
+                            onChanged: (value) =>
+                                setState(() => autoLogin = value ?? false),
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          const Text('자동 로그인', style: TextStyle(fontSize: 13)),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Spacer(),
-              TextButton(
-                style: TextButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 0,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () => setState(
+                        () => notice = '가입한 아이디 또는 비밀번호를 재설정할 수 있어요.',
+                      ),
+                      child: const Text('아이디/비밀번호 찾기'),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Text('|', style: TextStyle(color: Color(0xFFD1D5DB))),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () => Navigator.push(
+                        c,
+                        MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                      ),
+                      child: const Text(
+                        '회원가입',
+                        style: TextStyle(fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: () =>
-                    setState(() => notice = '가입한 아이디 또는 비밀번호를 재설정할 수 있어요.'),
-                child: const Text('아이디/비밀번호 찾기'),
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                child: Text('|', style: TextStyle(color: Color(0xFFD1D5DB))),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  minimumSize: Size.zero,
-                  padding: const EdgeInsets.symmetric(horizontal: 6),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                onPressed: () => Navigator.push(
-                  c,
-                  MaterialPageRoute(builder: (_) => const RegisterScreen()),
-                ),
-                child: const Text(
-                  '회원가입',
-                  style: TextStyle(fontWeight: FontWeight.w800),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           PrimaryButton('로그인하기', onPressed: loggingIn ? null : login),
           const SizedBox(height: 22),

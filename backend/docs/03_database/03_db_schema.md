@@ -1247,3 +1247,4 @@ docent_analyses(user_id, created_at)
 23. Trip Source 삭제는 `is_active = FALSE`
 24. 외부 API 실패 시 AI 추측값으로 채우지 않음
 25. FK / UNIQUE / CHECK 제약을 임의 제거하지 않음
+

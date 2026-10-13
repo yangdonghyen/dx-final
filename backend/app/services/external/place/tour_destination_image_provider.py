@@ -583,6 +583,7 @@ class TourDestinationImageProvider:
         self,
         content_id: str,
         content_type_id: int = 12,
+        include_images: bool = True,
     ) -> dict:
         """Fetch verified place details from TourAPI common/intro/image data."""
         normalized_id = str(content_id).strip()
@@ -634,13 +635,18 @@ class TourDestinationImageProvider:
         if returned_id != normalized_id:
             raise AppError("TOUR_PLACE_NOT_FOUND", "Tour place not found", 404)
 
+        # A trusted content ID can represent an attraction, restaurant, or
+        # another TourAPI type.  detailIntro2 requires that type, so prefer the
+        # authoritative value returned by detailCommon2 over the legacy caller
+        # default.  This is essential for restaurant hours.
+        resolved_content_type_id = self._optional_int(common.get("contenttypeid")) or content_type_id
         intro: dict = {}
         try:
             intro_payload = self._get_json(
                 "detailIntro2",
                 {
                     "contentId": normalized_id,
-                    "contentTypeId": content_type_id,
+                    "contentTypeId": resolved_content_type_id,
                 },
             )
             intro_rows = self._response_rows(intro_payload)
@@ -667,10 +673,10 @@ class TourDestinationImageProvider:
             )
             intro = {}
 
-        image_url = self._optional_text(common.get("firstimage"))
+        image_url = self._optional_text(common.get("firstimage")) if include_images else None
         if image_url:
             image_url = self._normalize_image_url(image_url)
-        else:
+        elif include_images:
             try:
                 image_payload = self._get_json(
                     "detailImage2",
@@ -708,9 +714,7 @@ class TourDestinationImageProvider:
 
         return {
             "content_id": normalized_id,
-            "content_type_id": self._optional_int(
-                common.get("contenttypeid")
-            ) or content_type_id,
+            "content_type_id": resolved_content_type_id,
             "title": self._optional_text(common.get("title")),
             "address": self._optional_text(common.get("addr1")),
             "image_url": image_url,

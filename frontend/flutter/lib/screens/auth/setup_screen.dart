@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/travel_taste_options.dart';
 import '../../services/display_mode_service.dart';
@@ -129,12 +130,11 @@ class _SetupScreenState extends State<SetupScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: items.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: ResponsiveLayout.isCompact(context) ? 2 : 3,
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
-                              childAspectRatio: 1.02,
+                              mainAxisExtent: ResponsiveLayout.isCompact(context) ? 118 : 108,
                             ),
                         itemBuilder: (context, index) {
                           final item = items[index];

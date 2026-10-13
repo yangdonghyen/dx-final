@@ -1,3 +1,5 @@
+import logging
+
 from app.core.config import Settings, get_settings
 from app.core.exceptions import AppError
 from app.services.external.ai.mock_provider import MockPlanGenerationProvider, MockPreferenceAnalysisProvider
@@ -14,11 +16,14 @@ from app.services.external.place.tour_destination_image_provider import (
 from app.services.external.scene.gemini_provider import GeminiSceneProvider
 from app.services.external.scene.mock_provider import MockSceneRecognitionProvider
 from app.services.external.weather.kma_provider import KmaProvider
-from app.services.external.routing import KakaoMobilityRouteProvider, UnavailableRouteProvider
+from app.services.external.routing import CachedRouteProvider, KakaoMobilityRouteProvider, UnavailableRouteProvider
+from app.services.external.naver_api_hub_provider import NaverApiHubProvider, UnavailableNaverCafeEvidenceProvider
 from app.services.youtube_representative_selector import YouTubeRepresentativeSelector
 from app.services.youtube_destination_recommendation_selector import (
     YouTubeDestinationRecommendationSelector,
 )
+
+logger = logging.getLogger("uvicorn.error")
 
 
 def _select(mode: str, name: str, mock_provider):
@@ -57,6 +62,11 @@ def get_tour_destination_image_provider(settings: Settings | None = None):
         settings.tour_api_base_url,
         settings.external_api_timeout_seconds,
     )
+
+
+def provide_tour_destination_image_provider():
+    """Plan generation uses it only for already-linked Tour content IDs."""
+    return get_tour_destination_image_provider()
 
 
 def get_youtube_representative_selector(settings: Settings | None = None):
@@ -98,6 +108,18 @@ def get_route_provider(settings: Settings | None = None):
         map_base_url=settings.kakao_map_base_url,
         walking_route_mode=settings.kakao_map_walking_route_mode,
     )
+
+
+def get_naver_cafe_evidence_provider(settings: Settings | None = None):
+    """API-HUB Search adapter, intentionally independent from NAVER OAuth."""
+    settings = settings or get_settings()
+    client_id = settings.naver_api_hub_client_id.strip()
+    client_secret = settings.naver_api_hub_client_secret.get_secret_value()
+    if not client_id or not client_secret:
+        logger.info("naver_cafe_evidence_provider provider=UnavailableNaverCafeEvidenceProvider configured=false")
+        return UnavailableNaverCafeEvidenceProvider()
+    logger.info("naver_cafe_evidence_provider provider=NaverApiHubProvider configured=true")
+    return NaverApiHubProvider(client_id, client_secret, settings.external_api_timeout_seconds)
 
 
 def get_kakao_region_geocoder(settings: Settings | None = None):
@@ -151,7 +173,20 @@ def provide_place_provider():
 
 
 def provide_route_provider():
-    return get_route_provider()
+    """Resolved once per HTTP request, so the route cache never outlives it."""
+    settings = get_settings()
+    provider = get_route_provider(settings)
+    if isinstance(provider, UnavailableRouteProvider):
+        return provider
+    return CachedRouteProvider(
+        provider,
+        max_calls=settings.route_max_calls_per_request,
+        max_candidate_calls=settings.route_max_candidate_calls_per_request,
+    )
+
+
+def provide_naver_cafe_evidence_provider():
+    return get_naver_cafe_evidence_provider()
 
 
 def provide_plan_generation_provider():

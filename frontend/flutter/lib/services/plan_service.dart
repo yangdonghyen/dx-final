@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import '../data/api/api_client.dart';
 import 'auth_service.dart';
 
@@ -16,6 +18,9 @@ class GeneratedPlanItem {
     this.latitude,
     this.longitude,
     this.category,
+    this.transportModeFromPrevious,
+    this.travelMinutesFromPrevious,
+    this.travelStatus,
   });
 
   final int itemId;
@@ -35,6 +40,20 @@ class GeneratedPlanItem {
   final double? longitude;
   final String? category;
 
+  /// Travel from the previous place. Older responses have none of these.
+  final String? transportModeFromPrevious;
+  final int? travelMinutesFromPrevious;
+
+  /// KNOWN, UNKNOWN or NONE. Null when the server did not send it.
+  final String? travelStatus;
+
+  /// The label to show above this item, or null to show nothing.
+  String? get travelLabel => planTravelLabel(
+    status: travelStatus,
+    mode: transportModeFromPrevious,
+    minutes: travelMinutesFromPrevious,
+  );
+
   factory GeneratedPlanItem.fromJson(Map<String, dynamic> json) {
     return GeneratedPlanItem(
       itemId: (json['item_id'] as num).toInt(),
@@ -49,8 +68,46 @@ class GeneratedPlanItem {
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
       category: json['category']?.toString(),
+      transportModeFromPrevious: json['transport_mode_from_previous']
+          ?.toString(),
+      travelMinutesFromPrevious: _intOrNull(
+        json['travel_minutes_from_previous'],
+      ),
+      travelStatus: json['travel_status']?.toString(),
     );
   }
+}
+
+int? _intOrNull(Object? value) => value is num ? value.toInt() : null;
+
+/// Korean name of a transport_mode_from_previous value.
+String planTransportLabel(String? mode) => switch (mode) {
+  'CAR' => '자동차',
+  'PUBLIC_TRANSIT' => '대중교통',
+  'WALK' => '도보',
+  'TAXI' => '택시',
+  _ => '이동',
+};
+
+/// What to show for the travel from the previous place.
+///
+/// KNOWN shows the mode and minutes, UNKNOWN says the time is not known and
+/// NONE shows nothing. Without a status (older responses and previews) only
+/// known minutes are shown; a missing value is never filled in.
+String? planTravelLabel({String? status, String? mode, Object? minutes}) {
+  if (status == 'NONE') return null;
+  final value = _intOrNull(minutes);
+  if (value != null && status != 'UNKNOWN') {
+    return '${planTransportLabel(mode)} ${_durationLabel(value)}';
+  }
+  if (status == 'UNKNOWN' || status == 'KNOWN') return '이동시간 정보 없음';
+  return null;
+}
+
+String _durationLabel(int minutes) {
+  if (minutes < 60) return '$minutes분';
+  final rest = minutes % 60;
+  return rest == 0 ? '${minutes ~/ 60}시간' : '${minutes ~/ 60}시간 $rest분';
 }
 
 /// One day of a generated plan (PlanDayResponse).
@@ -182,10 +239,34 @@ class PlanRegenerationApplyResult {
       );
 }
 
+/// AI plan calls can make up to 4 model calls on the server
+/// (AI_API_TIMEOUT_SECONDS=180 each), so wait 4 x 180s plus a 60s margin.
+const planAiRequestTimeout = Duration(seconds: 780);
+
+/// Whether a trip has a saved plan, is still generating one, or has none.
+enum TripPlanState { ready, generating, missing }
+
+class TripPlanLookup {
+  const TripPlanLookup(this.state, [this.plan]);
+
+  final TripPlanState state;
+
+  /// Set only when [state] is [TripPlanState.ready].
+  final GeneratedPlan? plan;
+}
+
 class PlanService {
-  PlanService({ApiClient? apiClient}) : _apiClient = apiClient ?? ApiClient();
+  PlanService({ApiClient? apiClient, Future<void> Function(Duration)? wait})
+    : _apiClient = apiClient ?? ApiClient(),
+      _wait = wait ?? Future<void>.delayed;
 
   final ApiClient _apiClient;
+  final Future<void> Function(Duration) _wait;
+
+  /// How often and how long [generateOrRecover] asks whether a generation
+  /// that lost its connection has finished on the server.
+  static const recoveryPollInterval = Duration(seconds: 5);
+  static const recoveryMaxPolls = 90;
 
   String get _accessToken {
     final token = AuthSession.accessToken;
@@ -208,6 +289,7 @@ class PlanService {
     final response = await _apiClient.post(
       '/api/v1/trips/$tripId/plans/generate',
       accessToken: _accessToken,
+      timeout: planAiRequestTimeout,
       body: {'selected_place_ids': selectedPlaceIds},
     );
 
@@ -223,6 +305,7 @@ class PlanService {
     final response = await _apiClient.post(
       '/api/v1/plans/$planId/regeneration-previews',
       accessToken: _accessToken,
+      timeout: planAiRequestTimeout,
       body: {
         'reason': reason,
         'instruction': instruction,
@@ -267,6 +350,7 @@ class PlanService {
     final response = await _apiClient.post(
       '/api/v1/plans/$planId/regenerate',
       accessToken: _accessToken,
+      timeout: planAiRequestTimeout,
       body: {
         'reason': reason,
         'instruction': instruction,
@@ -286,6 +370,75 @@ class PlanService {
 
     return GeneratedPlan.fromJson(response);
   }
+
+  /// GET /api/v1/trips/{tripId}/plan: the plan the server saved for the trip.
+  Future<TripPlanLookup> findForTrip(int tripId) async {
+    try {
+      final response = await _apiClient.get(
+        '/api/v1/trips/$tripId/plan',
+        accessToken: _accessToken,
+      );
+      return TripPlanLookup(
+        TripPlanState.ready,
+        GeneratedPlan.fromJson(response),
+      );
+    } on ApiException catch (error) {
+      switch (apiErrorCode(error)) {
+        case 'PLAN_GENERATION_IN_PROGRESS':
+          return const TripPlanLookup(TripPlanState.generating);
+        case 'PLAN_NOT_FOUND':
+          return const TripPlanLookup(TripPlanState.missing);
+      }
+      rethrow;
+    }
+  }
+
+  /// [generate], but when the request failed in a way the server may still
+  /// have finished (lost connection, client timeout, 409), it loads the
+  /// saved plan instead of asking the model again.
+  ///
+  /// Rethrows the original error when the server has no plan for the trip
+  /// and is not generating one, so the caller can offer a retry.
+  Future<GeneratedPlan> generateOrRecover(int tripId) async {
+    try {
+      return await generate(tripId);
+    } catch (error) {
+      if (!_serverMayHavePlan(error)) rethrow;
+      final planId = existingPlanId(error);
+      if (planId != null) return get(planId);
+      for (var poll = 0; poll < recoveryMaxPolls; poll++) {
+        final lookup = await findForTrip(tripId);
+        switch (lookup.state) {
+          case TripPlanState.ready:
+            return lookup.plan!;
+          case TripPlanState.missing:
+            rethrow;
+          case TripPlanState.generating:
+            await _wait(recoveryPollInterval);
+        }
+      }
+      throw TimeoutException('The plan is still being generated.');
+    }
+  }
+
+  static bool _serverMayHavePlan(Object error) {
+    if (error is StateError) return false;
+    if (error is! ApiException) return true;
+    return const {
+      'PLAN_ALREADY_EXISTS',
+      'PLAN_GENERATION_IN_PROGRESS',
+    }.contains(apiErrorCode(error));
+  }
+}
+
+/// The plan_id a PLAN_ALREADY_EXISTS response names, if any.
+int? existingPlanId(Object error) {
+  if (error is! ApiException) return null;
+  final detail = error.body['error'];
+  if (detail is! Map<String, dynamic>) return null;
+  final details = detail['details'];
+  if (details is! Map<String, dynamic>) return null;
+  return _intOrNull(details['plan_id']);
 }
 
 /// The server error code of an AppError response, if [error] carries one.
@@ -299,6 +452,9 @@ String? apiErrorCode(Object error) {
 /// A Korean message for a failed plan request, with the server code attached.
 String planErrorMessage(Object error) {
   if (error is StateError) return '로그인이 필요해요. 다시 로그인한 뒤 시도해주세요.';
+  if (error is TimeoutException) {
+    return 'AI 응답이 너무 오래 걸려 중단했어요. 잠시 후 다시 시도해주세요.';
+  }
   if (error is! ApiException) {
     return '서버에 연결하지 못했어요. 인터넷 연결을 확인해주세요.';
   }
@@ -342,6 +498,8 @@ String planErrorMessage(Object error) {
   }
   final korean = switch (code) {
     'PLAN_ALREADY_EXISTS' => '이 여행에는 이미 만들어진 일정이 있어요.',
+    'PLAN_GENERATION_IN_PROGRESS' => '이 여행의 일정을 아직 만들고 있어요. 잠시 후 다시 확인해주세요.',
+    'PLAN_NOT_FOUND' => '이 여행에는 아직 만들어진 일정이 없어요.',
     'PLACE_NOT_FOUND' => '선택한 장소를 찾지 못했어요. 장소를 다시 골라주세요.',
     'PLACE_COORDINATES_REQUIRED' => '위치가 확인되지 않은 장소가 있어요. 다른 장소를 골라주세요.',
     'PLACE_OUTSIDE_DESTINATION' => '여행지와 다른 지역의 장소가 있어요.',

@@ -138,6 +138,21 @@ def test_create_snapshots_user_preferences_companion_and_interests(trip_service)
     assert [(item.interest_code,item.source_type) for item in session.trip_interests[trip.trip_id]]==[("CAFE","USER")]
 
 
+@pytest.mark.parametrize("travel_style", ["SLOW", "STANDARD", "FOOD_FOCUSED"])
+def test_explicit_trip_travel_style_overrides_profile_and_is_trip_scoped(trip_service, travel_style):
+    service, session = trip_service
+
+    trip = service.create(1, request(trip_preferences={"rest_frequency": "LOW", "travel_style": travel_style}))
+
+    assert session.trip_preferences[trip.trip_id].travel_style == travel_style
+    assert session.user_preference.travel_style == "SLOW"
+
+
+def test_trip_preference_input_rejects_unknown_travel_style():
+    with pytest.raises(ValueError):
+        TripPreferenceInput(travel_style="RELAXED")
+
+
 def test_user_interest_overrides_same_profile_interest_source(trip_service):
     service,session=trip_service; trip=service.create(1,request(interest_codes=["FOOD"]))
     assert [(item.interest_code,item.source_type) for item in session.trip_interests[trip.trip_id]]==[("FOOD","USER")]
@@ -195,6 +210,40 @@ def test_city_only_request_parsing_snapshot_and_plan_interest_context_are_preser
     assert canonical == []
     assert context == {"raw_interest_codes": ["CITY"]}
     assert [candidate["place_id"] for candidate in candidates] == [163, 170]
+
+
+def test_explicit_trip_style_is_read_by_plan_generation_input(trip_service):
+    from app.services.plan_generation_service import PlanGenerationService
+
+    service, session = trip_service
+    trip = service.create(1, request(trip_preferences={"travel_style": "SLOW"}))
+    anchor = SimpleNamespace(
+        place_id=163, name="Anchor", category="AT4", region="Busan",
+        address="Busan Suyeong-gu", latitude=35.15, longitude=129.11,
+    )
+    generator = PlanGenerationService.__new__(PlanGenerationService)
+    generator._stored_anchors = lambda current_trip: [anchor]
+    generator.preferences = SimpleNamespace(get=lambda trip_id: session.trip_preferences[trip_id])
+    generator._candidate_places = lambda scope, anchors, preferences: [anchor]
+    generator.companions = SimpleNamespace(list=lambda trip_id: [])
+    generator.interests = TripInterests(session)
+
+    _, preferences, _, _, _, _, _, _ = generator._input(trip)
+
+    assert preferences["travel_style"] == "SLOW"
+
+
+def test_cafe_and_rest_interest_snapshots_reach_plan_input_without_profile_mutation(trip_service):
+    from app.services.exaone_interest_normalizer import normalize_exaone_interest_codes, raw_exaone_interest_codes
+
+    service, session = trip_service
+    trip = service.create(1, request(interest_codes=["CAFE", "REST"]))
+    stored_codes = [row.interest_code for row in session.trip_interests[trip.trip_id]]
+
+    assert stored_codes == ["CAFE", "REST"]
+    assert normalize_exaone_interest_codes(stored_codes) == ["CAFE"]
+    assert raw_exaone_interest_codes(stored_codes) == ["REST"]
+    assert session.user_interest_codes == ["FOOD"]
 
 
 def test_new_trip_snapshot_does_not_retain_sea_after_it_is_deselected(trip_service):
@@ -296,3 +345,4 @@ def test_snapshot_failure_rolls_back_all_trip_rows(trip_service, monkeypatch):
         service.create(1, request())
     assert session.rollbacks == 1
     assert not session.trips and not session.trip_preferences and not session.trip_companions and not session.trip_interests
+

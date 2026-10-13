@@ -13,6 +13,9 @@ from typing import Protocol
 class RouteEstimate:
     duration_seconds: int
     mode: str
+    # Route distance as returned by the directions provider, in metres.  It is
+    # optional because a valid provider response is allowed to omit distance.
+    distance_meters: int | None = None
     walking_seconds: int | None = None
     transfer_count: int | None = None
 

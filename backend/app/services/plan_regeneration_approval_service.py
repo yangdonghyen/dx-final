@@ -1,16 +1,22 @@
 """Apply or cancel a persisted preview; never call an AI provider here."""
 
 from datetime import date, datetime, time
+import logging
 
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.exceptions import AppError
+from app.core.request_logging import current_request_id
 from app.repositories.plan_repository import PlanItemRepository, PlanRegenerationPreviewRepository, PlanRepository, PlanRevisionRepository
 from app.repositories.trip_repository import TripRepository
 from app.schemas.plan import PlanRegenerationPreviewApplyResponse
 from app.services.external.ai.provider import GeneratedPlanDraft, PlanDraftDay, PlanDraftItem
 from app.services.plan_generation_service import PlanGenerationService
 from app.services.plan_regeneration_preview_service import PlanRegenerationPreviewService
+from app.services.plan_travel_time import stored_travel_columns
+
+
+logger = logging.getLogger("app.plan_regeneration")
 
 
 class PlanRegenerationApprovalService:
@@ -49,6 +55,18 @@ class PlanRegenerationApprovalService:
             by_date.setdefault(visit_date, []).append(item)
         return GeneratedPlanDraft([PlanDraftDay(visit_date, items) for visit_date, items in sorted(by_date.items())])
 
+    @staticmethod
+    def _proposed_travel(payload):
+        """Travel facts exactly as the approved preview showed them."""
+        travel = {}
+        for raw in payload["items"]:
+            try:
+                key = (date.fromisoformat(raw["visit_date"]), raw["sequence_no"])
+            except (KeyError, TypeError, ValueError):
+                continue
+            travel[key] = stored_travel_columns(raw)
+        return travel
+
     def _validate_stored_draft(self, draft, trip, candidate_places, anchor_ids):
         expected_dates = self.generation._date_skeleton(trip)
         if [day.visit_date for day in draft.days] != expected_dates:
@@ -83,19 +101,28 @@ class PlanRegenerationApprovalService:
             if preview.current_itinerary_snapshot != {"items": current}: raise AppError("PREVIEW_STALE", "Current itinerary no longer matches preview", 409)
             _, _, _, _, _, _, anchor_ids, candidate_places = self.generation._input(trip)
             days = self._validate_stored_draft(self._draft(preview.proposed_itinerary), trip, candidate_places, anchor_ids)
+            travel = self._proposed_travel(preview.proposed_itinerary)
             self.revisions.create(plan.plan_id, revision_no=plan.current_version, revision_type=preview.reason, instruction=None, snapshot={"current_version": plan.current_version, "items": current})
             for item in self.items.list(plan.plan_id): self.items.delete(item)
             for visit_date, rows in days:
                 for item, start, end in rows:
-                    self.items.create(plan.plan_id, place_id=item.place_id, visit_date=visit_date, sequence_no=item.sequence, item_type=item.item_type, title=item.title, start_time=start, end_time=end, recommendation_reason=item.recommendation_reason, validation_status="UNKNOWN")
+                    self.items.create(plan.plan_id, place_id=item.place_id, visit_date=visit_date, sequence_no=item.sequence, item_type=item.item_type, title=item.title, start_time=start, end_time=end, recommendation_reason=item.recommendation_reason, validation_status="UNKNOWN", **travel.get((visit_date, item.sequence), stored_travel_columns(None)))
             plan.current_version += 1
             self.previews.set_status(preview, "APPLIED", applied_at=datetime.utcnow())
             self.session.commit()
+        except AppError as exc:
+            self.session.rollback()
+            logger.info("preview_approve_failed request_id=%s plan_id=%s preview_id=%s code=%s rollback=COMPLETED", current_request_id(), plan_id, preview_id, exc.code)
+            raise
         except SQLAlchemyError as exc:
             self.session.rollback()
+            logger.info("preview_approve_failed request_id=%s plan_id=%s preview_id=%s code=PREVIEW_STORAGE_UNAVAILABLE rollback=COMPLETED", current_request_id(), plan_id, preview_id)
             raise AppError("PREVIEW_STORAGE_UNAVAILABLE", "Preview storage is unavailable", 503) from exc
         except Exception:
-            self.session.rollback(); raise
+            self.session.rollback()
+            logger.info("preview_approve_failed request_id=%s plan_id=%s preview_id=%s code=UNKNOWN rollback=COMPLETED", current_request_id(), plan_id, preview_id)
+            raise
+        logger.info("preview_approved request_id=%s plan_id=%s preview_id=%s version=%s rollback=NOT_REQUIRED", current_request_id(), plan.plan_id, preview.preview_id, plan.current_version)
         return PlanRegenerationPreviewApplyResponse(preview_id=preview.preview_id, plan_id=plan.plan_id, status="APPLIED", current_version=plan.current_version, approved=True)
 
     def cancel(self, user_id, plan_id, preview_id):
@@ -104,9 +131,17 @@ class PlanRegenerationApprovalService:
             if preview.status != "PENDING": raise AppError("PREVIEW_NOT_PENDING", "Preview is no longer pending", 409)
             self.previews.set_status(preview, "CANCELLED")
             self.session.commit()
+        except AppError as exc:
+            self.session.rollback()
+            logger.info("preview_cancel_failed request_id=%s plan_id=%s preview_id=%s code=%s rollback=COMPLETED", current_request_id(), plan_id, preview_id, exc.code)
+            raise
         except SQLAlchemyError as exc:
             self.session.rollback()
+            logger.info("preview_cancel_failed request_id=%s plan_id=%s preview_id=%s code=PREVIEW_STORAGE_UNAVAILABLE rollback=COMPLETED", current_request_id(), plan_id, preview_id)
             raise AppError("PREVIEW_STORAGE_UNAVAILABLE", "Preview storage is unavailable", 503) from exc
         except Exception:
-            self.session.rollback(); raise
+            self.session.rollback()
+            logger.info("preview_cancel_failed request_id=%s plan_id=%s preview_id=%s code=UNKNOWN rollback=COMPLETED", current_request_id(), plan_id, preview_id)
+            raise
+        logger.info("preview_cancelled request_id=%s plan_id=%s preview_id=%s rollback=NOT_REQUIRED", current_request_id(), plan.plan_id, preview.preview_id)
         return PlanRegenerationPreviewApplyResponse(preview_id=preview.preview_id, plan_id=plan.plan_id, status="CANCELLED")

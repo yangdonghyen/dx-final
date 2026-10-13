@@ -47,3 +47,4 @@ def test_session_closes_and_rolls_back_only_on_failure(monkeypatch, fails):
         db.rollback.assert_not_called()
     db.close.assert_called_once()
     db.commit.assert_not_called()
+

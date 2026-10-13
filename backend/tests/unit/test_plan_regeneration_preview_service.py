@@ -82,6 +82,24 @@ def test_preview_diff_includes_unchanged_and_removed_items():
     assert [entry["change_type"] for entry in svc._diff(current, proposed)] == ["UNCHANGED", "REMOVED"]
 
 
+def test_preview_diff_identifies_places_by_id_not_matching_title():
+    svc, _, _, _, _, _, _, _ = service()
+    current = [
+        {"item_id": 1, "place_id": 10, "item_type": "PLACE", "title": "같은 이름", "visit_date": "2026-01-01", "sequence_no": 1, "start_time": "10:00:00", "end_time": "11:00:00"},
+        {"item_id": 2, "place_id": 20, "item_type": "PLACE", "title": "감천문화마을", "visit_date": "2026-01-01", "sequence_no": 2, "start_time": "12:00:00", "end_time": "13:00:00"},
+    ]
+    proposed = [
+        {"place_id": 10, "item_type": "PLACE", "title": "같은 이름", "visit_date": "2026-01-01", "sequence_no": 1, "start_time": "10:00:00", "end_time": "11:00:00"},
+        {"place_id": 30, "item_type": "PLACE", "title": "같은 이름", "visit_date": "2026-01-01", "sequence_no": 2, "start_time": "12:00:00", "end_time": "13:00:00"},
+    ]
+
+    diff = svc._diff(current, proposed)
+
+    assert [(entry["change_type"], entry["before"] and entry["before"].get("place_id"), entry["after"] and entry["after"].get("place_id")) for entry in diff] == [
+        ("UNCHANGED", 10, 10), ("ADDED", None, 30), ("REMOVED", 20, None),
+    ]
+
+
 def test_preview_blocks_other_user_invalid_draft_provider_error_and_storage_failure():
     svc, plan, _, items, _, _, _, draft = service()
     with pytest.raises(AppError, match="own this trip"): svc.create(2, 10, PlanRegenerateRequest(reason="WEATHER_CHANGE", instruction="Indoors"))
@@ -166,6 +184,83 @@ def test_preview_rejects_unmet_places_goal_without_saving():
     assert svc.session.rollbacks == 1
     assert plan.current_version == 4
     assert len(items) == 3
+
+
+def test_preview_retries_once_when_verified_feedback_goal_is_not_met():
+    svc, plan, _, items, _, saved, received, draft = service()
+    items.append(row(102, 2, 3, "PLACE", time(16), time(17), "Gallery"))
+    corrected = GeneratedPlanDraft([PlanDraftDay(date(2026, 1, 1), [
+        PlanDraftItem(1, "PLACE", "Museum", 1, "11:00", "12:00", "moved"),
+        PlanDraftItem(2, "REST", "Rest", None, "13:00", "14:00", "rest"),
+    ])])
+    drafts = [draft, corrected]
+    svc.provider.regenerate_plan = lambda *args: received.append(args) or drafts.pop(0)
+
+    response = svc.create(
+        1, 10,
+        PlanRegenerateRequest(
+            reason="USER_FATIGUE", instruction="Fewer places and more rest",
+            feedback_codes=["places", "rest"],
+        ),
+    )
+
+    assert response.status == "PENDING"
+    assert len(received) == 2
+    assert "before=1, latest_draft=1" in received[1][7]
+    assert "before=30, latest_draft=60" in received[1][7]
+    assert len(saved) == 1 and plan.current_version == 4
+
+
+def test_preview_rejects_after_one_feedback_goal_retry_without_saving():
+    svc, plan, _, items, _, saved, received, draft = service()
+    items.append(row(102, 2, 3, "PLACE", time(16), time(17), "Gallery"))
+    svc.provider.regenerate_plan = lambda *args: received.append(args) or draft
+
+    with pytest.raises(AppError) as error:
+        svc.create(
+            1, 10,
+            PlanRegenerateRequest(
+                reason="USER_FATIGUE", instruction="Fewer places",
+                feedback_codes=["places"],
+            ),
+        )
+
+    assert error.value.code == "FEEDBACK_GOAL_NOT_MET"
+    assert len(received) == 2
+    assert saved == [] and svc.session.commits == 0 and svc.session.rollbacks == 1
+    assert plan.current_version == 4
+
+
+def test_preview_does_not_retry_when_the_first_feedback_draft_succeeds():
+    svc, _, _, _, _, saved, received, _ = service()
+
+    response = svc.create(
+        1, 10,
+        PlanRegenerateRequest(
+            reason="USER_FATIGUE", instruction="More rest", feedback_codes=["rest"],
+        ),
+    )
+
+    assert response.status == "PENDING"
+    assert len(received) == 1 and len(saved) == 1
+
+
+def test_preview_does_not_retry_anchor_loss_or_provider_failure():
+    svc, _, _, _, _, saved, received, _ = service()
+    missing_anchor = GeneratedPlanDraft([PlanDraftDay(date(2026, 1, 1), [
+        PlanDraftItem(1, "REST", "Rest", None, "11:00", "12:00", "rest"),
+    ])])
+    svc.provider.regenerate_plan = lambda *args: received.append(args) or missing_anchor
+    with pytest.raises(AppError):
+        svc.create(1, 10, PlanRegenerateRequest(reason="USER_FATIGUE", instruction="More rest", feedback_codes=["rest"]))
+    assert len(received) == 1 and saved == []
+
+    svc, _, _, _, _, saved, received, _ = service()
+    svc.provider.regenerate_plan = lambda *args: received.append(args) or (_ for _ in ()).throw(AppError("EXAONE_TIMEOUT", "timeout", 503))
+    with pytest.raises(AppError) as error:
+        svc.create(1, 10, PlanRegenerateRequest(reason="USER_FATIGUE", instruction="More rest", feedback_codes=["rest"]))
+    assert error.value.code == "EXAONE_TIMEOUT"
+    assert len(received) == 1 and saved == []
 
 
 def test_preview_rejects_partial_feedback_success():

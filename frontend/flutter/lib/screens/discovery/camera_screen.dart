@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import 'analyzing_screen.dart';
 
@@ -289,24 +290,27 @@ class _CameraScreenState extends State<CameraScreen> {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    '이미지에서 장소를 찾아드릴게요',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    '랜드마크나 풍경이 잘 보이는 사진을 앨범에서 선택해 주세요.',
-                    style: TextStyle(color: Color(0xFF6B7280)),
-                  ),
-                  const SizedBox(height: 24),
-                  Container(
-                    height: 310,
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(
+                ResponsiveLayout.pageHorizontal(context),
+                8,
+                ResponsiveLayout.pageHorizontal(context),
+                16,
+              ),
+              children: [
+                const Text(
+                  '이미지에서 장소를 찾아드릴게요',
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  '랜드마크나 풍경이 잘 보이는 사진을 앨범에서 선택해 주세요.',
+                  style: TextStyle(color: Color(0xFF6B7280)),
+                ),
+                const SizedBox(height: 24),
+                AspectRatio(
+                  aspectRatio: 1.05,
+                  child: Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -335,28 +339,28 @@ class _CameraScreenState extends State<CameraScreen> {
                             fit: BoxFit.cover,
                           ),
                   ),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 52,
-                    child: OutlinedButton.icon(
-                      onPressed: _picking ? null : _pickGalleryImage,
-                      icon: const Icon(Icons.image_search_outlined),
-                      label: Text(
-                        _selectedImage == null ? '앨범에서 불러오기' : '다른 이미지 선택',
-                      ),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppColors.primary,
-                        side: const BorderSide(color: AppColors.primary),
-                      ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: OutlinedButton.icon(
+                    onPressed: _picking ? null : _pickGalleryImage,
+                    icon: const Icon(Icons.image_search_outlined),
+                    label: Text(
+                      _selectedImage == null ? '앨범에서 불러오기' : '다른 이미지 선택',
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 28),
+            padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), 12, ResponsiveLayout.pageHorizontal(context), 20),
             child: SizedBox(
               width: double.infinity,
               height: 56,

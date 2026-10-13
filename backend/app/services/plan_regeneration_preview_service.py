@@ -1,16 +1,24 @@
 """Create pending regeneration previews without modifying the current itinerary."""
 
 from datetime import datetime, timedelta
+import logging
+from time import monotonic
 from typing import Any
 
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.config import get_settings
 from app.core.exceptions import AppError
+from app.core.request_logging import current_request_id
 from app.repositories.plan_repository import PlanItemRepository, PlanRegenerationPreviewRepository, PlanRepository
 from app.repositories.trip_repository import TripRepository
 from app.schemas.plan import PlanRegenerateRequest, PlanRegenerationPreviewResponse
 from app.services.plan_generation_service import PlanGenerationService
+from app.services.plan_travel_time import travel_columns
+
+
+logger = logging.getLogger("app.plan_regeneration")
+MAX_FEEDBACK_GOAL_PROVIDER_CALLS = 2
 
 
 class PlanRegenerationPreviewService:
@@ -35,8 +43,10 @@ class PlanRegenerationPreviewService:
         return {"item_id": item.item_id, "place_id": item.place_id, "visit_date": item.visit_date.isoformat(), "sequence_no": item.sequence_no, "item_type": item.item_type, "title": item.title, "start_time": item.start_time.isoformat() if item.start_time else None, "end_time": item.end_time.isoformat() if item.end_time else None, "validation_status": item.validation_status}
 
     @staticmethod
-    def _proposed_item(item, visit_date, start_time, end_time) -> dict[str, Any]:
-        return {"place_id": item.place_id, "visit_date": visit_date.isoformat(), "sequence_no": item.sequence, "item_type": item.item_type, "title": item.title, "start_time": start_time.isoformat() if start_time else None, "end_time": end_time.isoformat() if end_time else None, "recommendation_reason": item.recommendation_reason}
+    def _proposed_item(item, visit_date, start_time, end_time, estimate=None) -> dict[str, Any]:
+        # Travel values are stored with the proposal so approval applies these exact facts.
+        travel = travel_columns(estimate)
+        return {"place_id": item.place_id, "visit_date": visit_date.isoformat(), "sequence_no": item.sequence, "item_type": item.item_type, "title": item.title, "start_time": start_time.isoformat() if start_time else None, "end_time": end_time.isoformat() if end_time else None, "recommendation_reason": item.recommendation_reason, "transport_mode_from_previous": travel["transport_mode_from_previous"], "travel_minutes_from_previous": travel["travel_minutes_from_previous"], "travel_distance_meters_from_previous": travel["travel_distance_meters_from_previous"]}
 
     @staticmethod
     def _validate_no_time_overlap(days) -> None:
@@ -276,36 +286,149 @@ class PlanRegenerationPreviewService:
         result.extend({"change_type": "REMOVED", "before": item, "after": None} for item in remaining)
         return result
 
+    @classmethod
+    def _feedback_retry_instruction(
+        cls, instruction, feedback_codes, current, proposed, candidate_places, anchor_ids,
+    ):
+        """Add only server-verified feedback facts to the one retry prompt."""
+        facts = ["Backend verification found that the requested feedback goal was not met."]
+        codes = set(feedback_codes)
+        if "places" in codes:
+            facts.append(
+                "Verified optional activity place count: "
+                f"before={cls._optional_activity_count(current, candidate_places, anchor_ids)}, "
+                f"latest_draft={cls._optional_activity_count(proposed, candidate_places, anchor_ids)}. "
+                "The revised count must be lower."
+            )
+        if "rest" in codes:
+            facts.append(
+                "Verified REST minutes: "
+                f"before={cls._rest_minutes(current):g}, latest_draft={cls._rest_minutes(proposed):g}. "
+                "The revised REST minutes must be higher."
+            )
+        facts.append("Keep every required anchor and return only the existing output schema.")
+        return instruction.strip() + "\n\n" + " ".join(facts)
+
+    @classmethod
+    def _has_retryable_feedback_shortfall(
+        cls, feedback_codes, current, proposed, candidate_places, anchor_ids,
+    ):
+        """Only retry goals for which this service can state exact facts.
+
+        Route goals deliberately remain a one-shot validation: incomplete route
+        facts must not be replaced by a guessed retry instruction.
+        """
+        codes = set(feedback_codes)
+        return (
+            "places" in codes
+            and cls._optional_activity_count(proposed, candidate_places, anchor_ids)
+            >= cls._optional_activity_count(current, candidate_places, anchor_ids)
+        ) or (
+            "rest" in codes
+            and cls._rest_minutes(proposed) <= cls._rest_minutes(current)
+        )
+
+    @staticmethod
+    def _provider_model(provider):
+        model = getattr(provider, "model", None)
+        return model if isinstance(model, str) and model else type(provider).__name__
+
     def create(self, user_id, plan_id, request: PlanRegenerateRequest):
+        started_at = monotonic()
         plan, trip = self._owned_plan(user_id, plan_id)
         current = [self._snapshot_item(item) for item in self.items.list(plan.plan_id)]
+        provider_calls = 0
+        feedback_retry_used = False
         try:
             trip_input, preferences, companions, interests, context, candidates, anchor_ids, candidate_places = self.generation._input(trip)
-            draft = self.provider.regenerate_plan(trip_input, preferences, companions, interests, context, candidates, request.reason, request.instruction, current, request.feedback_codes)
-            draft = self.generation._normalize_draft_dates(draft, trip)
-            days = self.generation._validate_draft(self.generation._prepare_draft(draft, candidate_places, anchor_ids, trip), set(candidate_places))
-            self._validate_no_time_overlap(days); self.generation._validate_temporal_draft(days, candidate_places)
-            self.generation._validate_route_timing(days, candidate_places, trip); self.generation._validate_activity_diversity(days, candidate_places, trip)
-            included_anchors = {item.place_id for _, rows in days for item, _, _ in rows if item.place_id is not None}
-            if not anchor_ids.issubset(included_anchors): raise self.generation._provider_error()
-            proposed_items = [self._proposed_item(item, visit_date, start, end) for visit_date, rows in days for item, start, end in rows]
-            if request.reason == "USER_FATIGUE":
-                self._validate_feedback_goal(
-                    current,
-                    proposed_items,
-                    request.feedback_codes,
-                    candidate_places,
-                    anchor_ids,
-                    getattr(self.generation, "route_provider", None),
-                    getattr(trip, "transport_mode", None),
+            retry_instruction = request.instruction
+            for attempt in range(MAX_FEEDBACK_GOAL_PROVIDER_CALLS):
+                provider_started_at = monotonic()
+                provider_calls += 1
+                try:
+                    draft = self.provider.regenerate_plan(trip_input, preferences, companions, interests, context, candidates, request.reason, retry_instruction, current, request.feedback_codes)
+                finally:
+                    logger.info(
+                        "preview_provider_call request_id=%s plan_id=%s model=%s call=%s/%s elapsed_ms=%s",
+                        current_request_id(), plan.plan_id, self._provider_model(self.provider), provider_calls,
+                        MAX_FEEDBACK_GOAL_PROVIDER_CALLS, round((monotonic() - provider_started_at) * 1000),
+                    )
+                draft = self.generation._normalize_draft_dates(draft, trip)
+                days = self.generation._validate_draft(self.generation._prepare_draft(draft, candidate_places, anchor_ids, trip), set(candidate_places))
+                self._validate_no_time_overlap(days)
+                adjuster = getattr(self.generation, "_adjust_route_timing", None)
+                days = adjuster(days, candidate_places, trip) if adjuster is not None else days
+                self._validate_no_time_overlap(days); self.generation._validate_temporal_draft(days, candidate_places)
+                legs = self.generation._validate_route_timing(days, candidate_places, trip) or {}; self.generation._validate_activity_diversity(days, candidate_places, trip)
+                included_anchors = {item.place_id for _, rows in days for item, _, _ in rows if item.place_id is not None}
+                if not anchor_ids.issubset(included_anchors): raise self.generation._provider_error()
+                proposed_items = [self._proposed_item(item, visit_date, start, end, legs.get((visit_date, item.sequence))) for visit_date, rows in days for item, start, end in rows]
+                if request.reason != "USER_FATIGUE":
+                    break
+                try:
+                    self._validate_feedback_goal(
+                        current, proposed_items, request.feedback_codes, candidate_places, anchor_ids,
+                        getattr(self.generation, "route_provider", None), getattr(trip, "transport_mode", None),
+                    )
+                except AppError as exc:
+                    if (
+                        exc.code != "FEEDBACK_GOAL_NOT_MET"
+                        or attempt + 1 == MAX_FEEDBACK_GOAL_PROVIDER_CALLS
+                        or not self._has_retryable_feedback_shortfall(
+                            request.feedback_codes, current, proposed_items, candidate_places, anchor_ids,
+                        )
+                    ):
+                        raise
+                    feedback_retry_used = True
+                    retry_instruction = self._feedback_retry_instruction(
+                        request.instruction, request.feedback_codes, current, proposed_items, candidate_places, anchor_ids,
+                    )
+                    logger.info(
+                        "preview_feedback_goal request_id=%s plan_id=%s result=RETRYING code=%s "
+                        "places_before=%s places_after=%s rest_minutes_before=%s rest_minutes_after=%s",
+                        current_request_id(), plan.plan_id, exc.code,
+                        self._optional_activity_count(current, candidate_places, anchor_ids),
+                        self._optional_activity_count(proposed_items, candidate_places, anchor_ids),
+                        self._rest_minutes(current), self._rest_minutes(proposed_items),
+                    )
+                    continue
+                logger.info(
+                    "preview_feedback_goal request_id=%s plan_id=%s result=PASSED retry_used=%s feedback_codes=%s "
+                    "places_before=%s places_after=%s rest_minutes_before=%s rest_minutes_after=%s",
+                    current_request_id(), plan.plan_id, feedback_retry_used, ",".join(sorted(request.feedback_codes)),
+                    self._optional_activity_count(current, candidate_places, anchor_ids),
+                    self._optional_activity_count(proposed_items, candidate_places, anchor_ids),
+                    self._rest_minutes(current), self._rest_minutes(proposed_items),
                 )
+                break
             preview = self.previews.create(plan_id=plan.plan_id, user_id=user_id, base_version=plan.current_version, reason=request.reason, feedback_codes=list(request.feedback_codes), current_itinerary_snapshot={"items": current}, proposed_itinerary={"items": proposed_items}, diff=self._diff(current, proposed_items), expires_at=datetime.utcnow() + timedelta(minutes=get_settings().plan_regeneration_preview_ttl_minutes))
             self.session.commit()
+        except AppError as exc:
+            self.session.rollback()
+            logger.info(
+                "preview_create_failed request_id=%s plan_id=%s code=%s provider_calls=%s preview_saved=false total_elapsed_ms=%s",
+                current_request_id(), plan_id, exc.code, provider_calls, round((monotonic() - started_at) * 1000),
+            )
+            raise
         except SQLAlchemyError as exc:
             self.session.rollback()
+            logger.info("preview_create_failed request_id=%s plan_id=%s code=PREVIEW_STORAGE_UNAVAILABLE provider_calls=%s preview_saved=false total_elapsed_ms=%s", current_request_id(), plan_id, provider_calls, round((monotonic() - started_at) * 1000))
             raise AppError("PREVIEW_STORAGE_UNAVAILABLE", "Preview storage is unavailable", 503) from exc
         except Exception:
-            self.session.rollback(); raise
+            self.session.rollback()
+            logger.info("preview_create_failed request_id=%s plan_id=%s code=UNKNOWN provider_calls=%s preview_saved=false total_elapsed_ms=%s", current_request_id(), plan_id, provider_calls, round((monotonic() - started_at) * 1000))
+            raise
         # Route and opening-hours providers can be unavailable.  Hard failures
         # above are rejected, but do not claim a fully verified itinerary here.
+        logger.info(
+            "preview_create_succeeded request_id=%s plan_id=%s preview_id=%s version=%s model=%s provider_calls=%s "
+            "provider_call_limit=%s feedback_retry_used=%s preview_saved=true places_before=%s places_after=%s "
+            "rest_minutes_before=%s rest_minutes_after=%s total_elapsed_ms=%s",
+            current_request_id(), preview.plan_id, preview.preview_id, preview.base_version,
+            self._provider_model(self.provider), provider_calls, MAX_FEEDBACK_GOAL_PROVIDER_CALLS, feedback_retry_used,
+            self._optional_activity_count(current, candidate_places, anchor_ids),
+            self._optional_activity_count(proposed_items, candidate_places, anchor_ids),
+            self._rest_minutes(current), self._rest_minutes(proposed_items),
+            round((monotonic() - started_at) * 1000),
+        )
         return PlanRegenerationPreviewResponse(preview_id=preview.preview_id, plan_id=preview.plan_id, base_version=preview.base_version, status=preview.status, proposed_itinerary=preview.proposed_itinerary, diff=preview.diff, validation_status="UNKNOWN", expires_at=preview.expires_at)

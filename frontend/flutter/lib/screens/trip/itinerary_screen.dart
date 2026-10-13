@@ -8,6 +8,7 @@ import '../../services/active_trip_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/plan_service.dart';
+import '../../services/preview_diff_summary.dart';
 import '../../services/trip_service.dart';
 import '../../widgets/ai_working_indicator.dart';
 import '../../widgets/app_bottom_navigation.dart';
@@ -265,6 +266,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   GeneratedPlan? _loadedPlan;
   bool _planLoading = false;
   String? _planError;
+
+  /// True while the server is still generating this trip's first plan.
+  bool _planStillGenerating = false;
   GeneratedPlan? get _plan => _loadedPlan ?? widget.generatedPlan;
 
   /// 생성된 일정이 있으면 날짜별 일정, 없으면 null입니다.
@@ -284,24 +288,32 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 (day) => [
                   for (final item in day.items)
                     _PlanStop(
-                      // 시간이 없는 항목은 지어내지 않고 "--:--"로 보여줍니다.
-                      item.startTime != null && item.startTime!.length >= 5
-                          ? item.startTime!.substring(0, 5)
-                          : '--:--',
+                      _generatedTime(item),
                       _generatedEmoji(item),
                       item.name,
                       _generatedDescription(item),
-                      // 좌표가 없는 항목은 목록에만 두고 지도에서는 뺍니다.
-                      item.latitude != null && item.longitude != null
-                          ? LatLng(item.latitude!, item.longitude!)
-                          : null,
+                      _generatedPosition(item),
+                      travel: item.travelLabel,
+                      travelMode: item.transportModeFromPrevious,
                     ),
                 ],
               )
               .toList();
   }
 
-  String _generatedDescription(GeneratedPlanItem item) {
+  // 시간이 없는 항목은 지어내지 않고 "--:--"로 보여줍니다.
+  static String _generatedTime(GeneratedPlanItem item) =>
+      item.startTime != null && item.startTime!.length >= 5
+      ? item.startTime!.substring(0, 5)
+      : '--:--';
+
+  // 좌표가 없는 항목은 목록에만 두고 지도에서는 뺍니다.
+  static LatLng? _generatedPosition(GeneratedPlanItem item) =>
+      item.latitude != null && item.longitude != null
+      ? LatLng(item.latitude!, item.longitude!)
+      : null;
+
+  static String _generatedDescription(GeneratedPlanItem item) {
     final details = [
       if (item.address != null && item.address!.isNotEmpty) item.address!,
       if (item.category != null && item.category!.isNotEmpty)
@@ -318,26 +330,41 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     final plan = widget.generatedPlan;
     if (plan != null) {
       _applyPlan(plan);
-    } else if (ActiveTripService.planId != null) {
+    } else if (ActiveTripService.planId != null ||
+        ActiveTripService.tripId != null) {
       _loadSavedPlan();
     }
   }
 
   /// 저장된 plan_id로 일정을 다시 불러옵니다 (홈에서 다시 열 때).
+  /// plan_id를 모르면 trip_id로 서버에 저장된 일정을 찾습니다.
   Future<void> _loadSavedPlan() async {
     final planId = ActiveTripService.planId;
-    if (planId == null) return;
+    final tripId = ActiveTripService.tripId;
+    if (planId == null && tripId == null) return;
     setState(() {
       _planLoading = true;
       _planError = null;
+      _planStillGenerating = false;
     });
     try {
-      final plan = await _planService.get(planId);
+      GeneratedPlan? plan;
+      var generating = false;
+      if (planId != null) {
+        plan = await _planService.get(planId);
+      } else {
+        final lookup = await _planService.findForTrip(tripId!);
+        plan = lookup.plan;
+        generating = lookup.state == TripPlanState.generating;
+      }
       if (!mounted) return;
       setState(() {
-        _loadedPlan = plan;
-        _applyPlan(plan);
         _planLoading = false;
+        _planStillGenerating = generating;
+        if (plan != null) {
+          _loadedPlan = plan;
+          _applyPlan(plan);
+        }
       });
     } catch (error) {
       debugPrint('[Plan] load failed: $error');
@@ -399,7 +426,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   );
 
   /// Kakao 카테고리("여행 > 관광,명소 > 해수욕장")의 마지막 단계만 보여줍니다.
-  String _shortCategory(String category) =>
+  static String _shortCategory(String category) =>
       category
           .split('>')
           .map((part) => part.trim())
@@ -407,17 +434,18 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           .lastOrNull ??
       category;
 
-  String _generatedTypeLabel(String? itemType) => switch (itemType) {
+  static String _generatedTypeLabel(String? itemType) => switch (itemType) {
     'MEAL' => '식사',
     'REST' => '휴식',
     'FREE_TIME' => '자유 시간',
     _ => '관광',
   };
 
-  String _generatedEmoji(GeneratedPlanItem item) {
+  static String _generatedEmoji(GeneratedPlanItem item) {
     final category = (item.category ?? '').replaceAll(' ', '');
-    if (category.contains('카페') || category.toUpperCase().contains('CE7'))
+    if (category.contains('카페') || category.toUpperCase().contains('CE7')) {
       return '☕';
+    }
     return switch (item.itemType) {
       'MEAL' => '🍽️',
       'REST' => '☕',
@@ -800,21 +828,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
   }
 
   String _diffLabel(Map<String, dynamic> row) {
-    final after = row['after'] is Map
-        ? Map<String, dynamic>.from(row['after'] as Map)
-        : const <String, dynamic>{};
-    final before = row['before'] is Map
-        ? Map<String, dynamic>.from(row['before'] as Map)
-        : const <String, dynamic>{};
-    final name = (after['title'] ?? before['title'] ?? '일정 항목').toString();
-    return switch (row['change_type']?.toString()) {
-      'ADDED' => '추가: $name',
-      'REMOVED' => '제외: $name',
-      'RESCHEDULED' => '방문 시간 변경: $name',
-      'REST_CHANGED' => '휴식 시간 변경: $name',
-      'UNCHANGED' => '유지: $name',
-      _ => '변경: $name',
-    };
+    return previewDiffSummary(row);
   }
 
   List<Map<String, dynamic>> _proposedItems(PlanRegenerationPreview preview) {
@@ -852,7 +866,13 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       if (time.isNotEmpty) time.join(' - '),
     ].join(' ');
     final title = item['title']?.toString() ?? '일정 항목';
-    return prefix.isEmpty ? title : '$prefix · $title';
+    final label = prefix.isEmpty ? title : '$prefix · $title';
+    // Previews carry no travel_status, so only known minutes are shown.
+    final travel = planTravelLabel(
+      mode: item['transport_mode_from_previous']?.toString(),
+      minutes: item['travel_minutes_from_previous'],
+    );
+    return travel == null ? label : '$label ($travel 이동)';
   }
 
   Future<void> _approvePreview(GeneratedPlan plan) async {
@@ -1082,14 +1102,18 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     );
   }
 
-  Widget _travelLine(int index) {
-    final (icon, label) = index == 0
-        ? (Icons.directions_walk_rounded, '도보 10분 · 700m')
-        : widget.transport.contains('자동차')
-        ? (Icons.directions_car_rounded, '자차 8분 · 3.2km')
-        : widget.transport.contains('대중교통')
-        ? (Icons.directions_bus_rounded, '대중교통 16분 · 3.2km')
-        : (Icons.local_taxi_rounded, '택시 12분 · 3.2km');
+  /// Travel into [stop] from the item before it, as the server sent it.
+  /// Nothing is shown when the server sent no travel for this item.
+  Widget _travelLine(_PlanStop stop) {
+    final label = stop.travel;
+    if (label == null) return const SizedBox(height: 10);
+    final icon = switch (stop.travelMode) {
+      'CAR' => Icons.directions_car_rounded,
+      'PUBLIC_TRANSIT' => Icons.directions_bus_rounded,
+      'WALK' => Icons.directions_walk_rounded,
+      'TAXI' => Icons.local_taxi_rounded,
+      _ => Icons.more_vert_rounded,
+    };
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 0, 14, 10),
       child: Row(
@@ -1712,9 +1736,82 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       ],
     ),
   );
+  /// What the server's plan check found (meal times, food-only days,
+  /// repeated areas, unverified long legs). Shown as stored, never hidden.
+  Widget _planWarningsCard(List<String> warnings) => Container(
+    margin: const EdgeInsets.only(bottom: 12),
+    padding: const EdgeInsets.all(14),
+    decoration: BoxDecoration(
+      color: const Color(0xFFFFF7ED),
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(color: const Color(0xFFFED7AA)),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          '확인이 필요한 일정',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
+        const SizedBox(height: 6),
+        for (final warning in warnings)
+          Padding(
+            padding: const EdgeInsets.only(top: 3),
+            child: Text(
+              '• $warning',
+              style: const TextStyle(fontSize: 13, color: Color(0xFF9A3412)),
+            ),
+          ),
+      ],
+    ),
+  );
+
+  /// Shown instead of sample stops when this trip has no AI plan to show.
+  Widget _noPlanState() => Scaffold(
+    backgroundColor: AppColors.bg,
+    appBar: AppBar(title: const Text('전체 일정')),
+    body: Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 28),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              _planStillGenerating ? '일정을 아직 만들고 있어요' : '아직 만들어진 일정이 없어요',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              _planStillGenerating
+                  ? '잠시 후 다시 확인해주세요.'
+                  : '여행 만들기에서 AI 일정을 생성하면 여기에 표시돼요.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Color(0xFF4B5563)),
+            ),
+            if (_planStillGenerating) ...[
+              const SizedBox(height: 20),
+              FilledButton(
+                onPressed: _loadSavedPlan,
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  minimumSize: const Size.fromHeight(52),
+                ),
+                child: const Text('다시 확인'),
+              ),
+            ],
+          ],
+        ),
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     if (_planLoading || _planError != null) return _planLoadState();
+    // Never fall back to the built-in sample course as if it were this trip.
+    if (_generatedDays == null) return _noPlanState();
     if (rebuilding && _plan != null) {
       return const PopScope(
         canPop: false,
@@ -1755,6 +1852,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
                 children: [
                   _actionCard(),
+                  if (_plan != null && _plan!.warnings.isNotEmpty)
+                    _planWarningsCard(_plan!.warnings),
                   if (_pendingPreview != null && _plan != null)
                     _previewCard(_plan!),
                   if (widget.changeNotice != null)
@@ -1839,7 +1938,12 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                     ),
                     if (editingScheduleIndex == index)
                       _inlineEditPanel(schedule, index),
-                    if (index < schedule.length - 1) _travelLine(index),
+                    // Local comfort changes drop or add stops, so the
+                    // server's travel times no longer match them.
+                    if (index < schedule.length - 1)
+                      hasAppliedComfortReasons
+                          ? const SizedBox(height: 10)
+                          : _travelLine(schedule[index + 1]),
                   ],
                   const SizedBox(height: 8),
                   SizedBox(
@@ -1863,24 +1967,24 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                     onPressed: () => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => TodayTravelScreen(
-                          transport: widget.transport,
-                          places: widget.confirmedPlaces,
-                          itinerary: schedule
-                              .where((stop) => stop.position != null)
-                              .toList()
-                              .asMap()
-                              .entries
-                              .map(
-                                (entry) => TodayScheduleEntry(
-                                  time: entry.value.time,
-                                  emoji: entry.value.emoji,
-                                  place: entry.value.place,
-                                  description: entry.value.description,
-                                  position: entry.value.position!,
-                                  travel: entry.key == 0 ? '일정 시작' : '도보 10분',
-                                ),
-                              )
-                              .toList(),
+                          title: '${day.$1} · ${day.$2} 일정',
+                          itinerary: [
+                            for (final stop in schedule)
+                              TodayScheduleEntry(
+                                time: stop.time,
+                                emoji: stop.emoji,
+                                place: stop.place,
+                                description: stop.description,
+                                position: stop.position,
+                                // Same rule as the travel line above: only the
+                                // server's travel, and none once local comfort
+                                // changes no longer match it.
+                                travel: hasAppliedComfortReasons
+                                    ? null
+                                    : stop.travel,
+                                travelMode: stop.travelMode,
+                              ),
+                          ],
                         ),
                       ),
                     ),
@@ -2666,14 +2770,31 @@ class _ScheduleItem extends StatelessWidget {
   );
 }
 
+/// One AI plan day as [TodayTravelScreen] entries, labelled exactly as the
+/// itinerary shows them (time, emoji, description, coordinates, travel).
+List<TodayScheduleEntry> todayEntriesForPlanDay(GeneratedPlanDay day) => [
+  for (final item in day.items)
+    TodayScheduleEntry(
+      time: _ItineraryScreenState._generatedTime(item),
+      emoji: _ItineraryScreenState._generatedEmoji(item),
+      place: item.name,
+      description: _ItineraryScreenState._generatedDescription(item),
+      position: _ItineraryScreenState._generatedPosition(item),
+      travel: item.travelLabel,
+      travelMode: item.transportModeFromPrevious,
+    ),
+];
+
 class _PlanStop {
   const _PlanStop(
     this.time,
     this.emoji,
     this.place,
     this.description,
-    this.position,
-  );
+    this.position, {
+    this.travel,
+    this.travelMode,
+  });
 
   final String time;
   final String emoji;
@@ -2682,6 +2803,10 @@ class _PlanStop {
 
   /// 좌표를 모르는 일정(휴식·자유 시간 등)은 null이며 지도에 표시하지 않습니다.
   final LatLng? position;
+
+  /// Travel label from the previous item (see [planTravelLabel]), or null.
+  final String? travel;
+  final String? travelMode;
 
   _PlanStop copyWith({
     String? time,
@@ -2695,6 +2820,8 @@ class _PlanStop {
     place ?? this.place,
     description ?? this.description,
     position ?? this.position,
+    travel: travel,
+    travelMode: travelMode,
   );
 }
 

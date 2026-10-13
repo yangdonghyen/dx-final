@@ -220,3 +220,38 @@ flutter run
 - 원격 작업 기록에는 여행 만들기, 전체 일정, 날씨 화면의 Dart 분석 통과가 기록돼 있다. Android 에뮬레이터 빌드는 Flutter SDK의 Gradle 캐시 잠금 문제로 앱 컴파일 전 중단됐다고 기록돼 있다.
 - 이번 병합에서 `Handoff.md`, 지난 여행, 오늘의 일정, 전체 일정 화면에 충돌이 발생했고 양쪽 기능을 반영해 해결했다. 기존 `flutter/lib/app.dart`의 공백 변경과 미추적 `incoming-dx/`는 병합 범위에서 제외했다.
 - 병합 후 관련 Flutter 화면 7개의 Dart 정적 분석에서 `No issues found!`를 확인했다. 에뮬레이터나 실제 기기 실행은 이번 병합 과정에서 확인하지 않았다.
+
+## 2026-10-12 긴 사용자명 표시 안정화
+
+### 완료
+- 홈 화면과 마이페이지에서 긴 사용자명을 말줄임표로 생략하지 않고 전체 표시하도록 변경했습니다.
+- 홈 헤더는 사용자명 영역과 알림 버튼 영역을 분리해, 긴 이름이 여러 줄이 되어도 알림 버튼과 겹치지 않게 했습니다.
+- 기본/편한 모드 마이페이지의 사용자명은 프로필 카드 안의 가변 폭 영역에서 줄바꿈되며, 카드 바깥으로 넘치지 않게 했습니다.
+
+### 변경 파일
+- `flutter/lib/screens/home/home_screen.dart`
+- `flutter/lib/screens/my/profile_screen.dart`
+
+### 확인
+- `git diff --check` 통과.
+- 실기기에서는 앱 완전 종료 후 재실행 또는 새 APK 설치 후 긴 사용자명 표시를 확인합니다.
+
+## 2026-10-12 AI 초안·저장 목록 반응형 보완
+
+### 완료
+- AI 코스 초안의 DAY 1을 확정 일정과 같은 흐름으로 통일했습니다. 초안은 이제 `10:00 숙소 체크인 · 짐 보관 → 11:00 선택 장소 → 13:00 점심 식사 · 지역 맛집 → 14:30 다음 장소/산책 → 18:30 숙소 복귀 · 휴식` 순서와 설명을 표시합니다.
+- 편한 모드 저장 장소 카드에서 지역·태그·삭제 버튼이 좁은 기기에서 가로로 충돌하던 구성을 줄바꿈 가능한 레이아웃으로 변경했고, 카드 높이를 늘려 내용이 잘리지 않도록 조정했습니다.
+
+### 변경 파일
+- `flutter/lib/screens/trip/trip_places_screen.dart`
+- `flutter/lib/screens/preference/youtube_saved_screen.dart`
+- `flutter/lib/core/layout/app_responsive.dart`
+
+### 확인
+- `dart format flutter/lib/screens/trip/trip_places_screen.dart` 완료.
+- `git diff --check` 통과.
+- 실제 Android 기기에서는 Hot Restart 후 AI 초안과 확정 DAY 1, 편한 모드 저장 카드의 긴 지역명·태그·삭제 버튼 줄바꿈을 확인합니다.
+
+### dx-all 반영 메모 (2026-10-12)
+- 백엔드 연동판에서는 AI 코스 초안이 실제 일정 생성으로 대체돼 있어 목업 초안(`_draftStep`) 변경은 반영하지 않았습니다. 목업 이동시간(예: 도보 10분 · 700m)도 들어오지 않습니다.
+- 저장 장소 화면은 서버 저장 목록 버전을 유지하고, 카드 높이(`savedPlaceExtent` 248/260)만 반영했습니다.

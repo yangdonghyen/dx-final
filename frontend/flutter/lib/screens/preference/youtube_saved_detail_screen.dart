@@ -293,7 +293,7 @@ class _RecommendationPlaceCard extends StatelessWidget {
                       : Image.network(
                           place.imageUrl,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => _imagePlaceholder(),
+                          errorBuilder: (_, _, _) => _imagePlaceholder(),
                         ),
                 ),
               ),
@@ -360,7 +360,7 @@ class _HeroImage extends StatelessWidget {
       return Image.network(
         representativeImageUrl!,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _thumbnailOrPlaceholder(),
+        errorBuilder: (_, _, _) => _thumbnailOrPlaceholder(),
       );
     }
     return _thumbnailOrPlaceholder();
@@ -371,7 +371,7 @@ class _HeroImage extends StatelessWidget {
       return Image.network(
         thumbnailUrl!,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _placeholder(),
+        errorBuilder: (_, _, _) => _placeholder(),
       );
     }
     return _placeholder();

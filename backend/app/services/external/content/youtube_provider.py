@@ -102,3 +102,4 @@ class YouTubeContentProvider:
             raise AppError("PROVIDER_NOT_FOUND", "YouTube video was not found", 404) from None
         except (UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError, ValueError):
             raise AppError("YOUTUBE_MALFORMED_RESPONSE", "YouTube returned an invalid video response", 502) from None
+

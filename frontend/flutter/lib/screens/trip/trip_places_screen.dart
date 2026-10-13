@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import '../../data/travel_taste_options.dart';
 import '../../widgets/ai_working_indicator.dart';
@@ -66,9 +67,6 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
   int? _createdTripId;
   String? _createdTripSignature;
 
-  /// 서버가 알려준 일정 id입니다. PLAN_ALREADY_EXISTS일 때 조회에 사용합니다.
-  int? _knownPlanId;
-
   final TripService _tripService = TripService();
   final PlanService _planService = PlanService();
 
@@ -83,6 +81,14 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
     '체험': 'ACTIVITY',
     '휴식': 'REST',
     '전통문화': 'CULTURE',
+  };
+
+  /// UI labels are deliberately mapped to the API enum instead of relying on
+  /// a server-side default. Unknown labels must be handled as invalid input.
+  static const _travelStyleCodes = <String, String>{
+    '여유롭게': 'SLOW',
+    '알차게': 'STANDARD',
+    '맛집 중심': 'FOOD_FOCUSED',
   };
 
   /// 신뢰 가능한 원천(저장한 영상 등)에서 전달된 목적지입니다.
@@ -110,6 +116,8 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
       if (_travelTastes.contains(taste) && _interestCodes.containsKey(taste))
         _interestCodes[taste]!,
   ];
+
+  String? get _selectedTravelStyleCode => _travelStyleCodes[_travelStyle];
 
   /// WALK migration을 적용한 뒤에만 build-time flag로 도보 선택을 활성화합니다.
   static const bool _walkModeEnabled = bool.fromEnvironment(
@@ -323,6 +331,14 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
       return;
     }
 
+    final travelStyle = _selectedTravelStyleCode;
+    if (travelStyle == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('여행 스타일을 다시 선택해 주세요.')),
+      );
+      return;
+    }
+
     setState(() => _savingTripTaste = true);
 
     try {
@@ -352,6 +368,7 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
       destination,
       transportMode,
       interestCodes.join(','),
+      travelStyle,
     ].join('|');
 
     if (_createdTripId == null || _createdTripSignature != signature) {
@@ -362,6 +379,7 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
           destination: destination,
           transportMode: transportMode,
           interestCodes: interestCodes,
+          travelStyle: travelStyle,
         );
 
         debugPrint(
@@ -370,7 +388,6 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
         );
         _createdTripId = createdTrip.tripId;
         _createdTripSignature = signature;
-        _knownPlanId = null;
       } catch (error) {
         debugPrint('[Trip] create failed: $error');
 
@@ -408,34 +425,19 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
 
     GeneratedPlan plan;
     try {
-      // 장소를 고르지 않고 목적지 전체 후보로 일정을 만듭니다.
-      plan = await _planService.generate(tripId, const <int>[]);
+      // 장소를 고르지 않고 목적지 전체 후보로 일정을 만듭니다. 연결이 끊기거나
+      // 이미 만든 일정이 있으면 AI를 다시 부르지 않고 서버에 저장된 일정을 불러옵니다.
+      plan = await _planService.generateOrRecover(tripId);
     } catch (error) {
       debugPrint('[Plan] generate failed: $error');
-      final knownPlanId = _knownPlanId;
-      if (apiErrorCode(error) == 'PLAN_ALREADY_EXISTS' && knownPlanId != null) {
-        try {
-          plan = await _planService.get(knownPlanId);
-        } catch (fetchError) {
-          debugPrint('[Plan] fetch failed: $fetchError');
-          if (!mounted) return;
-          setState(() {
-            _generating = false;
-            _generateError = planErrorMessage(fetchError);
-          });
-          return;
-        }
-      } else {
-        if (!mounted) return;
-        setState(() {
-          _generating = false;
-          _generateError = planErrorMessage(error);
-        });
-        return;
-      }
+      if (!mounted) return;
+      setState(() {
+        _generating = false;
+        _generateError = planErrorMessage(error);
+      });
+      return;
     }
 
-    _knownPlanId = plan.planId;
     debugPrint(
       '[Plan] generated plan_id=${plan.planId}, days=${plan.days.length}',
     );
@@ -564,9 +566,14 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
       if (_loadingTripTaste) {
         return const Center(child: CircularProgressIndicator());
       }
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-        child: _tastesStep(),
+      return ListView(
+        padding: EdgeInsets.fromLTRB(
+          ResponsiveLayout.pageHorizontal(context),
+          12,
+          ResponsiveLayout.pageHorizontal(context),
+          16,
+        ),
+        children: [_tastesStep()],
       );
     }
 
@@ -904,104 +911,98 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
         }).toList(),
       ),
       const SizedBox(height: 12),
-      Expanded(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '여행 취향 선택',
-                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+      Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '여행 취향 선택',
+              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              '원하는 항목을 여러 개 골라주세요.',
+              style: TextStyle(color: Color(0xFF6B7280)),
+            ),
+            const SizedBox(height: 10),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: travelTasteOptions.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: ResponsiveLayout.isCompact(context) ? 2 : 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                mainAxisExtent: ResponsiveLayout.isCompact(context) ? 92 : 96,
               ),
-              const SizedBox(height: 4),
-              const Text(
-                '원하는 항목을 여러 개 골라주세요.',
-                style: TextStyle(color: Color(0xFF6B7280)),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (context, constraints) => GridView.builder(
-                    padding: EdgeInsets.zero,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: travelTasteOptions.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 10,
-                      crossAxisSpacing: 10,
-                      mainAxisExtent: (constraints.maxHeight - 20) / 3,
-                    ),
-                    itemBuilder: (context, index) {
-                      final item = travelTasteOptions[index];
-                      final selected = _travelTastes.contains(item.$2);
-                      return Material(
-                        color: selected
-                            ? AppColors.soft
-                            : const Color(0xFFF9FAFF),
-                        borderRadius: BorderRadius.circular(18),
-                        child: InkWell(
-                          onTap: () => setState(() {
-                            if (selected) {
-                              _travelTastes.remove(item.$2);
-                            } else {
-                              _travelTastes.add(item.$2);
-                            }
-                          }),
-                          borderRadius: BorderRadius.circular(18),
-                          child: Stack(
+              itemBuilder: (context, index) {
+                final item = travelTasteOptions[index];
+                final selected = _travelTastes.contains(item.$2);
+                return Material(
+                  color: selected ? AppColors.soft : const Color(0xFFF9FAFF),
+                  borderRadius: BorderRadius.circular(18),
+                  child: InkWell(
+                    onTap: () => setState(() {
+                      if (selected) {
+                        _travelTastes.remove(item.$2);
+                      } else {
+                        _travelTastes.add(item.$2);
+                      }
+                    }),
+                    borderRadius: BorderRadius.circular(18),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Center(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      item.$1,
-                                      style: const TextStyle(fontSize: 25),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      item.$2,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w900,
-                                        color: selected
-                                            ? AppColors.primary
-                                            : AppColors.ink,
-                                      ),
-                                    ),
-                                  ],
+                              Text(
+                                item.$1,
+                                style: const TextStyle(fontSize: 25),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                item.$2,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w900,
+                                  color: selected
+                                      ? AppColors.primary
+                                      : AppColors.ink,
                                 ),
                               ),
-                              if (selected)
-                                const Positioned(
-                                  right: 7,
-                                  top: 7,
-                                  child: CircleAvatar(
-                                    radius: 10,
-                                    backgroundColor: AppColors.primary,
-                                    child: Icon(
-                                      Icons.check,
-                                      size: 14,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        if (selected)
+                          const Positioned(
+                            right: 7,
+                            top: 7,
+                            child: CircleAvatar(
+                              radius: 10,
+                              backgroundColor: AppColors.primary,
+                              child: Icon(
+                                Icons.check,
+                                size: 14,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     ],
@@ -1023,8 +1024,8 @@ class _TripPlacesScreenState extends State<TripPlacesScreen> {
       GridView.count(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        crossAxisCount: 2,
-        childAspectRatio: .92,
+        crossAxisCount: ResponsiveLayout.twoColumnCount(context),
+        mainAxisExtent: ResponsiveLayout.selectionCardExtent(context),
         mainAxisSpacing: 14,
         crossAxisSpacing: 14,
         children: _transportOptions.map((option) {

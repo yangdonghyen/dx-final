@@ -1,13 +1,18 @@
 """Kakao route facts adapter with distinct Mobility and Map API contracts."""
 
 import json
+import logging
 import socket
+from time import monotonic
 from typing import Callable
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from app.services.external.routing.provider import RouteEstimate
+
+
+logger = logging.getLogger("app.routing")
 
 
 KAKAO_MOBILITY_BASE_URL = "https://apis-navi.kakaomobility.com"
@@ -72,19 +77,24 @@ class KakaoMobilityRouteProvider:
         return value if isinstance(value, int) and not isinstance(value, bool) and value > 0 else None
 
     @classmethod
-    def _driving_duration_seconds(cls, body: bytes) -> int | None:
+    def _driving_route(cls, body: bytes) -> tuple[int, int | None] | None:
         try:
             payload = json.loads(body.decode("utf-8"))
             route = payload["routes"][0]
             if not isinstance(route, dict) or route.get("result_code", 0) != 0:
                 return None
-            return cls._positive_seconds(route["summary"]["duration"])
+            duration = cls._positive_seconds(route["summary"]["duration"])
+            if duration is None:
+                return None
+            return duration, cls._positive_seconds(route["summary"].get("distance"))
         except (UnicodeDecodeError, json.JSONDecodeError, KeyError, IndexError, TypeError):
             return None
 
     def _request(self, base_url: str, path: str, params: dict[str, str]) -> bytes | None:
         if not self.api_key:
             return None
+        started = monotonic()
+        outcome = "error"
         try:
             status, body = self.http_get(
                 f"{base_url}{path}?{urlencode(params)}",
@@ -95,7 +105,12 @@ class KakaoMobilityRouteProvider:
             return None
         except (URLError, TimeoutError, socket.timeout, OSError):
             return None
-        return body if 200 <= status < 300 else None
+        else:
+            outcome = "ok" if 200 <= status < 300 else f"http_{status}"
+            return body if 200 <= status < 300 else None
+        finally:
+            # No coordinates, query string, or credential is logged.
+            logger.info("route_provider_request path=%s outcome=%s elapsed_ms=%d", path, outcome, (monotonic() - started) * 1000)
 
     @staticmethod
     def _map_params(
@@ -121,10 +136,12 @@ class KakaoMobilityRouteProvider:
             payload = json.loads(body.decode("utf-8"))
             if payload.get("status") != "OK":
                 return None
-            duration = cls._positive_seconds(payload["route"]["properties"]["totalTime"])
+            properties = payload["route"]["properties"]
+            duration = cls._positive_seconds(properties["totalTime"])
+            distance = cls._positive_seconds(properties.get("totalDistance"))
         except (UnicodeDecodeError, json.JSONDecodeError, KeyError, TypeError):
             return None
-        return RouteEstimate(duration, "WALK", walking_seconds=duration) if duration is not None else None
+        return RouteEstimate(duration, "WALK", distance_meters=distance, walking_seconds=duration) if duration is not None else None
 
     @classmethod
     def _walking_seconds(cls, steps: object) -> int | None:
@@ -174,6 +191,7 @@ class KakaoMobilityRouteProvider:
         return RouteEstimate(
             duration,
             "PUBLIC_TRANSIT",
+            distance_meters=cls._positive_seconds(route["properties"].get("totalDistance")),
             walking_seconds=cls._walking_seconds(route.get("steps")),
             transfer_count=transfers,
         )
@@ -200,8 +218,8 @@ class KakaoMobilityRouteProvider:
                     "summary": "true",
                 },
             )
-            duration = self._driving_duration_seconds(body) if body is not None else None
-            return RouteEstimate(duration, "CAR") if duration is not None else None
+            route = self._driving_route(body) if body is not None else None
+            return RouteEstimate(route[0], "CAR", distance_meters=route[1]) if route is not None else None
         if transport_mode == "WALK":
             if self.walking_route_mode not in WALK_ROUTE_MODES:
                 return None

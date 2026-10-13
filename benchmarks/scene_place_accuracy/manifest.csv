@@ -1,0 +1,4 @@
+image_id,image_path,place_id,capture_type,note
+001,images/gyeongbokgung_001.jpg,gyeongbokgung_geunjeongjeon,landmark_full,근정전 전경
+002,images/gyeongbokgung_002.png,gyeongbokgung_geunjeongjeon,tv_recapture,TV 화면 재촬영
+003,images/gyeonghoeru_001.webp,gyeongbokgung_gyeonghoeru,night,경회루 야경

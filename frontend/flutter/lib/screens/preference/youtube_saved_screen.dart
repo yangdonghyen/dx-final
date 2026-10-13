@@ -201,11 +201,11 @@ class _YoutubeSavedScreenState extends State<YoutubeSavedScreen> {
           20,
         ),
         itemCount: _discoveries.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: ResponsiveLayout.twoColumnCount(context),
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: .87,
+          mainAxisExtent: ResponsiveLayout.savedPlaceExtent(context),
         ),
         itemBuilder: (context, index) => _comfortCard(_discoveries[index]),
       ),

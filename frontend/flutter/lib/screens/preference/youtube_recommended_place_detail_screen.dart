@@ -175,7 +175,7 @@ class _YouTubeRecommendedPlaceDetailScreenState
           Image.network(
             imageUrl,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => _fallbackImage(fallbackImageUrl),
+            errorBuilder: (_, _, _) => _fallbackImage(fallbackImageUrl),
           )
         else
           _imagePlaceholder(),
@@ -210,7 +210,7 @@ class _YouTubeRecommendedPlaceDetailScreenState
     return Image.network(
       imageUrl,
       fit: BoxFit.cover,
-      errorBuilder: (_, __, ___) => _imagePlaceholder(),
+      errorBuilder: (_, _, _) => _imagePlaceholder(),
     );
   }
 

@@ -68,6 +68,36 @@ def test_place_detail_uses_common_and_intro_data_and_normalizes_empty_values(mon
     assert result["info_center"] is None
 
 
+def test_place_detail_uses_common_content_type_for_restaurant_intro(monkeypatch):
+    provider = TourDestinationImageProvider("unused", "https://example.test", 1)
+    calls = []
+
+    def fake_get_json(endpoint, params):
+        calls.append((endpoint, params))
+        if endpoint == "detailCommon2":
+            return _payload([{"contentid": "12345", "contenttypeid": "39"}])
+        return _payload([{"usetime": "09:00~18:00", "restdate": ""}])
+
+    monkeypatch.setattr(provider, "_get_json", fake_get_json)
+    assert provider.get_place_detail("12345")["content_type_id"] == 39
+    assert calls[1] == ("detailIntro2", {"contentId": "12345", "contentTypeId": 39})
+
+
+def test_hours_only_detail_skips_image_endpoint(monkeypatch):
+    provider = TourDestinationImageProvider("unused", "https://example.test", 1)
+    calls = []
+
+    def fake_get_json(endpoint, params):
+        calls.append(endpoint)
+        if endpoint == "detailCommon2":
+            return _payload([{"contentid": "12345", "contenttypeid": "12"}])
+        return _payload([{"usetime": "09:00~18:00", "restdate": ""}])
+
+    monkeypatch.setattr(provider, "_get_json", fake_get_json)
+    assert provider.get_place_detail("12345", include_images=False)["image_url"] is None
+    assert calls == ["detailCommon2", "detailIntro2"]
+
+
 def test_place_detail_rejects_invalid_or_unknown_content_id(monkeypatch):
     provider = TourDestinationImageProvider("unused", "https://example.test", 1)
     with pytest.raises(AppError) as invalid:

@@ -9,7 +9,8 @@ from app.services.external.ai.exaone_preference_provider import ExaonePreference
 from app.services.external.ai.exaone_plan_provider import ExaonePlanGenerationProvider
 from app.services.external.content.mock_provider import MockContentProvider
 from app.services.external.content.youtube_provider import YouTubeContentProvider
-from app.services.external.factory import get_content_provider, get_place_provider, get_plan_generation_provider, get_preference_analysis_provider
+from app.services.external.factory import get_content_provider, get_place_provider, get_plan_generation_provider, get_preference_analysis_provider, get_naver_cafe_evidence_provider
+from app.services.external.naver_api_hub_provider import NaverApiHubProvider, UnavailableNaverCafeEvidenceProvider
 from app.services.external.place.mock_provider import MockPlaceProvider
 from app.services.external.place.kakao_provider import KakaoPlaceProvider
 
@@ -74,6 +75,21 @@ def test_factory_returns_mock_providers_without_network_clients():
     assert isinstance(get_preference_analysis_provider(), MockPreferenceAnalysisProvider)
     assert isinstance(get_place_provider(), MockPlaceProvider)
     assert isinstance(get_plan_generation_provider(), MockPlanGenerationProvider)
+    assert isinstance(get_naver_cafe_evidence_provider(Settings()), UnavailableNaverCafeEvidenceProvider)
+
+
+def test_factory_keeps_api_hub_search_credentials_separate_from_naver_login():
+    settings = Settings(naver_client_id="oauth-id", naver_client_secret="oauth-secret", naver_api_hub_client_id="search-id", naver_api_hub_client_secret="search-secret")
+    assert isinstance(get_naver_cafe_evidence_provider(settings), NaverApiHubProvider)
+
+
+def test_naver_cafe_evidence_factory_logs_provider_state_without_credentials(caplog):
+    with caplog.at_level("INFO"):
+        get_naver_cafe_evidence_provider(Settings())
+        get_naver_cafe_evidence_provider(Settings(naver_api_hub_client_id="search-id", naver_api_hub_client_secret="search-secret"))
+    assert "provider=UnavailableNaverCafeEvidenceProvider configured=false" in caplog.text
+    assert "provider=NaverApiHubProvider configured=true" in caplog.text
+    assert "search-secret" not in caplog.text
 
 
 def test_plan_factory_selects_exaone_real_provider():

@@ -1,0 +1,61 @@
+{
+  "gyeongbokgung_generic": {
+    "detail_name": "경복궁",
+    "parent_name": null,
+    "accepted_names": [
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Gyeongbokgung Palace"
+  },
+  "geunjeongjeon": {
+    "detail_name": "근정전",
+    "parent_name": "경복궁",
+    "accepted_names": [
+      "근정전",
+      "Geunjeongjeon",
+      "Geunjeongjeon Hall",
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Geunjeongjeon Gyeongbokgung"
+  },
+  "gyeonghoeru": {
+    "detail_name": "경회루",
+    "parent_name": "경복궁",
+    "accepted_names": [
+      "경회루",
+      "Gyeonghoeru",
+      "Gyeonghoeru Pavilion",
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Gyeonghoeru Gyeongbokgung"
+  },
+  "gwanghwamun": {
+    "detail_name": "광화문",
+    "parent_name": "경복궁",
+    "accepted_names": [
+      "광화문",
+      "Gwanghwamun",
+      "Gwanghwamun Gate",
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Gwanghwamun Gyeongbokgung"
+  },
+  "gyeongbokgung_other": {
+    "detail_name": "경복궁 내부",
+    "parent_name": "경복궁",
+    "accepted_names": [
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Gyeongbokgung Palace buildings"
+  }
+}

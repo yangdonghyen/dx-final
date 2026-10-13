@@ -1,0 +1,18 @@
+{
+  "gyeongbokgung_generic": {"detail_name": "경복궁", "parent_name": "경복궁", "accepted_names": ["경복궁", "Gyeongbokgung", "Gyeongbokgung Palace"]},
+  "gyeongbokgung_geunjeongjeon": {"detail_name": "근정전", "parent_name": "경복궁", "accepted_names": ["근정전", "Geunjeongjeon", "Geunjeongjeon Hall", "경복궁", "Gyeongbokgung", "Gyeongbokgung Palace"]},
+  "gyeongbokgung_gyeonghoeru": {"detail_name": "경회루", "parent_name": "경복궁", "accepted_names": ["경회루", "Gyeonghoeru", "Gyeonghoeru Pavilion", "경복궁", "Gyeongbokgung", "Gyeongbokgung Palace"]},
+  "gyeongbokgung_gwanghwamun": {"detail_name": "광화문", "parent_name": "경복궁", "accepted_names": ["광화문", "Gwanghwamun", "Gwanghwamun Gate", "경복궁", "Gyeongbokgung", "Gyeongbokgung Palace"]},
+  "n_seoul_tower": {"detail_name": "N서울타워", "parent_name": "N서울타워", "accepted_names": ["N서울타워", "N 서울 타워", "N Seoul Tower", "Namsan Seoul Tower", "Namsan Tower"]},
+  "gwangan_bridge": {"detail_name": "광안대교", "parent_name": "광안대교", "accepted_names": ["광안대교", "광안 대교", "Gwangan Bridge", "Gwangandaegyo"]},
+  "seongsan_ilchulbong": {"detail_name": "성산일출봉", "parent_name": "성산일출봉", "accepted_names": ["성산일출봉", "성산 일출봉", "Seongsan Ilchulbong", "Seongsan Ilchulbong Tuff Cone"]},
+  "jeonju_hanok_village": {"detail_name": "전주한옥마을", "parent_name": "전주한옥마을", "accepted_names": ["전주한옥마을", "전주 한옥마을", "Jeonju Hanok Village", "Jeonju Hanok Maeul"]},
+  "haeundae_beach": {"detail_name": "해운대해수욕장", "parent_name": "해운대해수욕장", "accepted_names": ["해운대해수욕장", "해운대 해수욕장", "Haeundae Beach", "Haeundae Beach Resort"]},
+  "dongdaemun_design_plaza": {"detail_name": "동대문디자인플라자", "parent_name": "동대문디자인플라자", "accepted_names": ["동대문디자인플라자", "동대문 디자인 플라자", "DDP", "Dongdaemun Design Plaza"]},
+  "suwon_hwaseong_generic": {"detail_name": "수원화성", "parent_name": "수원화성", "accepted_names": ["수원화성", "수원 화성", "Suwon Hwaseong", "Hwaseong Fortress", "Suwon Hwaseong Fortress"]},
+  "suwon_hwaseong_janganmun": {"detail_name": "장안문", "parent_name": "수원화성", "accepted_names": ["장안문", "Janganmun", "Janganmun Gate", "수원화성", "수원 화성", "Suwon Hwaseong", "Hwaseong Fortress", "Suwon Hwaseong Fortress"]},
+  "suwon_hwaseong_hwahongmun": {"detail_name": "화홍문", "parent_name": "수원화성", "accepted_names": ["화홍문", "Hwahongmun", "Hwahongmun Gate", "수원화성", "수원 화성", "Suwon Hwaseong", "Hwaseong Fortress", "Suwon Hwaseong Fortress"]},
+  "suwon_hwaseong_seojangdae": {"detail_name": "서장대", "parent_name": "수원화성", "accepted_names": ["서장대", "Seojangdae", "Seojangdae Command Post", "수원화성", "수원 화성", "Suwon Hwaseong", "Hwaseong Fortress", "Suwon Hwaseong Fortress"]},
+  "nami_island": {"detail_name": "남이섬", "parent_name": "남이섬", "accepted_names": ["남이섬", "남이 섬", "Nami Island", "Namiseom"]},
+  "yeosu_marine_cable_car": {"detail_name": "여수해상케이블카", "parent_name": "여수해상케이블카", "accepted_names": ["여수해상케이블카", "여수 해상 케이블카", "Yeosu Marine Cable Car", "Yeosu Maritime Cable Car"]}
+}

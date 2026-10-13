@@ -1185,37 +1185,37 @@ Repository에는 `.env.example`만 올린다.
 
 # 17. 공식 문서 참고
 
-- Kakao Login REST API
+- Kakao Login REST API  
   https://developers.kakao.com/docs/ko/kakaologin/rest-api
 
-- Naver Login Profile API
+- Naver Login Profile API  
   https://developers.naver.com/docs/login/profile/profile.md
 
-- YouTube Data API videos.list
+- YouTube Data API videos.list  
   https://developers.google.com/youtube/v3/docs/videos/list
 
-- Kakao Local REST API
+- Kakao Local REST API  
   https://developers.kakao.com/docs/ko/local/dev-guide
 
-- Kakao REST API Reference
+- Kakao REST API Reference  
   https://developers.kakao.com/docs/ko/rest-api/reference
 
-- Kakao Mobility Directions
+- Kakao Mobility Directions  
   https://developers.kakaomobility.com/guide/navi-api/start
 
-- 한국관광공사 국문 관광정보 서비스
+- 한국관광공사 국문 관광정보 서비스  
   https://www.data.go.kr/data/15101578/openapi.do
 
-- 기상청 단기예보 조회서비스
+- 기상청 단기예보 조회서비스  
   https://www.data.go.kr/data/15084084/openapi.do
 
-- Gemini Image Understanding
+- Gemini Image Understanding  
   https://ai.google.dev/gemini-api/docs/image-understanding
 
-- LG EXAONE 4.0 API 발표
+- LG EXAONE 4.0 API 발표  
   https://www.lg.co.kr/media/release/29154
 
-- K-EXAONE / FriendliAI
+- K-EXAONE / FriendliAI  
   https://friendli.ai/blog/k-exaone-on-serverless
 
 ---

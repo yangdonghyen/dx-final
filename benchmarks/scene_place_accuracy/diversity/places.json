@@ -1,0 +1,2543 @@
+{
+  "gyeongbokgung": {
+    "detail_name": "경복궁",
+    "parent_name": null,
+    "accepted_names": [
+      "경복궁",
+      "Gyeongbokgung",
+      "Gyeongbokgung Palace"
+    ],
+    "commons_query": "Gyeongbokgung Palace",
+    "category": "palace",
+    "region": "Seoul",
+    "canonical_name_ko": "경복궁",
+    "canonical_name_en": "Gyeongbokgung Palace",
+    "commons_queries": [
+      "Gyeongbokgung Palace",
+      "경복궁",
+      "Gyeongbokgung Palace Korea",
+      "Gyeongbokgung Palace South Korea"
+    ],
+    "required_terms": [
+      "Gyeongbokgung Palace",
+      "경복궁",
+      "Gyeongbokgung"
+    ],
+    "forbidden_terms": [],
+    "commons_category": "Gyeongbokgung"
+  },
+  "changdeokgung": {
+    "detail_name": "창덕궁",
+    "parent_name": null,
+    "accepted_names": [
+      "창덕궁",
+      "Changdeokgung",
+      "Changdeokgung Palace"
+    ],
+    "commons_query": "Changdeokgung Palace",
+    "category": "palace",
+    "region": "Seoul",
+    "canonical_name_ko": "창덕궁",
+    "canonical_name_en": "Changdeokgung Palace",
+    "commons_queries": [
+      "Changdeokgung Palace",
+      "창덕궁",
+      "Changdeokgung Palace Korea",
+      "Changdeokgung Palace South Korea"
+    ],
+    "required_terms": [
+      "Changdeokgung Palace",
+      "창덕궁",
+      "Changdeokgung"
+    ],
+    "forbidden_terms": [],
+    "commons_category": "Changdeokgung"
+  },
+  "changgyeonggung": {
+    "detail_name": "창경궁",
+    "parent_name": null,
+    "accepted_names": [
+      "창경궁",
+      "Changgyeonggung",
+      "Changgyeonggung Palace"
+    ],
+    "commons_query": "Changgyeonggung Palace",
+    "category": "palace",
+    "region": "Seoul",
+    "canonical_name_ko": "창경궁",
+    "canonical_name_en": "Changgyeonggung Palace",
+    "commons_queries": [
+      "Changgyeonggung Palace",
+      "창경궁",
+      "Changgyeonggung Palace Korea",
+      "Changgyeonggung Palace South Korea"
+    ],
+    "required_terms": [
+      "Changgyeonggung Palace",
+      "창경궁",
+      "Changgyeonggung"
+    ],
+    "forbidden_terms": []
+  },
+  "deoksugung": {
+    "detail_name": "덕수궁",
+    "parent_name": null,
+    "accepted_names": [
+      "덕수궁",
+      "Deoksugung",
+      "Deoksugung Palace"
+    ],
+    "commons_query": "Deoksugung Palace",
+    "category": "palace",
+    "region": "Seoul",
+    "canonical_name_ko": "덕수궁",
+    "canonical_name_en": "Deoksugung Palace",
+    "commons_queries": [
+      "Deoksugung Palace",
+      "덕수궁",
+      "Deoksugung Palace Korea",
+      "Deoksugung Palace South Korea"
+    ],
+    "required_terms": [
+      "Deoksugung Palace",
+      "덕수궁",
+      "Deoksugung"
+    ],
+    "forbidden_terms": []
+  },
+  "jongmyo": {
+    "detail_name": "종묘",
+    "parent_name": null,
+    "accepted_names": [
+      "종묘",
+      "Jongmyo Shrine",
+      "Jongmyo"
+    ],
+    "commons_query": "Jongmyo Shrine",
+    "category": "heritage",
+    "region": "Seoul",
+    "canonical_name_ko": "종묘",
+    "canonical_name_en": "Jongmyo",
+    "commons_queries": [
+      "Jongmyo Shrine",
+      "종묘",
+      "Jongmyo Shrine Korea",
+      "Jongmyo Shrine South Korea"
+    ],
+    "required_terms": [
+      "Jongmyo Shrine",
+      "종묘",
+      "Jongmyo"
+    ],
+    "forbidden_terms": [],
+    "commons_category": "Jongmyo"
+  },
+  "n_seoul_tower": {
+    "detail_name": "N서울타워",
+    "parent_name": null,
+    "accepted_names": [
+      "N서울타워",
+      "N Seoul Tower",
+      "Namsan Seoul Tower"
+    ],
+    "commons_query": "N Seoul Tower",
+    "category": "tower",
+    "region": "Seoul",
+    "canonical_name_ko": "N서울타워",
+    "canonical_name_en": "Namsan Seoul Tower",
+    "commons_queries": [
+      "N Seoul Tower",
+      "N서울타워",
+      "N Seoul Tower Korea",
+      "N Seoul Tower South Korea"
+    ],
+    "required_terms": [
+      "N Seoul Tower",
+      "N서울타워",
+      "Namsan Seoul Tower"
+    ],
+    "forbidden_terms": []
+  },
+  "ddp": {
+    "detail_name": "동대문디자인플라자",
+    "parent_name": null,
+    "accepted_names": [
+      "동대문디자인플라자",
+      "DDP",
+      "Dongdaemun Design Plaza"
+    ],
+    "commons_query": "Dongdaemun Design Plaza",
+    "category": "modern_architecture",
+    "region": "Seoul",
+    "canonical_name_ko": "동대문디자인플라자",
+    "canonical_name_en": "Dongdaemun Design Plaza",
+    "commons_queries": [
+      "Dongdaemun Design Plaza",
+      "동대문디자인플라자",
+      "Dongdaemun Design Plaza Korea",
+      "Dongdaemun Design Plaza South Korea"
+    ],
+    "required_terms": [
+      "Dongdaemun Design Plaza",
+      "동대문디자인플라자",
+      "DDP"
+    ],
+    "forbidden_terms": []
+  },
+  "seoul_city_hall": {
+    "detail_name": "서울특별시청",
+    "parent_name": null,
+    "accepted_names": [
+      "서울특별시청",
+      "서울시청",
+      "Seoul City Hall"
+    ],
+    "commons_query": "Seoul City Hall building",
+    "category": "modern_architecture",
+    "region": "Seoul",
+    "canonical_name_ko": "서울특별시청",
+    "canonical_name_en": "Seoul City Hall",
+    "commons_queries": [
+      "Seoul City Hall building",
+      "서울특별시청",
+      "Seoul City Hall building Korea",
+      "Seoul City Hall building South Korea"
+    ],
+    "required_terms": [
+      "Seoul City Hall building",
+      "서울특별시청",
+      "서울시청",
+      "Seoul City Hall"
+    ],
+    "forbidden_terms": []
+  },
+  "seoul_olympic_park": {
+    "detail_name": "올림픽공원",
+    "parent_name": null,
+    "accepted_names": [
+      "올림픽공원",
+      "Olympic Park",
+      "Seoul Olympic Park"
+    ],
+    "commons_query": "Olympic Park Seoul",
+    "category": "park",
+    "region": "Seoul",
+    "canonical_name_ko": "올림픽공원",
+    "canonical_name_en": "Seoul Olympic Park",
+    "commons_queries": [
+      "Olympic Park Seoul",
+      "올림픽공원",
+      "Olympic Park Seoul Korea",
+      "Olympic Park Seoul South Korea"
+    ],
+    "required_terms": [
+      "Olympic Park Seoul",
+      "올림픽공원",
+      "Olympic Park",
+      "Seoul Olympic Park"
+    ],
+    "forbidden_terms": []
+  },
+  "bukchon_hanok_village": {
+    "detail_name": "북촌한옥마을",
+    "parent_name": null,
+    "accepted_names": [
+      "북촌한옥마을",
+      "Bukchon Hanok Village"
+    ],
+    "commons_query": "Bukchon Hanok Village",
+    "category": "traditional_village",
+    "region": "Seoul",
+    "canonical_name_ko": "북촌한옥마을",
+    "canonical_name_en": "Bukchon Hanok Village",
+    "commons_queries": [
+      "Bukchon Hanok Village",
+      "북촌한옥마을",
+      "Bukchon Hanok Village Korea",
+      "Bukchon Hanok Village South Korea"
+    ],
+    "required_terms": [
+      "Bukchon Hanok Village",
+      "북촌한옥마을"
+    ],
+    "forbidden_terms": []
+  },
+  "incheon_bridge": {
+    "detail_name": "인천대교",
+    "parent_name": null,
+    "accepted_names": [
+      "인천대교",
+      "Incheon Bridge"
+    ],
+    "commons_query": "Incheon Bridge",
+    "category": "bridge",
+    "region": "Incheon",
+    "canonical_name_ko": "인천대교",
+    "canonical_name_en": "Incheon Bridge",
+    "commons_queries": [
+      "Incheon Bridge",
+      "인천대교",
+      "Incheon Bridge Korea",
+      "Incheon Bridge South Korea"
+    ],
+    "required_terms": [
+      "Incheon Bridge",
+      "인천대교"
+    ],
+    "forbidden_terms": []
+  },
+  "songdo_central_park": {
+    "detail_name": "송도센트럴파크",
+    "parent_name": null,
+    "accepted_names": [
+      "송도센트럴파크",
+      "Songdo Central Park"
+    ],
+    "commons_query": "Songdo Central Park",
+    "category": "park",
+    "region": "Incheon",
+    "canonical_name_ko": "송도센트럴파크",
+    "canonical_name_en": "Songdo Central Park",
+    "commons_queries": [
+      "Songdo Central Park",
+      "송도센트럴파크",
+      "Songdo Central Park Korea",
+      "Songdo Central Park South Korea"
+    ],
+    "required_terms": [
+      "Songdo Central Park",
+      "송도센트럴파크"
+    ],
+    "forbidden_terms": []
+  },
+  "suwon_hwaseong": {
+    "detail_name": "수원화성",
+    "parent_name": null,
+    "accepted_names": [
+      "수원화성",
+      "Hwaseong Fortress",
+      "Suwon Hwaseong"
+    ],
+    "commons_query": "Hwaseong Fortress",
+    "category": "fortress",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "수원화성",
+    "canonical_name_en": "Suwon Hwaseong",
+    "commons_queries": [
+      "Hwaseong Fortress",
+      "수원화성",
+      "Hwaseong Fortress Korea",
+      "Hwaseong Fortress South Korea"
+    ],
+    "required_terms": [
+      "Hwaseong Fortress",
+      "수원화성",
+      "Suwon Hwaseong"
+    ],
+    "forbidden_terms": []
+  },
+  "korean_folk_village": {
+    "detail_name": "한국민속촌",
+    "parent_name": null,
+    "accepted_names": [
+      "한국민속촌",
+      "Korean Folk Village"
+    ],
+    "commons_query": "Korean Folk Village",
+    "category": "tourist_facility",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "한국민속촌",
+    "canonical_name_en": "Korean Folk Village",
+    "commons_queries": [
+      "Korean Folk Village",
+      "한국민속촌",
+      "Korean Folk Village Korea",
+      "Korean Folk Village South Korea"
+    ],
+    "required_terms": [
+      "Korean Folk Village",
+      "한국민속촌"
+    ],
+    "forbidden_terms": []
+  },
+  "garden_of_morning_calm": {
+    "detail_name": "아침고요수목원",
+    "parent_name": null,
+    "accepted_names": [
+      "아침고요수목원",
+      "The Garden of Morning Calm",
+      "Garden of Morning Calm"
+    ],
+    "commons_query": "The Garden of Morning Calm",
+    "category": "garden",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "아침고요수목원",
+    "canonical_name_en": "Garden of Morning Calm",
+    "commons_queries": [
+      "The Garden of Morning Calm",
+      "아침고요수목원",
+      "The Garden of Morning Calm Korea",
+      "The Garden of Morning Calm South Korea"
+    ],
+    "required_terms": [
+      "The Garden of Morning Calm",
+      "아침고요수목원",
+      "Garden of Morning Calm"
+    ],
+    "forbidden_terms": []
+  },
+  "nami_island": {
+    "detail_name": "남이섬",
+    "parent_name": null,
+    "accepted_names": [
+      "남이섬",
+      "Nami Island",
+      "Namiseom"
+    ],
+    "commons_query": "Nami Island Korea",
+    "category": "island",
+    "region": "Gangwon",
+    "canonical_name_ko": "남이섬",
+    "canonical_name_en": "Namiseom",
+    "commons_queries": [
+      "Nami Island Korea",
+      "남이섬",
+      "Nami Island Korea Korea",
+      "Nami Island Korea South Korea"
+    ],
+    "required_terms": [
+      "Nami Island Korea",
+      "남이섬",
+      "Nami Island",
+      "Namiseom"
+    ],
+    "forbidden_terms": []
+  },
+  "seoraksan": {
+    "detail_name": "설악산",
+    "parent_name": null,
+    "accepted_names": [
+      "설악산",
+      "Seoraksan",
+      "Seoraksan National Park"
+    ],
+    "commons_query": "Seoraksan",
+    "category": "mountain",
+    "region": "Gangwon",
+    "canonical_name_ko": "설악산",
+    "canonical_name_en": "Seoraksan National Park",
+    "commons_queries": [
+      "Seoraksan",
+      "설악산",
+      "Seoraksan Korea",
+      "Seoraksan South Korea"
+    ],
+    "required_terms": [
+      "Seoraksan",
+      "설악산",
+      "Seoraksan National Park"
+    ],
+    "forbidden_terms": [],
+    "commons_category": "Seoraksan"
+  },
+  "gangneung_gyeongpo_beach": {
+    "detail_name": "경포해변",
+    "parent_name": null,
+    "accepted_names": [
+      "경포해변",
+      "경포대해수욕장",
+      "Gyeongpo Beach"
+    ],
+    "commons_query": "Gyeongpo Beach",
+    "category": "beach",
+    "region": "Gangwon",
+    "canonical_name_ko": "경포해변",
+    "canonical_name_en": "Gyeongpo Beach",
+    "commons_queries": [
+      "Gyeongpo Beach",
+      "경포해변",
+      "Gyeongpo Beach Korea",
+      "Gyeongpo Beach South Korea"
+    ],
+    "required_terms": [
+      "Gyeongpo Beach",
+      "경포해변",
+      "경포대해수욕장"
+    ],
+    "forbidden_terms": []
+  },
+  "jeongdongjin": {
+    "detail_name": "정동진",
+    "parent_name": null,
+    "accepted_names": [
+      "정동진",
+      "Jeongdongjin"
+    ],
+    "commons_query": "Jeongdongjin",
+    "category": "natural_attraction",
+    "region": "Gangwon",
+    "canonical_name_ko": "정동진",
+    "canonical_name_en": "Jeongdongjin",
+    "commons_queries": [
+      "Jeongdongjin",
+      "정동진",
+      "Jeongdongjin Korea",
+      "Jeongdongjin South Korea"
+    ],
+    "required_terms": [
+      "Jeongdongjin",
+      "정동진"
+    ],
+    "forbidden_terms": []
+  },
+  "pyeongchang_alpensia": {
+    "detail_name": "알펜시아",
+    "parent_name": null,
+    "accepted_names": [
+      "알펜시아",
+      "Alpensia Resort"
+    ],
+    "commons_query": "Alpensia Resort",
+    "category": "tourist_facility",
+    "region": "Gangwon",
+    "canonical_name_ko": "알펜시아",
+    "canonical_name_en": "Alpensia Resort",
+    "commons_queries": [
+      "Alpensia Resort",
+      "알펜시아",
+      "Alpensia Resort Korea",
+      "Alpensia Resort South Korea"
+    ],
+    "required_terms": [
+      "Alpensia Resort",
+      "알펜시아"
+    ],
+    "forbidden_terms": []
+  },
+  "woljeongsa": {
+    "detail_name": "월정사",
+    "parent_name": null,
+    "accepted_names": [
+      "월정사",
+      "Woljeongsa",
+      "Woljeongsa Temple"
+    ],
+    "commons_query": "Woljeongsa Temple",
+    "category": "temple",
+    "region": "Gangwon",
+    "canonical_name_ko": "월정사",
+    "canonical_name_en": "Woljeongsa Temple",
+    "commons_queries": [
+      "Woljeongsa Temple",
+      "월정사",
+      "Woljeongsa Temple Korea",
+      "Woljeongsa Temple South Korea"
+    ],
+    "required_terms": [
+      "Woljeongsa Temple",
+      "월정사",
+      "Woljeongsa"
+    ],
+    "forbidden_terms": []
+  },
+  "andong_hahoe": {
+    "detail_name": "안동하회마을",
+    "parent_name": null,
+    "accepted_names": [
+      "안동하회마을",
+      "하회마을",
+      "Hahoe Folk Village"
+    ],
+    "commons_query": "Hahoe Folk Village",
+    "category": "traditional_village",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "안동하회마을",
+    "canonical_name_en": "Hahoe Folk Village",
+    "commons_queries": [
+      "Hahoe Folk Village",
+      "안동하회마을",
+      "Hahoe Folk Village Korea",
+      "Hahoe Folk Village South Korea"
+    ],
+    "required_terms": [
+      "Hahoe Folk Village",
+      "안동하회마을",
+      "하회마을"
+    ],
+    "forbidden_terms": []
+  },
+  "bulguksa": {
+    "detail_name": "불국사",
+    "parent_name": null,
+    "accepted_names": [
+      "불국사",
+      "Bulguksa",
+      "Bulguksa Temple"
+    ],
+    "commons_query": "Bulguksa",
+    "category": "temple",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "불국사",
+    "canonical_name_en": "Bulguksa Temple",
+    "commons_queries": [
+      "Bulguksa",
+      "불국사",
+      "Bulguksa Korea",
+      "Bulguksa South Korea"
+    ],
+    "required_terms": [
+      "Bulguksa",
+      "불국사",
+      "Bulguksa Temple"
+    ],
+    "forbidden_terms": [],
+    "commons_category": "Bulguksa"
+  },
+  "seokguram": {
+    "detail_name": "석굴암",
+    "parent_name": null,
+    "accepted_names": [
+      "석굴암",
+      "Seokguram Grotto",
+      "Seokguram"
+    ],
+    "commons_query": "Seokguram Grotto",
+    "category": "heritage",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "석굴암",
+    "canonical_name_en": "Seokguram",
+    "commons_queries": [
+      "Seokguram Grotto",
+      "석굴암",
+      "Seokguram Grotto Korea",
+      "Seokguram Grotto South Korea"
+    ],
+    "required_terms": [
+      "Seokguram Grotto",
+      "석굴암",
+      "Seokguram"
+    ],
+    "forbidden_terms": []
+  },
+  "cheomseongdae": {
+    "detail_name": "첨성대",
+    "parent_name": null,
+    "accepted_names": [
+      "첨성대",
+      "Cheomseongdae",
+      "Cheomseongdae Observatory"
+    ],
+    "commons_query": "Cheomseongdae",
+    "category": "heritage",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "첨성대",
+    "canonical_name_en": "Cheomseongdae Observatory",
+    "commons_queries": [
+      "Cheomseongdae",
+      "첨성대",
+      "Cheomseongdae Korea",
+      "Cheomseongdae South Korea"
+    ],
+    "required_terms": [
+      "Cheomseongdae",
+      "첨성대",
+      "Cheomseongdae Observatory"
+    ],
+    "forbidden_terms": []
+  },
+  "donggung_wolji": {
+    "detail_name": "동궁과 월지",
+    "parent_name": null,
+    "accepted_names": [
+      "동궁과 월지",
+      "안압지",
+      "Donggung and Wolji",
+      "Anapji"
+    ],
+    "commons_query": "Donggung and Wolji",
+    "category": "heritage",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "동궁과 월지",
+    "canonical_name_en": "Anapji",
+    "commons_queries": [
+      "Donggung and Wolji",
+      "동궁과 월지",
+      "Donggung and Wolji Korea",
+      "Donggung and Wolji South Korea"
+    ],
+    "required_terms": [
+      "Donggung and Wolji",
+      "동궁과 월지",
+      "안압지",
+      "Anapji"
+    ],
+    "forbidden_terms": []
+  },
+  "pohang_space_walk": {
+    "detail_name": "스페이스워크",
+    "parent_name": null,
+    "accepted_names": [
+      "스페이스워크",
+      "Space Walk"
+    ],
+    "commons_query": "Space Walk Pohang",
+    "category": "modern_architecture",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "스페이스워크",
+    "canonical_name_en": "Pohang Space Walk",
+    "commons_queries": [
+      "Pohang Space Walk",
+      "스페이스워크 포항",
+      "Pohang Space Walk Korea"
+    ],
+    "required_terms": [
+      "pohang space walk",
+      "스페이스워크",
+      "pohang"
+    ],
+    "forbidden_terms": []
+  },
+  "ulleungdo": {
+    "detail_name": "울릉도",
+    "parent_name": null,
+    "accepted_names": [
+      "울릉도",
+      "Ulleungdo",
+      "Ulleung Island"
+    ],
+    "commons_query": "Ulleungdo",
+    "category": "island",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "울릉도",
+    "canonical_name_en": "Ulleung Island",
+    "commons_queries": [
+      "Ulleungdo",
+      "울릉도",
+      "Ulleungdo Korea",
+      "Ulleungdo South Korea"
+    ],
+    "required_terms": [
+      "Ulleungdo",
+      "울릉도",
+      "Ulleung Island"
+    ],
+    "forbidden_terms": []
+  },
+  "dokdo": {
+    "detail_name": "독도",
+    "parent_name": null,
+    "accepted_names": [
+      "독도",
+      "Dokdo",
+      "Liancourt Rocks"
+    ],
+    "commons_query": "Dokdo Korea",
+    "category": "island",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "독도",
+    "canonical_name_en": "Liancourt Rocks",
+    "commons_queries": [
+      "Dokdo Korea",
+      "독도",
+      "Dokdo Korea Korea",
+      "Dokdo Korea South Korea"
+    ],
+    "required_terms": [
+      "Dokdo Korea",
+      "독도",
+      "Dokdo",
+      "Liancourt Rocks"
+    ],
+    "forbidden_terms": [
+      "boat",
+      "police",
+      "tourist",
+      "navy",
+      "defense drill",
+      "military",
+      "exhibition",
+      "photograph exhibition",
+      "press conference",
+      "museum",
+      "watchtower"
+    ]
+  },
+  "haeinsa": {
+    "detail_name": "해인사",
+    "parent_name": null,
+    "accepted_names": [
+      "해인사",
+      "Haeinsa",
+      "Haeinsa Temple"
+    ],
+    "commons_query": "Haeinsa",
+    "category": "temple",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "해인사",
+    "canonical_name_en": "Haeinsa Temple",
+    "commons_queries": [
+      "Haeinsa",
+      "해인사",
+      "Haeinsa Korea",
+      "Haeinsa South Korea"
+    ],
+    "required_terms": [
+      "Haeinsa",
+      "해인사",
+      "Haeinsa Temple"
+    ],
+    "forbidden_terms": []
+  },
+  "tongyeong_cable_car": {
+    "detail_name": "통영케이블카",
+    "parent_name": null,
+    "accepted_names": [
+      "통영케이블카",
+      "Tongyeong Cable Car"
+    ],
+    "commons_query": "Tongyeong Cable Car",
+    "category": "tourist_facility",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "통영케이블카",
+    "canonical_name_en": "Tongyeong Cable Car",
+    "commons_queries": [
+      "Tongyeong Cable Car",
+      "통영케이블카",
+      "Tongyeong Cable Car Korea",
+      "Tongyeong Cable Car South Korea"
+    ],
+    "required_terms": [
+      "Tongyeong Cable Car",
+      "통영케이블카"
+    ],
+    "forbidden_terms": []
+  },
+  "windy_hill": {
+    "detail_name": "바람의 언덕",
+    "parent_name": null,
+    "accepted_names": [
+      "바람의 언덕",
+      "Windy Hill"
+    ],
+    "commons_query": "Windy Hill Geoje",
+    "category": "natural_attraction",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "바람의 언덕",
+    "canonical_name_en": "Windy Hill",
+    "commons_queries": [
+      "Windy Hill Geoje",
+      "바람의 언덕 거제",
+      "Geoje Windy Hill"
+    ],
+    "required_terms": [
+      "Windy Hill Geoje",
+      "바람의 언덕",
+      "Windy Hill"
+    ],
+    "forbidden_terms": []
+  },
+  "jinhae_gunhangje": {
+    "detail_name": "진해군항제",
+    "parent_name": null,
+    "accepted_names": [
+      "진해군항제",
+      "Jinhae Gunhangje Festival"
+    ],
+    "commons_query": "Jinhae cherry blossom",
+    "category": "festival_site",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "진해군항제",
+    "canonical_name_en": "Jinhae Gunhangje Festival",
+    "commons_queries": [
+      "Jinhae cherry blossom",
+      "진해군항제",
+      "Jinhae cherry blossom Korea",
+      "Jinhae cherry blossom South Korea"
+    ],
+    "required_terms": [
+      "Jinhae cherry blossom",
+      "진해군항제",
+      "Jinhae Gunhangje Festival"
+    ],
+    "forbidden_terms": []
+  },
+  "busan_gwangandaegyo": {
+    "detail_name": "광안대교",
+    "parent_name": null,
+    "accepted_names": [
+      "광안대교",
+      "Gwangan Bridge",
+      "Gwangandaegyo"
+    ],
+    "commons_query": "Gwangan Bridge",
+    "category": "bridge",
+    "region": "Busan",
+    "canonical_name_ko": "광안대교",
+    "canonical_name_en": "Gwangandaegyo",
+    "commons_queries": [
+      "Gwangan Bridge",
+      "광안대교",
+      "Gwangan Bridge Korea",
+      "Gwangan Bridge South Korea"
+    ],
+    "required_terms": [
+      "Gwangan Bridge",
+      "광안대교",
+      "Gwangandaegyo"
+    ],
+    "forbidden_terms": []
+  },
+  "haeundae_beach": {
+    "detail_name": "해운대해수욕장",
+    "parent_name": null,
+    "accepted_names": [
+      "해운대해수욕장",
+      "Haeundae Beach"
+    ],
+    "commons_query": "Haeundae Beach",
+    "category": "beach",
+    "region": "Busan",
+    "canonical_name_ko": "해운대해수욕장",
+    "canonical_name_en": "Haeundae Beach",
+    "commons_queries": [
+      "Haeundae Beach",
+      "해운대해수욕장",
+      "Haeundae Beach Korea",
+      "Haeundae Beach South Korea"
+    ],
+    "required_terms": [
+      "Haeundae Beach",
+      "해운대해수욕장"
+    ],
+    "forbidden_terms": []
+  },
+  "gamcheon_culture_village": {
+    "detail_name": "감천문화마을",
+    "parent_name": null,
+    "accepted_names": [
+      "감천문화마을",
+      "Gamcheon Culture Village"
+    ],
+    "commons_query": "Gamcheon Culture Village",
+    "category": "traditional_village",
+    "region": "Busan",
+    "canonical_name_ko": "감천문화마을",
+    "canonical_name_en": "Gamcheon Culture Village",
+    "commons_queries": [
+      "Gamcheon Culture Village",
+      "감천문화마을",
+      "Gamcheon Culture Village Korea",
+      "Gamcheon Culture Village South Korea"
+    ],
+    "required_terms": [
+      "Gamcheon Culture Village",
+      "감천문화마을"
+    ],
+    "forbidden_terms": []
+  },
+  "haedong_yonggungsa": {
+    "detail_name": "해동용궁사",
+    "parent_name": null,
+    "accepted_names": [
+      "해동용궁사",
+      "Haedong Yonggungsa"
+    ],
+    "commons_query": "Haedong Yonggungsa",
+    "category": "temple",
+    "region": "Busan",
+    "canonical_name_ko": "해동용궁사",
+    "canonical_name_en": "Haedong Yonggungsa",
+    "commons_queries": [
+      "Haedong Yonggungsa",
+      "해동용궁사",
+      "Haedong Yonggungsa Korea",
+      "Haedong Yonggungsa South Korea"
+    ],
+    "required_terms": [
+      "Haedong Yonggungsa",
+      "해동용궁사"
+    ],
+    "forbidden_terms": []
+  },
+  "busan_tower": {
+    "detail_name": "부산타워",
+    "parent_name": null,
+    "accepted_names": [
+      "부산타워",
+      "Busan Tower"
+    ],
+    "commons_query": "Busan Tower",
+    "category": "tower",
+    "region": "Busan",
+    "canonical_name_ko": "부산타워",
+    "canonical_name_en": "Busan Tower",
+    "commons_queries": [
+      "Busan Tower",
+      "부산타워",
+      "Busan Tower Korea",
+      "Busan Tower South Korea"
+    ],
+    "required_terms": [
+      "Busan Tower",
+      "부산타워"
+    ],
+    "forbidden_terms": []
+  },
+  "taejongdae": {
+    "detail_name": "태종대",
+    "parent_name": null,
+    "accepted_names": [
+      "태종대",
+      "Taejongdae"
+    ],
+    "commons_query": "Taejongdae",
+    "category": "natural_attraction",
+    "region": "Busan",
+    "canonical_name_ko": "태종대",
+    "canonical_name_en": "Taejongdae",
+    "commons_queries": [
+      "Taejongdae",
+      "태종대",
+      "Taejongdae Korea",
+      "Taejongdae South Korea"
+    ],
+    "required_terms": [
+      "Taejongdae",
+      "태종대"
+    ],
+    "forbidden_terms": [
+      "bus"
+    ]
+  },
+  "daejeon_expo_bridge": {
+    "detail_name": "엑스포다리",
+    "parent_name": null,
+    "accepted_names": [
+      "엑스포다리",
+      "Expo Bridge"
+    ],
+    "commons_query": "Expo Bridge Daejeon",
+    "category": "bridge",
+    "region": "Daejeon",
+    "canonical_name_ko": "엑스포다리",
+    "canonical_name_en": "Expo Bridge",
+    "commons_queries": [
+      "Expo Bridge Daejeon",
+      "엑스포다리",
+      "Expo Bridge Daejeon Korea",
+      "Expo Bridge Daejeon South Korea"
+    ],
+    "required_terms": [
+      "Expo Bridge Daejeon",
+      "엑스포다리",
+      "Expo Bridge"
+    ],
+    "forbidden_terms": []
+  },
+  "hanbat_arboretum": {
+    "detail_name": "한밭수목원",
+    "parent_name": null,
+    "accepted_names": [
+      "한밭수목원",
+      "Hanbat Arboretum"
+    ],
+    "commons_query": "Hanbat Arboretum",
+    "category": "park",
+    "region": "Daejeon",
+    "canonical_name_ko": "한밭수목원",
+    "canonical_name_en": "Hanbat Arboretum",
+    "commons_queries": [
+      "Hanbat Arboretum",
+      "한밭수목원",
+      "Hanbat Arboretum Korea",
+      "Hanbat Arboretum South Korea"
+    ],
+    "required_terms": [
+      "Hanbat Arboretum",
+      "한밭수목원"
+    ],
+    "forbidden_terms": []
+  },
+  "cheongnamdae": {
+    "detail_name": "청남대",
+    "parent_name": null,
+    "accepted_names": [
+      "청남대",
+      "Cheongnamdae"
+    ],
+    "commons_query": "Cheongnamdae",
+    "category": "heritage",
+    "region": "Chungbuk",
+    "canonical_name_ko": "청남대",
+    "canonical_name_en": "Cheongnamdae",
+    "commons_queries": [
+      "Cheongnamdae",
+      "청남대",
+      "Cheongnamdae Korea",
+      "Cheongnamdae South Korea"
+    ],
+    "required_terms": [
+      "Cheongnamdae",
+      "청남대"
+    ],
+    "forbidden_terms": []
+  },
+  "beopjusa": {
+    "detail_name": "법주사",
+    "parent_name": null,
+    "accepted_names": [
+      "법주사",
+      "Beopjusa",
+      "Beopjusa Temple"
+    ],
+    "commons_query": "Beopjusa",
+    "category": "temple",
+    "region": "Chungbuk",
+    "canonical_name_ko": "법주사",
+    "canonical_name_en": "Beopjusa Temple",
+    "commons_queries": [
+      "Beopjusa",
+      "법주사",
+      "Beopjusa Korea",
+      "Beopjusa South Korea"
+    ],
+    "required_terms": [
+      "Beopjusa",
+      "법주사",
+      "Beopjusa Temple"
+    ],
+    "forbidden_terms": []
+  },
+  "danyang_dodam_sambong": {
+    "detail_name": "도담삼봉",
+    "parent_name": null,
+    "accepted_names": [
+      "도담삼봉",
+      "Dodamsambong Peaks"
+    ],
+    "commons_query": "Dodamsambong",
+    "category": "natural_attraction",
+    "region": "Chungbuk",
+    "canonical_name_ko": "도담삼봉",
+    "canonical_name_en": "Dodamsambong Peaks",
+    "commons_queries": [
+      "Dodamsambong",
+      "도담삼봉",
+      "Dodamsambong Korea",
+      "Dodamsambong South Korea"
+    ],
+    "required_terms": [
+      "Dodamsambong",
+      "도담삼봉",
+      "Dodamsambong Peaks"
+    ],
+    "forbidden_terms": []
+  },
+  "gongju_gongsanseong": {
+    "detail_name": "공주 공산성",
+    "parent_name": null,
+    "accepted_names": [
+      "공주 공산성",
+      "Gongsanseong Fortress"
+    ],
+    "commons_query": "Gongsanseong Fortress",
+    "category": "fortress",
+    "region": "Chungnam",
+    "canonical_name_ko": "공주 공산성",
+    "canonical_name_en": "Gongsanseong Fortress",
+    "commons_queries": [
+      "Gongsanseong Fortress",
+      "공주 공산성",
+      "Gongsanseong Fortress Korea",
+      "Gongsanseong Fortress South Korea"
+    ],
+    "required_terms": [
+      "Gongsanseong Fortress",
+      "공주 공산성"
+    ],
+    "forbidden_terms": []
+  },
+  "buyeo_baesanjeong": {
+    "detail_name": "부여 부소산성",
+    "parent_name": null,
+    "accepted_names": [
+      "부여 부소산성",
+      "Busosanseong Fortress"
+    ],
+    "commons_query": "Busosanseong Fortress",
+    "category": "fortress",
+    "region": "Chungnam",
+    "canonical_name_ko": "부여 부소산성",
+    "canonical_name_en": "Busosanseong Fortress",
+    "commons_queries": [
+      "Busosanseong Fortress",
+      "부여 부소산성",
+      "Busosanseong Fortress Korea",
+      "Busosanseong Fortress South Korea"
+    ],
+    "required_terms": [
+      "Busosanseong Fortress",
+      "부여 부소산성"
+    ],
+    "forbidden_terms": [
+      "replica",
+      "museum",
+      "goransa",
+      "goransa temple"
+    ]
+  },
+  "taean_anmyeondo": {
+    "detail_name": "안면도",
+    "parent_name": null,
+    "accepted_names": [
+      "안면도",
+      "Anmyeondo",
+      "Anmyeon Island"
+    ],
+    "commons_query": "Anmyeondo",
+    "category": "island",
+    "region": "Chungnam",
+    "canonical_name_ko": "안면도",
+    "canonical_name_en": "Anmyeon Island",
+    "commons_queries": [
+      "Anmyeondo",
+      "안면도",
+      "Anmyeondo Korea",
+      "Anmyeondo South Korea"
+    ],
+    "required_terms": [
+      "Anmyeondo",
+      "안면도",
+      "Anmyeon Island"
+    ],
+    "forbidden_terms": [
+      "buan"
+    ]
+  },
+  "jeonju_hanok_village": {
+    "detail_name": "전주한옥마을",
+    "parent_name": null,
+    "accepted_names": [
+      "전주한옥마을",
+      "Jeonju Hanok Village"
+    ],
+    "commons_query": "Jeonju Hanok Village",
+    "category": "traditional_village",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "전주한옥마을",
+    "canonical_name_en": "Jeonju Hanok Village",
+    "commons_queries": [
+      "Jeonju Hanok Village",
+      "전주한옥마을",
+      "Jeonju Hanok Village Korea",
+      "Jeonju Hanok Village South Korea"
+    ],
+    "required_terms": [
+      "Jeonju Hanok Village",
+      "전주한옥마을"
+    ],
+    "forbidden_terms": []
+  },
+  "jeonju_pungnammun": {
+    "detail_name": "풍남문",
+    "parent_name": null,
+    "accepted_names": [
+      "풍남문",
+      "Pungnammun Gate"
+    ],
+    "commons_query": "Pungnammun",
+    "category": "heritage",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "풍남문",
+    "canonical_name_en": "Pungnammun Gate",
+    "commons_queries": [
+      "Pungnammun",
+      "풍남문",
+      "Pungnammun Korea",
+      "Pungnammun South Korea"
+    ],
+    "required_terms": [
+      "Pungnammun",
+      "풍남문",
+      "Pungnammun Gate"
+    ],
+    "forbidden_terms": []
+  },
+  "naejangsan": {
+    "detail_name": "내장산",
+    "parent_name": null,
+    "accepted_names": [
+      "내장산",
+      "Naejangsan",
+      "Naejangsan National Park"
+    ],
+    "commons_query": "Naejangsan",
+    "category": "mountain",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "내장산",
+    "canonical_name_en": "Naejangsan National Park",
+    "commons_queries": [
+      "Naejangsan",
+      "내장산",
+      "Naejangsan Korea",
+      "Naejangsan South Korea"
+    ],
+    "required_terms": [
+      "Naejangsan",
+      "내장산",
+      "Naejangsan National Park"
+    ],
+    "forbidden_terms": []
+  },
+  "gunsan_modern_history_museum": {
+    "detail_name": "군산근대역사박물관",
+    "parent_name": null,
+    "accepted_names": [
+      "군산근대역사박물관",
+      "Gunsan Modern History Museum"
+    ],
+    "commons_query": "Gunsan Modern History Museum",
+    "category": "museum",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "군산근대역사박물관",
+    "canonical_name_en": "Gunsan Modern History Museum",
+    "commons_queries": [
+      "Gunsan Modern History Museum",
+      "군산근대역사박물관",
+      "Gunsan Modern History Museum Korea",
+      "Gunsan Modern History Museum South Korea"
+    ],
+    "required_terms": [
+      "Gunsan Modern History Museum",
+      "군산근대역사박물관"
+    ],
+    "forbidden_terms": []
+  },
+  "suncheon_bay": {
+    "detail_name": "순천만습지",
+    "parent_name": null,
+    "accepted_names": [
+      "순천만습지",
+      "순천만",
+      "Suncheon Bay Wetland Reserve"
+    ],
+    "commons_query": "Suncheon Bay Wetland",
+    "category": "natural_attraction",
+    "region": "Jeonnam",
+    "canonical_name_ko": "순천만습지",
+    "canonical_name_en": "Suncheon Bay Wetland Reserve",
+    "commons_queries": [
+      "Suncheon Bay Wetland",
+      "순천만습지",
+      "Suncheon Bay Wetland Korea",
+      "Suncheon Bay Wetland South Korea"
+    ],
+    "required_terms": [
+      "Suncheon Bay Wetland",
+      "순천만습지",
+      "순천만",
+      "Suncheon Bay Wetland Reserve"
+    ],
+    "forbidden_terms": []
+  },
+  "yeosu_expo": {
+    "detail_name": "여수세계박람회장",
+    "parent_name": null,
+    "accepted_names": [
+      "여수세계박람회장",
+      "Yeosu Expo"
+    ],
+    "commons_query": "Yeosu Expo",
+    "category": "tourist_facility",
+    "region": "Jeonnam",
+    "canonical_name_ko": "여수세계박람회장",
+    "canonical_name_en": "Yeosu Expo",
+    "commons_queries": [
+      "Yeosu Expo",
+      "여수세계박람회장",
+      "Yeosu Expo Korea",
+      "Yeosu Expo South Korea"
+    ],
+    "required_terms": [
+      "Yeosu Expo",
+      "여수세계박람회장"
+    ],
+    "forbidden_terms": []
+  },
+  "hyangiram": {
+    "detail_name": "향일암",
+    "parent_name": null,
+    "accepted_names": [
+      "향일암",
+      "Hyangiram"
+    ],
+    "commons_query": "Hyangiram",
+    "category": "temple",
+    "region": "Jeonnam",
+    "canonical_name_ko": "향일암",
+    "canonical_name_en": "Hyangiram",
+    "commons_queries": [
+      "Hyangiram",
+      "향일암",
+      "Hyangiram Korea",
+      "Hyangiram South Korea"
+    ],
+    "required_terms": [
+      "Hyangiram",
+      "향일암"
+    ],
+    "forbidden_terms": []
+  },
+  "boseong_tea_fields": {
+    "detail_name": "보성녹차밭",
+    "parent_name": null,
+    "accepted_names": [
+      "보성녹차밭",
+      "Boseong Green Tea Fields"
+    ],
+    "commons_query": "Boseong tea fields",
+    "category": "natural_attraction",
+    "region": "Jeonnam",
+    "canonical_name_ko": "보성녹차밭",
+    "canonical_name_en": "Boseong Green Tea Fields",
+    "commons_queries": [
+      "Boseong tea fields",
+      "보성녹차밭",
+      "Boseong tea fields Korea",
+      "Boseong tea fields South Korea"
+    ],
+    "required_terms": [
+      "Boseong tea fields",
+      "보성녹차밭",
+      "Boseong Green Tea Fields"
+    ],
+    "forbidden_terms": []
+  },
+  "damyang_juknokwon": {
+    "detail_name": "담양 죽녹원",
+    "parent_name": null,
+    "accepted_names": [
+      "담양 죽녹원",
+      "Juknokwon",
+      "Juknokwon Bamboo Forest"
+    ],
+    "commons_query": "Juknokwon Bamboo Forest",
+    "category": "natural_attraction",
+    "region": "Jeonnam",
+    "canonical_name_ko": "담양 죽녹원",
+    "canonical_name_en": "Juknokwon Bamboo Forest",
+    "commons_queries": [
+      "Juknokwon Bamboo Forest",
+      "담양 죽녹원",
+      "Juknokwon Bamboo Forest Korea",
+      "Juknokwon Bamboo Forest South Korea"
+    ],
+    "required_terms": [
+      "Juknokwon Bamboo Forest",
+      "담양 죽녹원",
+      "Juknokwon"
+    ],
+    "forbidden_terms": [
+      "pagoda"
+    ]
+  },
+  "mudeungsan": {
+    "detail_name": "무등산",
+    "parent_name": null,
+    "accepted_names": [
+      "무등산",
+      "Mudeungsan",
+      "Mudeungsan National Park"
+    ],
+    "commons_query": "Mudeungsan",
+    "category": "mountain",
+    "region": "Gwangju",
+    "canonical_name_ko": "무등산",
+    "canonical_name_en": "Mudeungsan National Park",
+    "commons_queries": [
+      "Mudeungsan",
+      "무등산",
+      "Mudeungsan Korea",
+      "Mudeungsan South Korea"
+    ],
+    "required_terms": [
+      "Mudeungsan",
+      "무등산",
+      "Mudeungsan National Park"
+    ],
+    "forbidden_terms": []
+  },
+  "asia_culture_center": {
+    "detail_name": "국립아시아문화전당",
+    "parent_name": null,
+    "accepted_names": [
+      "국립아시아문화전당",
+      "Asia Culture Center"
+    ],
+    "commons_query": "Asia Culture Center Gwangju",
+    "category": "modern_architecture",
+    "region": "Gwangju",
+    "canonical_name_ko": "국립아시아문화전당",
+    "canonical_name_en": "Asia Culture Center",
+    "commons_queries": [
+      "Asia Culture Center Gwangju",
+      "국립아시아문화전당",
+      "Asia Culture Center Gwangju Korea",
+      "Asia Culture Center Gwangju South Korea"
+    ],
+    "required_terms": [
+      "Asia Culture Center Gwangju",
+      "국립아시아문화전당",
+      "Asia Culture Center"
+    ],
+    "forbidden_terms": []
+  },
+  "ulsan_daewangam": {
+    "detail_name": "대왕암공원",
+    "parent_name": null,
+    "accepted_names": [
+      "대왕암공원",
+      "Daewangam Park"
+    ],
+    "commons_query": "Daewangam Park",
+    "category": "park",
+    "region": "Ulsan",
+    "canonical_name_ko": "대왕암공원",
+    "canonical_name_en": "Daewangam Park",
+    "commons_queries": [
+      "Daewangam Park",
+      "대왕암공원",
+      "Daewangam Park Korea",
+      "Daewangam Park South Korea"
+    ],
+    "required_terms": [
+      "Daewangam Park",
+      "대왕암공원"
+    ],
+    "forbidden_terms": []
+  },
+  "ulsan_grand_park": {
+    "detail_name": "울산대공원",
+    "parent_name": null,
+    "accepted_names": [
+      "울산대공원",
+      "Ulsan Grand Park"
+    ],
+    "commons_query": "Ulsan Grand Park",
+    "category": "park",
+    "region": "Ulsan",
+    "canonical_name_ko": "울산대공원",
+    "canonical_name_en": "Ulsan Grand Park",
+    "commons_queries": [
+      "Ulsan Grand Park",
+      "울산대공원",
+      "Ulsan Grand Park Korea",
+      "Ulsan Grand Park South Korea"
+    ],
+    "required_terms": [
+      "Ulsan Grand Park",
+      "울산대공원"
+    ],
+    "forbidden_terms": [
+      "bus"
+    ]
+  },
+  "suncheon_bay_national_garden": {
+    "detail_name": "순천만국가정원",
+    "parent_name": null,
+    "accepted_names": [
+      "순천만국가정원",
+      "Suncheon Bay National Garden"
+    ],
+    "commons_query": "Suncheon Bay National Garden",
+    "category": "garden",
+    "region": "Jeonnam",
+    "canonical_name_ko": "순천만국가정원",
+    "canonical_name_en": "Suncheon Bay National Garden",
+    "commons_queries": [
+      "Suncheon Bay National Garden",
+      "순천만국가정원",
+      "Suncheon Bay National Garden Korea",
+      "Suncheon Bay National Garden South Korea"
+    ],
+    "required_terms": [
+      "Suncheon Bay National Garden",
+      "순천만국가정원"
+    ],
+    "forbidden_terms": []
+  },
+  "hallasan": {
+    "detail_name": "한라산",
+    "parent_name": null,
+    "accepted_names": [
+      "한라산",
+      "Hallasan",
+      "Hallasan National Park"
+    ],
+    "commons_query": "Hallasan",
+    "category": "mountain",
+    "region": "Jeju",
+    "canonical_name_ko": "한라산",
+    "canonical_name_en": "Hallasan National Park",
+    "commons_queries": [
+      "Hallasan",
+      "한라산",
+      "Hallasan Korea",
+      "Hallasan South Korea"
+    ],
+    "required_terms": [
+      "Hallasan",
+      "한라산",
+      "Hallasan National Park"
+    ],
+    "forbidden_terms": []
+  },
+  "seongsan_ilchulbong": {
+    "detail_name": "성산일출봉",
+    "parent_name": null,
+    "accepted_names": [
+      "성산일출봉",
+      "Seongsan Ilchulbong",
+      "Seongsan Sunrise Peak"
+    ],
+    "commons_query": "Seongsan Ilchulbong",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "성산일출봉",
+    "canonical_name_en": "Seongsan Sunrise Peak",
+    "commons_queries": [
+      "Seongsan Ilchulbong",
+      "성산일출봉",
+      "Seongsan Ilchulbong Korea",
+      "Seongsan Ilchulbong South Korea"
+    ],
+    "required_terms": [
+      "Seongsan Ilchulbong",
+      "성산일출봉",
+      "Seongsan Sunrise Peak"
+    ],
+    "forbidden_terms": []
+  },
+  "jeju_seongsan": {
+    "detail_name": "섭지코지",
+    "parent_name": null,
+    "accepted_names": [
+      "섭지코지",
+      "Seopjikoji"
+    ],
+    "commons_query": "Seopjikoji",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "섭지코지",
+    "canonical_name_en": "Seopjikoji",
+    "commons_queries": [
+      "Seopjikoji",
+      "섭지코지",
+      "Seopjikoji Korea",
+      "Seopjikoji South Korea"
+    ],
+    "required_terms": [
+      "Seopjikoji",
+      "섭지코지"
+    ],
+    "forbidden_terms": []
+  },
+  "jeju_man_janggul": {
+    "detail_name": "만장굴",
+    "parent_name": null,
+    "accepted_names": [
+      "만장굴",
+      "Manjanggul Cave"
+    ],
+    "commons_query": "Manjanggul Cave",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "만장굴",
+    "canonical_name_en": "Manjanggul Cave",
+    "commons_queries": [
+      "Manjanggul Cave",
+      "만장굴",
+      "Manjanggul Cave Korea",
+      "Manjanggul Cave South Korea"
+    ],
+    "required_terms": [
+      "Manjanggul Cave",
+      "만장굴"
+    ],
+    "forbidden_terms": []
+  },
+  "jeju_loveland": {
+    "detail_name": "제주러브랜드",
+    "parent_name": null,
+    "accepted_names": [
+      "제주러브랜드",
+      "Jeju Loveland"
+    ],
+    "commons_query": "Jeju Loveland",
+    "category": "tourist_facility",
+    "region": "Jeju",
+    "canonical_name_ko": "제주러브랜드",
+    "canonical_name_en": "Jeju Loveland",
+    "commons_queries": [
+      "Jeju Loveland",
+      "제주러브랜드",
+      "Jeju Loveland Korea",
+      "Jeju Loveland South Korea"
+    ],
+    "required_terms": [
+      "Jeju Loveland",
+      "제주러브랜드"
+    ],
+    "forbidden_terms": []
+  },
+  "cheonjeyeon_falls": {
+    "detail_name": "천제연폭포",
+    "parent_name": null,
+    "accepted_names": [
+      "천제연폭포",
+      "Cheonjeyeon Falls"
+    ],
+    "commons_query": "Cheonjeyeon Falls",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "천제연폭포",
+    "canonical_name_en": "Cheonjeyeon Falls",
+    "commons_queries": [
+      "Cheonjeyeon Falls",
+      "천제연폭포",
+      "Cheonjeyeon Falls Korea",
+      "Cheonjeyeon Falls South Korea"
+    ],
+    "required_terms": [
+      "Cheonjeyeon Falls",
+      "천제연폭포"
+    ],
+    "forbidden_terms": []
+  },
+  "jeongbang_falls": {
+    "detail_name": "정방폭포",
+    "parent_name": null,
+    "accepted_names": [
+      "정방폭포",
+      "Jeongbang Falls"
+    ],
+    "commons_query": "Jeongbang Falls",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "정방폭포",
+    "canonical_name_en": "Jeongbang Falls",
+    "commons_queries": [
+      "Jeongbang Falls",
+      "정방폭포",
+      "Jeongbang Falls Korea",
+      "Jeongbang Falls South Korea"
+    ],
+    "required_terms": [
+      "Jeongbang Falls",
+      "정방폭포"
+    ],
+    "forbidden_terms": []
+  },
+  "oedolgae": {
+    "detail_name": "외돌개",
+    "parent_name": null,
+    "accepted_names": [
+      "외돌개",
+      "Oedolgae"
+    ],
+    "commons_query": "Oedolgae",
+    "category": "natural_attraction",
+    "region": "Jeju",
+    "canonical_name_ko": "외돌개",
+    "canonical_name_en": "Oedolgae",
+    "commons_queries": [
+      "Oedolgae",
+      "외돌개",
+      "Oedolgae Korea",
+      "Oedolgae South Korea"
+    ],
+    "required_terms": [
+      "Oedolgae",
+      "외돌개"
+    ],
+    "forbidden_terms": []
+  },
+  "u_do": {
+    "detail_name": "우도",
+    "parent_name": null,
+    "accepted_names": [
+      "우도",
+      "Udo Island",
+      "Udo"
+    ],
+    "commons_query": "Udo Island Jeju",
+    "category": "island",
+    "region": "Jeju",
+    "canonical_name_ko": "우도",
+    "canonical_name_en": "Udo",
+    "commons_queries": [
+      "Udo Island Jeju",
+      "우도",
+      "Udo Island Jeju Korea",
+      "Udo Island Jeju South Korea"
+    ],
+    "required_terms": [
+      "Udo Island Jeju",
+      "우도",
+      "Udo Island",
+      "Udo"
+    ],
+    "forbidden_terms": []
+  },
+  "daereungwon": {
+    "detail_name": "대릉원",
+    "parent_name": null,
+    "accepted_names": [
+      "대릉원",
+      "Daereungwon"
+    ],
+    "commons_query": "Daereungwon",
+    "category": "heritage",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "대릉원",
+    "canonical_name_en": "Daereungwon",
+    "commons_queries": [
+      "Daereungwon",
+      "대릉원",
+      "Daereungwon Korea",
+      "Daereungwon South Korea"
+    ],
+    "required_terms": [
+      "Daereungwon",
+      "대릉원"
+    ],
+    "forbidden_terms": []
+  },
+  "gyeongju_namsan": {
+    "detail_name": "경주 남산",
+    "parent_name": null,
+    "accepted_names": [
+      "경주 남산",
+      "Gyeongju Namsan"
+    ],
+    "commons_query": "Gyeongju Namsan",
+    "category": "mountain",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "경주 남산",
+    "canonical_name_en": "Gyeongju Namsan",
+    "commons_queries": [
+      "Gyeongju Namsan",
+      "경주 남산",
+      "Gyeongju Namsan Korea",
+      "Gyeongju Namsan South Korea"
+    ],
+    "required_terms": [
+      "Gyeongju Namsan",
+      "경주 남산"
+    ],
+    "forbidden_terms": []
+  },
+  "gimhae_gaya_theme_park": {
+    "detail_name": "가야테마파크",
+    "parent_name": null,
+    "accepted_names": [
+      "가야테마파크",
+      "Gaya Theme Park"
+    ],
+    "commons_query": "Gaya Theme Park",
+    "category": "tourist_facility",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "가야테마파크",
+    "canonical_name_en": "Gaya Theme Park",
+    "commons_queries": [
+      "Gaya Theme Park",
+      "가야테마파크",
+      "Gaya Theme Park Korea",
+      "Gaya Theme Park South Korea"
+    ],
+    "required_terms": [
+      "Gaya Theme Park",
+      "가야테마파크"
+    ],
+    "forbidden_terms": []
+  },
+  "namhae_german_village": {
+    "detail_name": "남해독일마을",
+    "parent_name": null,
+    "accepted_names": [
+      "남해독일마을",
+      "Namhae German Village"
+    ],
+    "commons_query": "Namhae German Village",
+    "category": "traditional_village",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "남해독일마을",
+    "canonical_name_en": "Namhae German Village",
+    "commons_queries": [
+      "Namhae German Village",
+      "남해독일마을",
+      "Namhae German Village Korea",
+      "Namhae German Village South Korea"
+    ],
+    "required_terms": [
+      "Namhae German Village",
+      "남해독일마을"
+    ],
+    "forbidden_terms": []
+  },
+  "oedo_botania": {
+    "detail_name": "외도 보타니아",
+    "parent_name": null,
+    "accepted_names": [
+      "외도 보타니아",
+      "Oedo Botania",
+      "Oedo-Botania"
+    ],
+    "commons_query": "Oedo Botania",
+    "category": "garden",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "외도 보타니아",
+    "canonical_name_en": "Oedo-Botania",
+    "commons_queries": [
+      "Oedo Botania",
+      "외도 보타니아",
+      "Oedo Botania Korea",
+      "Oedo Botania South Korea"
+    ],
+    "required_terms": [
+      "Oedo Botania",
+      "외도 보타니아",
+      "Oedo-Botania"
+    ],
+    "forbidden_terms": []
+  },
+  "daegu_83_tower": {
+    "detail_name": "83타워",
+    "parent_name": null,
+    "accepted_names": [
+      "83타워",
+      "83 Tower",
+      "E-World 83 Tower"
+    ],
+    "commons_query": "83 Tower Daegu",
+    "category": "tower",
+    "region": "Daegu",
+    "canonical_name_ko": "83타워",
+    "canonical_name_en": "E-World 83 Tower",
+    "commons_queries": [
+      "83 Tower Daegu",
+      "83타워",
+      "83 Tower Daegu Korea",
+      "83 Tower Daegu South Korea"
+    ],
+    "required_terms": [
+      "83 Tower Daegu",
+      "83타워",
+      "83 Tower",
+      "E-World 83 Tower"
+    ],
+    "forbidden_terms": []
+  },
+  "daegu_ap_san": {
+    "detail_name": "앞산공원",
+    "parent_name": null,
+    "accepted_names": [
+      "앞산공원",
+      "Apsan Park"
+    ],
+    "commons_query": "Apsan Park",
+    "category": "park",
+    "region": "Daegu",
+    "canonical_name_ko": "앞산공원",
+    "canonical_name_en": "Apsan Park",
+    "commons_queries": [
+      "Apsan Park",
+      "앞산공원",
+      "Apsan Park Korea",
+      "Apsan Park South Korea"
+    ],
+    "required_terms": [
+      "Apsan Park",
+      "앞산공원"
+    ],
+    "forbidden_terms": []
+  },
+  "seodaemun_prison_history_hall": {
+    "detail_name": "서대문형무소역사관",
+    "parent_name": null,
+    "accepted_names": [
+      "서대문형무소역사관",
+      "Seodaemun Prison History Hall"
+    ],
+    "commons_query": "Seodaemun Prison History Hall",
+    "category": "heritage",
+    "region": "Seoul",
+    "canonical_name_ko": "서대문형무소역사관",
+    "canonical_name_en": "Seodaemun Prison History Hall",
+    "commons_queries": [
+      "Seodaemun Prison History Hall",
+      "서대문형무소역사관",
+      "Seodaemun Prison History Hall Korea",
+      "Seodaemun Prison History Hall South Korea"
+    ],
+    "required_terms": [
+      "Seodaemun Prison History Hall",
+      "서대문형무소역사관"
+    ],
+    "forbidden_terms": []
+  },
+  "seoul_gwanghwamun_square": {
+    "detail_name": "광화문광장",
+    "parent_name": null,
+    "accepted_names": [
+      "광화문광장",
+      "Gwanghwamun Square"
+    ],
+    "commons_query": "Gwanghwamun Square",
+    "category": "square",
+    "region": "Seoul",
+    "canonical_name_ko": "광화문광장",
+    "canonical_name_en": "Gwanghwamun Square",
+    "commons_queries": [
+      "Gwanghwamun Square",
+      "광화문광장",
+      "Gwanghwamun Square Korea",
+      "Gwanghwamun Square South Korea"
+    ],
+    "required_terms": [
+      "Gwanghwamun Square",
+      "광화문광장"
+    ],
+    "forbidden_terms": []
+  },
+  "seoul_lotte_world_tower": {
+    "detail_name": "롯데월드타워",
+    "parent_name": null,
+    "accepted_names": [
+      "롯데월드타워",
+      "Lotte World Tower"
+    ],
+    "commons_query": "Lotte World Tower",
+    "category": "tower",
+    "region": "Seoul",
+    "canonical_name_ko": "롯데월드타워",
+    "canonical_name_en": "Lotte World Tower",
+    "commons_queries": [
+      "Lotte World Tower",
+      "롯데월드타워",
+      "Lotte World Tower Korea",
+      "Lotte World Tower South Korea"
+    ],
+    "required_terms": [
+      "Lotte World Tower",
+      "롯데월드타워"
+    ],
+    "forbidden_terms": []
+  },
+  "seoul_coex": {
+    "detail_name": "코엑스",
+    "parent_name": null,
+    "accepted_names": [
+      "코엑스",
+      "COEX Convention & Exhibition Center",
+      "COEX"
+    ],
+    "commons_query": "COEX Seoul",
+    "category": "modern_architecture",
+    "region": "Seoul",
+    "canonical_name_ko": "코엑스",
+    "canonical_name_en": "COEX",
+    "commons_queries": [
+      "COEX Seoul",
+      "코엑스",
+      "COEX Seoul Korea",
+      "COEX Seoul South Korea"
+    ],
+    "required_terms": [
+      "COEX Seoul",
+      "코엑스",
+      "COEX Convention & Exhibition Center",
+      "COEX"
+    ],
+    "forbidden_terms": []
+  },
+  "incheon_chinatown": {
+    "detail_name": "인천차이나타운",
+    "parent_name": null,
+    "accepted_names": [
+      "인천차이나타운",
+      "Incheon Chinatown"
+    ],
+    "commons_query": "Incheon Chinatown",
+    "category": "traditional_village",
+    "region": "Incheon",
+    "canonical_name_ko": "인천차이나타운",
+    "canonical_name_en": "Incheon Chinatown",
+    "commons_queries": [
+      "Incheon Chinatown",
+      "인천차이나타운",
+      "Incheon Chinatown Korea",
+      "Incheon Chinatown South Korea"
+    ],
+    "required_terms": [
+      "Incheon Chinatown",
+      "인천차이나타운"
+    ],
+    "forbidden_terms": []
+  },
+  "ojukheon": {
+    "detail_name": "오죽헌",
+    "parent_name": null,
+    "accepted_names": [
+      "오죽헌",
+      "Ojukheon",
+      "Ojukheon House"
+    ],
+    "commons_query": "Ojukheon Gangneung",
+    "category": "heritage",
+    "region": "Gangwon",
+    "canonical_name_ko": "오죽헌",
+    "canonical_name_en": "Ojukheon House",
+    "commons_queries": [
+      "Ojukheon Gangneung",
+      "오죽헌",
+      "Ojukheon Gangneung Korea",
+      "Ojukheon Gangneung South Korea"
+    ],
+    "required_terms": [
+      "Ojukheon Gangneung",
+      "오죽헌",
+      "Ojukheon",
+      "Ojukheon House"
+    ],
+    "forbidden_terms": []
+  },
+  "paju_imjingak": {
+    "detail_name": "임진각",
+    "parent_name": null,
+    "accepted_names": [
+      "임진각",
+      "Imjingak"
+    ],
+    "commons_query": "Imjingak",
+    "category": "tourist_facility",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "임진각",
+    "canonical_name_en": "Imjingak",
+    "commons_queries": [
+      "Imjingak",
+      "임진각",
+      "Imjingak Korea",
+      "Imjingak South Korea"
+    ],
+    "required_terms": [
+      "Imjingak",
+      "임진각"
+    ],
+    "forbidden_terms": []
+  },
+  "yangpyeong_dumulmeori": {
+    "detail_name": "두물머리",
+    "parent_name": null,
+    "accepted_names": [
+      "두물머리",
+      "Dumulmeori"
+    ],
+    "commons_query": "Dumulmeori",
+    "category": "natural_attraction",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "두물머리",
+    "canonical_name_en": "Dumulmeori",
+    "commons_queries": [
+      "Dumulmeori",
+      "두물머리",
+      "Dumulmeori Korea",
+      "Dumulmeori South Korea"
+    ],
+    "required_terms": [
+      "Dumulmeori",
+      "두물머리"
+    ],
+    "forbidden_terms": []
+  },
+  "gimpo_aegibong": {
+    "detail_name": "애기봉평화생태공원",
+    "parent_name": null,
+    "accepted_names": [
+      "애기봉평화생태공원",
+      "Aegibong Peace Ecopark"
+    ],
+    "commons_query": "Aegibong Peace Ecopark",
+    "category": "park",
+    "region": "Gyeonggi",
+    "canonical_name_ko": "애기봉평화생태공원",
+    "canonical_name_en": "Aegibong Peace Ecopark",
+    "commons_queries": [
+      "Aegibong Peace Ecopark",
+      "애기봉평화생태공원",
+      "Aegibong Peace Ecopark Korea",
+      "Aegibong Peace Ecopark South Korea"
+    ],
+    "required_terms": [
+      "Aegibong Peace Ecopark",
+      "애기봉평화생태공원"
+    ],
+    "forbidden_terms": [
+      "starbucks"
+    ]
+  },
+  "seonamsa": {
+    "detail_name": "선암사",
+    "parent_name": null,
+    "accepted_names": [
+      "선암사",
+      "Seonamsa",
+      "Seonamsa Temple"
+    ],
+    "commons_query": "Seonamsa Temple Suncheon",
+    "category": "temple",
+    "region": "Jeonnam",
+    "canonical_name_ko": "선암사",
+    "canonical_name_en": "Seonamsa Temple",
+    "commons_queries": [
+      "Seonamsa Temple Suncheon",
+      "선암사",
+      "Seonamsa Temple Suncheon Korea",
+      "Seonamsa Temple Suncheon South Korea"
+    ],
+    "required_terms": [
+      "Seonamsa Temple Suncheon",
+      "선암사",
+      "Seonamsa",
+      "Seonamsa Temple"
+    ],
+    "forbidden_terms": []
+  },
+  "jinju_castle": {
+    "detail_name": "진주성",
+    "parent_name": null,
+    "accepted_names": [
+      "진주성",
+      "Jinju Castle",
+      "Jinjuseong"
+    ],
+    "commons_query": "Jinju Castle Korea",
+    "category": "fortress",
+    "region": "Gyeongnam",
+    "canonical_name_ko": "진주성",
+    "canonical_name_en": "Jinjuseong",
+    "commons_queries": [
+      "Jinju Castle Korea",
+      "진주성",
+      "Jinju Castle Korea Korea",
+      "Jinju Castle Korea South Korea"
+    ],
+    "required_terms": [
+      "Jinju Castle Korea",
+      "진주성",
+      "Jinju Castle",
+      "Jinjuseong"
+    ],
+    "forbidden_terms": []
+  },
+  "taebaeksan": {
+    "detail_name": "태백산",
+    "parent_name": null,
+    "accepted_names": [
+      "태백산",
+      "Taebaeksan",
+      "Taebaeksan National Park"
+    ],
+    "commons_query": "Taebaeksan",
+    "category": "mountain",
+    "region": "Gangwon",
+    "canonical_name_ko": "태백산",
+    "canonical_name_en": "Taebaeksan National Park",
+    "commons_queries": [
+      "Taebaeksan",
+      "태백산",
+      "Taebaeksan Korea",
+      "Taebaeksan South Korea"
+    ],
+    "required_terms": [
+      "Taebaeksan",
+      "태백산",
+      "Taebaeksan National Park"
+    ],
+    "forbidden_terms": []
+  },
+  "samcheok_haesindang": {
+    "detail_name": "해신당공원",
+    "parent_name": null,
+    "accepted_names": [
+      "해신당공원",
+      "Haesindang Park"
+    ],
+    "commons_query": "Haesindang Park",
+    "category": "park",
+    "region": "Gangwon",
+    "canonical_name_ko": "해신당공원",
+    "canonical_name_en": "Haesindang Park",
+    "commons_queries": [
+      "Haesindang Park",
+      "해신당공원",
+      "Haesindang Park Korea",
+      "Haesindang Park South Korea"
+    ],
+    "required_terms": [
+      "Haesindang Park",
+      "해신당공원"
+    ],
+    "forbidden_terms": []
+  },
+  "yeongju_buseoksa": {
+    "detail_name": "부석사",
+    "parent_name": null,
+    "accepted_names": [
+      "부석사",
+      "Buseoksa",
+      "Buseoksa Temple"
+    ],
+    "commons_query": "Buseoksa Yeongju",
+    "category": "temple",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "부석사",
+    "canonical_name_en": "Buseoksa Temple",
+    "commons_queries": [
+      "Buseoksa Yeongju",
+      "부석사",
+      "Buseoksa Yeongju Korea",
+      "Buseoksa Yeongju South Korea"
+    ],
+    "required_terms": [
+      "Buseoksa Yeongju",
+      "부석사",
+      "Buseoksa",
+      "Buseoksa Temple"
+    ],
+    "forbidden_terms": []
+  },
+  "mungyeongsaejae": {
+    "detail_name": "문경새재",
+    "parent_name": null,
+    "accepted_names": [
+      "문경새재",
+      "Mungyeong Saejae"
+    ],
+    "commons_query": "Mungyeong Saejae",
+    "category": "natural_attraction",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "문경새재",
+    "canonical_name_en": "Mungyeong Saejae",
+    "commons_queries": [
+      "Mungyeong Saejae",
+      "문경새재",
+      "Mungyeong Saejae Korea",
+      "Mungyeong Saejae South Korea"
+    ],
+    "required_terms": [
+      "Mungyeong Saejae",
+      "문경새재"
+    ],
+    "forbidden_terms": []
+  },
+  "woljeonggyo": {
+    "detail_name": "월정교",
+    "parent_name": null,
+    "accepted_names": [
+      "월정교",
+      "Woljeonggyo",
+      "Woljeong Bridge"
+    ],
+    "commons_query": "Woljeonggyo Gyeongju",
+    "category": "bridge",
+    "region": "Gyeongbuk",
+    "canonical_name_ko": "월정교",
+    "canonical_name_en": "Woljeong Bridge",
+    "commons_queries": [
+      "Woljeonggyo Gyeongju",
+      "월정교",
+      "Woljeonggyo Gyeongju Korea",
+      "Woljeonggyo Gyeongju South Korea"
+    ],
+    "required_terms": [
+      "Woljeonggyo Gyeongju",
+      "월정교",
+      "Woljeonggyo",
+      "Woljeong Bridge"
+    ],
+    "forbidden_terms": []
+  },
+  "chungju_tangeumdae": {
+    "detail_name": "탄금대",
+    "parent_name": null,
+    "accepted_names": [
+      "탄금대",
+      "Tangeumdae"
+    ],
+    "commons_query": "Tangeumdae",
+    "category": "park",
+    "region": "Chungbuk",
+    "canonical_name_ko": "탄금대",
+    "canonical_name_en": "Tangeumdae",
+    "commons_queries": [
+      "Tangeumdae",
+      "탄금대",
+      "Tangeumdae Korea",
+      "Tangeumdae South Korea"
+    ],
+    "required_terms": [
+      "Tangeumdae",
+      "탄금대"
+    ],
+    "forbidden_terms": []
+  },
+  "jecheon_cheongpung": {
+    "detail_name": "청풍문화재단지",
+    "parent_name": null,
+    "accepted_names": [
+      "청풍문화재단지",
+      "Cheongpung Cultural Heritage Complex"
+    ],
+    "commons_query": "Cheongpung Cultural Heritage Complex",
+    "category": "heritage",
+    "region": "Chungbuk",
+    "canonical_name_ko": "청풍문화재단지",
+    "canonical_name_en": "Cheongpung Cultural Heritage Complex",
+    "commons_queries": [
+      "Cheongpung Cultural Heritage Complex",
+      "청풍문화재단지",
+      "Cheongpung Cultural Heritage Complex Korea",
+      "Cheongpung Cultural Heritage Complex South Korea"
+    ],
+    "required_terms": [
+      "Cheongpung Cultural Heritage Complex",
+      "청풍문화재단지"
+    ],
+    "forbidden_terms": []
+  },
+  "asan_oesam": {
+    "detail_name": "외암민속마을",
+    "parent_name": null,
+    "accepted_names": [
+      "외암민속마을",
+      "Oeam Folk Village"
+    ],
+    "commons_query": "Oeam Folk Village",
+    "category": "traditional_village",
+    "region": "Chungnam",
+    "canonical_name_ko": "외암민속마을",
+    "canonical_name_en": "Oeam Folk Village",
+    "commons_queries": [
+      "Oeam Folk Village",
+      "외암민속마을",
+      "Oeam Folk Village Korea",
+      "Oeam Folk Village South Korea"
+    ],
+    "required_terms": [
+      "Oeam Folk Village",
+      "외암민속마을"
+    ],
+    "forbidden_terms": []
+  },
+  "seosan_haemieupseong": {
+    "detail_name": "해미읍성",
+    "parent_name": null,
+    "accepted_names": [
+      "해미읍성",
+      "Haemieupseong Fortress"
+    ],
+    "commons_query": "Haemieupseong",
+    "category": "fortress",
+    "region": "Chungnam",
+    "canonical_name_ko": "해미읍성",
+    "canonical_name_en": "Haemieupseong Fortress",
+    "commons_queries": [
+      "Haemieupseong",
+      "해미읍성",
+      "Haemieupseong Korea",
+      "Haemieupseong South Korea"
+    ],
+    "required_terms": [
+      "Haemieupseong",
+      "해미읍성",
+      "Haemieupseong Fortress"
+    ],
+    "forbidden_terms": []
+  },
+  "iksan_mireuksaji": {
+    "detail_name": "익산 미륵사지",
+    "parent_name": null,
+    "accepted_names": [
+      "익산 미륵사지",
+      "Mireuksaji"
+    ],
+    "commons_query": "Mireuksaji",
+    "category": "heritage",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "익산 미륵사지",
+    "canonical_name_en": "Mireuksaji",
+    "commons_queries": [
+      "Mireuksaji",
+      "익산 미륵사지",
+      "Mireuksaji Korea",
+      "Mireuksaji South Korea"
+    ],
+    "required_terms": [
+      "Mireuksaji",
+      "익산 미륵사지"
+    ],
+    "forbidden_terms": [
+      "museum"
+    ]
+  },
+  "namwon_gwanghallu": {
+    "detail_name": "광한루원",
+    "parent_name": null,
+    "accepted_names": [
+      "광한루원",
+      "Gwanghallu Garden"
+    ],
+    "commons_query": "Gwanghallu Garden",
+    "category": "garden",
+    "region": "Jeonbuk",
+    "canonical_name_ko": "광한루원",
+    "canonical_name_en": "Gwanghallu Garden",
+    "commons_queries": [
+      "Gwanghallu Garden",
+      "광한루원",
+      "Gwanghallu Garden Korea",
+      "Gwanghallu Garden South Korea"
+    ],
+    "required_terms": [
+      "Gwanghallu Garden",
+      "광한루원"
+    ],
+    "forbidden_terms": []
+  },
+  "mokpo_gatbawi": {
+    "detail_name": "목포 갓바위",
+    "parent_name": null,
+    "accepted_names": [
+      "목포 갓바위",
+      "Gatbawi Rock"
+    ],
+    "commons_query": "Gatbawi Rock Mokpo",
+    "category": "natural_attraction",
+    "region": "Jeonnam",
+    "canonical_name_ko": "목포 갓바위",
+    "canonical_name_en": "Gatbawi Rock",
+    "commons_queries": [
+      "Gatbawi Rock Mokpo",
+      "목포 갓바위",
+      "Gatbawi Rock Mokpo Korea",
+      "Gatbawi Rock Mokpo South Korea"
+    ],
+    "required_terms": [
+      "Gatbawi Rock Mokpo",
+      "목포 갓바위",
+      "Gatbawi Rock"
+    ],
+    "forbidden_terms": []
+  }
+}

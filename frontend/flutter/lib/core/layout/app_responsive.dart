@@ -16,7 +16,7 @@ class AppResponsive extends StatelessWidget {
       builder: (context, constraints) {
         final media = MediaQuery.of(context);
         final systemTextScale = media.textScaler.scale(1);
-        final safeTextScale = systemTextScale.clamp(0.85, 1.3).toDouble();
+        final safeTextScale = systemTextScale.clamp(0.85, 1.15).toDouble();
         final contentWidth = math.min(constraints.maxWidth, _maxContentWidth);
 
         return ColoredBox(
@@ -45,8 +45,21 @@ class ResponsiveLayout {
 
   static bool isCompact(BuildContext context) {
     final size = sizeOf(context);
-    return size.width <= 360 || size.height <= 700;
+    return size.width <= 360 || size.height <= 720;
   }
+
+  static double gap(BuildContext context) {
+    final width = sizeOf(context).width;
+    if (width <= 340) return 8;
+    if (width >= 480) return 14;
+    return 12;
+  }
+
+  static double sectionSpacing(BuildContext context) =>
+      isCompact(context) ? 12 : 16;
+
+  static double cardPadding(BuildContext context) =>
+      isCompact(context) ? 14 : 16;
 
   static double pageHorizontal(BuildContext context) {
     final width = sizeOf(context).width;
@@ -63,4 +76,19 @@ class ResponsiveLayout {
 
   static double bottomNavigationHeight(BuildContext context) =>
       isCompact(context) ? 72 : 80;
+
+  /// 주요 메뉴는 기기 폭과 관계없이 두 열을 유지해 과도한 세로 여백을 막습니다.
+  static int twoColumnCount(BuildContext context) => 2;
+
+  static double profileMenuExtent(BuildContext context) =>
+      isCompact(context) ? 126 : 154;
+
+  static double homeMenuExtent(BuildContext context) =>
+      isCompact(context) ? 132 : 156;
+
+  static double savedPlaceExtent(BuildContext context) =>
+      isCompact(context) ? 248 : 260;
+
+  static double selectionCardExtent(BuildContext context) =>
+      isCompact(context) ? 156 : 172;
 }

@@ -1,0 +1,6 @@
+image_id,image_path,true_country,true_region,true_city,true_place,difficulty
+001,images/001.jpg,대한민국,서울특별시,서울,광화문,landmark
+002,images/002.jpg,대한민국,경상북도,경주시,첨성대,landmark
+003,images/003.jpg,대한민국,부산광역시,부산,감천문화마을,general
+004,images/004.jpg,대한민국,강원특별자치도,강릉시,안목해변,general
+005,images/005.jpg,대한민국,서울특별시,서울,북촌한옥마을,hard

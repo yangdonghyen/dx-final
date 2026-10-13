@@ -1,4 +1,6 @@
 import json
+import socket
+from urllib.error import HTTPError
 from urllib.parse import parse_qs, urlsplit
 
 from app.core.config import Settings
@@ -18,10 +20,10 @@ class HttpGet:
 
 
 def test_car_route_keeps_mobility_duration_without_walking_estimate():
-    http_get = HttpGet(payload={"routes": [{"result_code": 0, "summary": {"duration": 725}}]})
+    http_get = HttpGet(payload={"routes": [{"result_code": 0, "summary": {"duration": 725, "distance": 4210}}]})
     estimate = KakaoMobilityRouteProvider("test-key", 3, http_get=http_get).route(37.5, 127.0, 37.6, 127.1, "CAR")
 
-    assert (estimate.duration_seconds, estimate.mode, estimate.walking_seconds) == (725, "CAR", None)
+    assert (estimate.duration_seconds, estimate.mode, estimate.distance_meters, estimate.walking_seconds) == (725, "CAR", 4210, None)
     url, headers, timeout = http_get.calls[0]
     assert urlsplit(url).netloc == "apis-navi.kakaomobility.com"
     assert urlsplit(url).path == "/v1/directions"
@@ -35,12 +37,12 @@ def test_car_route_keeps_mobility_duration_without_walking_estimate():
 
 
 def test_explicit_walk_uses_map_wgs84_and_accessible_policy():
-    http_get = HttpGet(payload={"status": "OK", "route": {"properties": {"totalTime": 180}}})
+    http_get = HttpGet(payload={"status": "OK", "route": {"properties": {"totalTime": 180, "totalDistance": 215}}})
     provider = KakaoMobilityRouteProvider("test-key", 3, walking_route_mode="ACCESSIBLE", http_get=http_get)
 
     estimate = provider.route(37.5, 127.0, 37.6, 127.1, "WALK")
 
-    assert (estimate.duration_seconds, estimate.mode, estimate.walking_seconds) == (180, "WALK", 180)
+    assert (estimate.duration_seconds, estimate.mode, estimate.distance_meters, estimate.walking_seconds) == (180, "WALK", 215, 180)
     url, headers, _ = http_get.calls[0]
     assert urlsplit(url).netloc == "dapi.kakao.com"
     assert urlsplit(url).path == "/v2/routing/walk"
@@ -55,8 +57,8 @@ def test_explicit_walk_uses_map_wgs84_and_accessible_policy():
 
 def test_public_transit_selects_shortest_then_fewest_transfers_and_sums_walking():
     http_get = HttpGet(payload={"status": "OK", "routes": [
-        {"properties": {"totalTime": 240, "transfers": 3}, "steps": [{"properties": {"type": "WALKING", "time": 120}}]},
-        {"properties": {"totalTime": 240, "transfers": 1}, "steps": [
+        {"properties": {"totalTime": 240, "totalDistance": 3900, "transfers": 3}, "steps": [{"properties": {"type": "WALKING", "time": 120}}]},
+        {"properties": {"totalTime": 240, "totalDistance": 3100, "transfers": 1}, "steps": [
             {"properties": {"type": "WALKING", "time": 40}},
             {"properties": {"type": "BUS", "time": 120}},
             {"properties": {"type": "WALKING", "time": 30}},
@@ -66,7 +68,7 @@ def test_public_transit_selects_shortest_then_fewest_transfers_and_sums_walking(
 
     estimate = KakaoMobilityRouteProvider("test-key", 3, http_get=http_get).route(37.5, 127.0, 37.6, 127.1, "PUBLIC_TRANSIT")
 
-    assert (estimate.duration_seconds, estimate.mode, estimate.walking_seconds, estimate.transfer_count) == (240, "PUBLIC_TRANSIT", 70, 1)
+    assert (estimate.duration_seconds, estimate.mode, estimate.distance_meters, estimate.walking_seconds, estimate.transfer_count) == (240, "PUBLIC_TRANSIT", 3100, 70, 1)
     url, _, _ = http_get.calls[0]
     assert urlsplit(url).netloc == "dapi.kakao.com"
     assert urlsplit(url).path == "/v2/routing/publictraffic"
@@ -97,6 +99,20 @@ def test_other_mixed_and_invalid_or_incomplete_route_results_remain_unknown():
     no_call = HttpGet()
     assert KakaoMobilityRouteProvider("test-key", 3, http_get=no_call).route(91, 127.0, 37.6, 127.1, "PUBLIC_TRANSIT") is None
     assert no_call.calls == []
+
+
+def test_auth_failure_and_timeout_are_unknown_without_fallback_estimates():
+    def authentication_failure(*_args):
+        raise HTTPError("https://example.invalid", 401, "Unauthorized", {}, None)
+
+    def timeout(*_args):
+        raise socket.timeout()
+
+    for http_get in (authentication_failure, timeout):
+        estimate = KakaoMobilityRouteProvider("test-key", 3, http_get=http_get).route(
+            37.5, 127.0, 37.6, 127.1, "CAR"
+        )
+        assert estimate is None
 
 
 def test_route_factory_is_opt_in_and_exposes_map_walking_policy():

@@ -107,3 +107,5 @@ class TripSourceRepository:
     def update(self, source, **fields):
         for field, value in fields.items(): setattr(source, field, value)
         self.session.flush(); return source
+
+

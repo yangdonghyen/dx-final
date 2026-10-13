@@ -36,3 +36,8 @@ node_modules/
 # OS
 .DS_Store
 Thumbs.db
+.initial_plan_eval_mysql/
+/.task73b_mysql/
+/.task74b_pytest/
+/.task74c_mysql/
+*.bak*

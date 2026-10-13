@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/layout/app_responsive.dart';
 import '../../core/theme/app_theme.dart';
 import '../../widgets/primary_button.dart';
 import '../trip/trip_places_screen.dart';
@@ -17,8 +18,6 @@ class PlaceDetailScreen extends StatefulWidget {
 }
 
 class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
-  bool saved = true;
-
   String get imageUrl => widget.placeName.contains('애월')
       ? 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&h=400&fit=crop'
       : 'https://images.unsplash.com/photo-1500534623283-312aade485b7?w=600&h=400&fit=crop';
@@ -33,16 +32,15 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(child: Column(children: [
         SizedBox(height: 240, child: Stack(fit: StackFit.expand, children: [
-          Image.network(imageUrl, fit: BoxFit.cover, errorBuilder: (_, __, ___) => Container(color: AppColors.soft, alignment: Alignment.center, child: Text(widget.emoji, style: const TextStyle(fontSize: 72)))),
+          Image.network(imageUrl, fit: BoxFit.cover, errorBuilder: (_, _, _) => Container(color: AppColors.soft, alignment: Alignment.center, child: Text(widget.emoji, style: const TextStyle(fontSize: 72)))),
           const DecoratedBox(decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.bottomCenter, end: Alignment.center, colors: [Color(0x80000000), Colors.transparent]))),
           Positioned(top: 12, left: 16, child: _RoundButton(icon: Icons.chevron_left_rounded, tooltip: '이전 화면으로', onPressed: () => Navigator.of(context).maybePop())),
-          Positioned(top: 12, right: 16, child: _RoundButton(icon: saved ? Icons.favorite : Icons.favorite_border, tooltip: saved ? '저장한 장소에서 제거' : '장소 저장', foreground: Colors.white, background: saved ? const Color(0xFFEF4444) : const Color(0xDDFFFFFF), onPressed: () => setState(() => saved = !saved))),
         ])),
         Expanded(child: ListView(padding: const EdgeInsets.fromLTRB(20, 16, 20, 28), children: [
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: Text(widget.placeName, style: const TextStyle(color: AppColors.ink, fontSize: 24, fontWeight: FontWeight.w700))), const SizedBox(width: 12), const Row(children: [Icon(Icons.star_rounded, color: Color(0xFFFBBF24), size: 15), SizedBox(width: 4), Text('4.8', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600))])]),
           const SizedBox(height: 3), Text(widget.location, style: const TextStyle(color: Color(0xFF9CA3AF), fontSize: 14)), const SizedBox(height: 12),
           Wrap(spacing: 8, runSpacing: 8, children: widget.tags.map((tag) => _Tag('${tagIcon(tag)} $tag')).toList()), const SizedBox(height: 20),
-          GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: facilities.length, gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.15), itemBuilder: (_, i) => Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFFF9FAFB), borderRadius: BorderRadius.circular(12)), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Text(facilities[i].icon, style: const TextStyle(fontSize: 20)), const SizedBox(height: 2), Text(facilities[i].label, textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF4B5563), fontSize: 12, fontWeight: FontWeight.w500))]))),
+          GridView.builder(shrinkWrap: true, physics: const NeverScrollableScrollPhysics(), itemCount: facilities.length, gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: ResponsiveLayout.isCompact(context) ? 2 : 3, crossAxisSpacing: 8, mainAxisSpacing: 8, mainAxisExtent: ResponsiveLayout.isCompact(context) ? 76 : 70), itemBuilder: (_, i) => Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: const Color(0xFFF9FAFB), borderRadius: BorderRadius.circular(12)), child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [Text(facilities[i].icon, style: const TextStyle(fontSize: 20)), const SizedBox(height: 2), Text(facilities[i].label, textAlign: TextAlign.center, style: const TextStyle(color: Color(0xFF4B5563), fontSize: 12, fontWeight: FontWeight.w500))]))),
           const SizedBox(height: 20),
           Container(padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFFF7F9FF), borderRadius: BorderRadius.circular(16)), child: const Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('이런 분들께 추천해요', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)), SizedBox(height: 8), _Recommendation('걷기 어려우신 분들도 해안 산책로로 편하게 즐길 수 있어요'), _Recommendation('주차장이 넓어 차량으로 방문하기 좋아요'), _Recommendation('화장실이 바로 근처에 있어 안심하고 머물 수 있어요')])),
         ])),
@@ -53,10 +51,20 @@ class _PlaceDetailScreenState extends State<PlaceDetailScreen> {
 }
 
 class _RoundButton extends StatelessWidget {
-  const _RoundButton({required this.icon, required this.tooltip, required this.onPressed, this.foreground = AppColors.ink, this.background = const Color(0xDDFFFFFF)});
-  final IconData icon; final String tooltip; final VoidCallback onPressed; final Color foreground; final Color background;
+  const _RoundButton({required this.icon, required this.tooltip, required this.onPressed});
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onPressed;
   @override
-  Widget build(BuildContext context) => Material(color: background, shape: const CircleBorder(), child: IconButton(onPressed: onPressed, tooltip: tooltip, icon: Icon(icon, color: foreground, size: 22)));
+  Widget build(BuildContext context) => Material(
+    color: const Color(0xDDFFFFFF),
+    shape: const CircleBorder(),
+    child: IconButton(
+      onPressed: onPressed,
+      tooltip: tooltip,
+      icon: Icon(icon, color: AppColors.ink, size: 22),
+    ),
+  );
 }
 
 class _Tag extends StatelessWidget {

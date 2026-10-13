@@ -119,3 +119,5 @@ class TripService:
             self.session.commit()
         except Exception:
             self.session.rollback(); raise
+
+

@@ -15,3 +15,4 @@ class VideoMetadata:
 
 class ContentProvider(Protocol):
     def get_video(self, video_id: str) -> VideoMetadata: ...
+

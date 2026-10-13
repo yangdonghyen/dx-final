@@ -91,6 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     if (shouldLogout != true || !mounted) return;
     await AuthSession.clear();
+    if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (_) => false,
@@ -330,6 +331,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
     if (shouldWithdraw != true || !mounted) return;
     await AuthSession.clear();
+    if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (_) => const LoginScreen()),
       (_) => false,
@@ -368,7 +370,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     ),
     child: ListView(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
+      padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), 12, ResponsiveLayout.pageHorizontal(context), 10),
       children: [
         Row(
           children: [
@@ -393,7 +395,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         _profileSummary(),
         const SizedBox(height: 16),
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(ResponsiveLayout.cardPadding(context)),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
@@ -403,11 +405,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                // 실기기 글꼴 크기에서도 아이콘과 제목이 충분히 들어가도록 카드 높이를 확보합니다.
-                childAspectRatio: 1.24,
+                crossAxisCount: ResponsiveLayout.twoColumnCount(context),
+                mainAxisSpacing: ResponsiveLayout.gap(context),
+                crossAxisSpacing: ResponsiveLayout.gap(context),
+                mainAxisExtent: ResponsiveLayout.profileMenuExtent(context),
                 children: [
                   _menu(
                     Icons.calendar_month_outlined,
@@ -445,7 +446,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _basicProfile() => Container(
     color: const Color(0xFFF7F8FC),
     child: ListView(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+      padding: EdgeInsets.fromLTRB(ResponsiveLayout.pageHorizontal(context), 14, ResponsiveLayout.pageHorizontal(context), 12),
       children: [
         Row(
           children: [
@@ -599,7 +600,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     ),
   );
   Widget _profileSummary() => Container(
-    padding: const EdgeInsets.all(16),
+    padding: EdgeInsets.all(ResponsiveLayout.cardPadding(context)),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(24),
@@ -626,13 +627,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(width: 13),
-            Text(
+            Expanded(child: Text(
               AuthSession.profileTitle,
               style: TextStyle(
                 fontSize: senior ? 22 : 20,
                 fontWeight: FontWeight.w900,
               ),
             ),
+          ),
           ],
         ),
         const SizedBox(height: 14),
@@ -641,14 +643,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Expanded(
               child: _Stat(
                 '지난 여행',
-                _pastTripCount == null ? '-' : '${_pastTripCount}회',
+                _pastTripCount == null ? '-' : '$_pastTripCount회',
               ),
             ),
             SizedBox(height: 38, child: VerticalDivider()),
             Expanded(
               child: _Stat(
                 '저장 장소',
-                _savedPlaceCount == null ? '-' : '${_savedPlaceCount}곳',
+                _savedPlaceCount == null ? '-' : '$_savedPlaceCount곳',
               ),
             ),
           ],
@@ -681,6 +683,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 Text(
                   label,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: senior ? 16 : 15,
                     fontWeight: FontWeight.w900,

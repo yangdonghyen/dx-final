@@ -1,0 +1,18 @@
+DIV021	File:Korea-Pyeongchang-Woljeongsa temple-Octagonal Nine Story Stone Pagoda-01.jpg	possible secondary subject: pagoda
+DIV032	File:Geoje Shinseondae.jpg	possible secondary subject: museum
+DIV034	File:Korea-Busan-Gwangan Bridge-01.jpg	possible secondary subject: bus
+DIV035	File:Haeundae Beach in Busan.jpg	possible secondary subject: bus
+DIV036	File:Gamcheon Culture Village 1.jpg	possible secondary subject: bus
+DIV037	File:Haedong Yonggungsa Temple view on sea.JPG	possible secondary subject: bus
+DIV038	File:Busan Cityscape 1.jpg	possible secondary subject: bus
+DIV039	File:Korea-Busan-Taejongdae-01.jpg	possible secondary subject: bus
+DIV029	File:Dokdo-Police boat.jpg	possible secondary subject: boat
+DIV046	File:Replica of the Sataekjijeok Stele on display in the National Museum of Korea.jpg	possible secondary subject: replica, bus, museum
+DIV060	File:Ulsan Bus 504 (Side panel).jpg	possible secondary subject: bus
+DIV064	File:KOCIS Trip to Jeju Island and Seoul (6279268944).jpg	possible secondary subject: boat, museum
+DIV086	File:Starbucks Aegibong Peace Ecopark Branch 3.jpg	possible secondary subject: starbucks
+DIV091	File:Buseoksa Dangganjiju.JPG	possible secondary subject: bus
+DIV098	File:Mireuksaji National Museum.jpg	possible secondary subject: museum
+DIV051	File:Gunsanhistorym.jpg	possible secondary subject: museum
+DIV056	File:Korean Pagoda.jpg	possible secondary subject: pagoda
+DIV088	File:Choksuk pavillion in Jinju Castel.JPG	possible secondary subject: boat

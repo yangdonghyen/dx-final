@@ -1,0 +1,6 @@
+﻿image_id,image_path,difficulty,true_country,true_region,true_city,true_place,pred_country,pred_region,pred_city,pred_place,confidence,reason,country_match,region_match,city_match,exact_place_match,status,error,model_used
+001,images/001.jpg,landmark,대한민국,서울특별시,서울,광화문,대한민국,서울특별시,종로구,광화문,1.0,"건물 전면 상단 현판에 한자로 '光化門(광화문)'이 선명하게 표시되어 있으며, 세 개의 홍예문과 중층 우진각 지붕 누각, 좌우로 이어지는 궁궐 담장 및 해태상 등 경복궁의 정문인 광화문의 고유한 건축적 특징이 명확하게 확인됩니다.",True,True,False,True,success,,gemini-3.8-flash
+002,images/002.jpg,landmark,대한민국,경상북도,경주시,첨성대,대한민국,경상북도,경주시,첨성대,0.99,"사진 중심에 신라 시대의 대표적인 천문관측 시설인 첨성대의 독특한 화강석 구조물이 선명하게 보이며, 배경으로 경주 유적지 특유의 고분과 주변 조경이 확인됩니다.",True,True,True,True,success,,gemini-3.8-flash
+003,images/003.jpg,general,대한민국,부산광역시,부산,감천문화마을,,,,,,,,,,,failure,HTTP_429,gemini-3.8-flash
+004,images/004.jpg,general,대한민국,강원특별자치도,강릉시,안목해변,,,,,,,,,,,failure,HTTP_429,gemini-3.8-flash
+005,images/005.jpg,hard,대한민국,서울특별시,서울,북촌한옥마을,대한민국,서울특별시,종로구,북촌한옥마을 (가회동 골목길),0.98,"경사진 골목길 양옆으로 기와지붕과 벽돌·석축 담장을 갖춘 전형적인 한국의 한옥 밀집 지역 구조이며, 길 중간에 한글로 쓰인 '비상소화장치' 안내함이 보입니다. 이 구도는 서울 종로구 북촌한옥마을의 대표적인 가회동 골목길(북촌 5경/6경) 전경과 일치합니다.",True,True,False,False,success,,gemini-3.8-flash

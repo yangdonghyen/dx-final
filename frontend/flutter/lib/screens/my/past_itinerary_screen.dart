@@ -165,4 +165,4 @@ class _RecordCard extends StatelessWidget {
         subtitle: Padding(padding: const EdgeInsets.only(top: 5), child: Text('$time · $detail')),
       ),
     );
-  }}
+  }}

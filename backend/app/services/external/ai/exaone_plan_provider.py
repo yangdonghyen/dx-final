@@ -4,19 +4,33 @@ import json
 import logging
 import re
 from datetime import date, datetime, time, timedelta
+from time import monotonic
 from typing import Any
 
 from app.core.exceptions import AppError
 from app.services.external.ai.ollama_client import OllamaClient
 from app.services.external.ai.provider import GeneratedPlanDraft, PlanDraftDay, PlanDraftItem
+from app.services.place_temporal_validation import opening_hours_match
+from app.services.plan_quality_rules import distance_meters
 
 
 logger = logging.getLogger("uvicorn.error")
 MAX_RAW_RESPONSE_LOG_CHARS = 8000
+MAX_SCHEMA_RETRY_MODEL_CALLS = 2
+# Output bound for one plan call (Ollama num_predict). Without it Ollama
+# generates until num_ctx is full, so a looping answer only ends at the HTTP
+# timeout. A busy day is about 8 items of ~60 tokens; this leaves headroom.
+PLAN_OUTPUT_BASE_TOKENS = 256
+PLAN_OUTPUT_TOKENS_PER_DAY = 768
 
 ALLOWED_INTEREST_CODES = {"FOOD", "CAFE", "NATURE", "CULTURE", "HISTORY", "SHOPPING", "EXHIBITION", "ACTIVITY"}
 ALLOWED_RAW_INTEREST_CODES = {"SEA", "CITY", "REST"}
 ALLOWED_TRAVEL_STYLES = {"SLOW", "STANDARD", "FOOD_FOCUSED"}
+# A repeated place's replacement may not be farther than this (straight line,
+# stored coordinates) from the stops around it, unless the repeated place
+# already was.  Lower walking tolerance shrinks it.  No travel time is implied.
+REPLACEMENT_MAX_METERS = 5000
+REPLACEMENT_MAX_METERS_BY_WALKING = {"VERY_LOW": 1000, "LOW": 2000}
 ALLOWED_ITEM_TYPES = {"PLACE", "MEAL", "REST", "FREE_TIME"}
 ALLOWED_REGENERATION_REASONS = {"USER_FATIGUE", "WEATHER_CHANGE"}
 
@@ -78,6 +92,10 @@ Respect stated preferences, companion limitations, canonical_interests, and pref
 
 travel_style is itinerary intent: SLOW means lower schedule density, fewer intensive stops, and more room for rest. STANDARD means normal density within other constraints. FOOD_FOCUSED means prioritize suitable supplied food candidates while still creating a balanced trip.
 
+For SLOW, normally schedule no more than two non-food PLACE visits on a full day unless required anchors make that impossible. Keep a genuine REST interval after a long activity or between intensive activities when the schedule has room. REST is a planned rest interval, not a verified facility or accessibility claim. FREE_TIME is only an unscheduled, location-unknown flexible interval: it is not a visit, a walking activity, a rest facility, or evidence that the traveller can walk. Do not label FREE_TIME as a nearby walk, beach walk, or place-specific rest when no supplied place_id supports that location. Do not use a generic FREE_TIME immediately after a long visit to describe substantially the same activity or area; prefer an actual REST interval, or leave the time genuinely unspecified.
+
+Do not treat a short geographic gap as a verified walk, parking transition, or easy vehicle transfer. Coordinates are only preliminary ordering data. The backend alone decides whether the selected transport mode has a verified route and whether the timetable fits it.
+
 Verified NON_FOOD_ACTIVITY candidates are the itinerary backbone. When the supplied pool contains enough distinct non-food activities for the trip days, include at least one on every full travel day. When fewer exist, include as many distinct non-food activities as the verified pool permits; do not invent one. FOOD_OR_CAFE candidates can enrich meals, cafe breaks, and a FOOD_FOCUSED trip, but must not replace available non-food activities or fill an itinerary by themselves.
 
 Meal timing: schedule a restaurant only as lunch (start 11:30-13:30) or dinner (start 17:30-19:30). Use at most one lunch and one dinner per day, and never put two restaurants back to back. A cafe break fits between activities: at most one per day by default, up to two per day when CAFE is in canonical_interests or raw_interest_codes or travel_style is FOOD_FOCUSED.
@@ -124,9 +142,11 @@ class ExaonePlanGenerationProvider:
             raise AppError("EXAONE_MODEL_NOT_CONFIGURED", "EXAONE model is required for real plan generation", 503)
         self.model = model.strip()
         self.client = client or OllamaClient(base_url, timeout)
+        self.timeout = timeout
         # Ollama's default context is too small for the prompt plus candidates;
         # when it overflows, Ollama drops the start (rules and trip dates).
         self.num_ctx = num_ctx
+        self.call_diagnostics: list[dict[str, Any]] = []
 
     @staticmethod
     def _input_error(message: str) -> None:
@@ -288,7 +308,7 @@ class ExaonePlanGenerationProvider:
         return [{**row, "visit_date": day.isoformat()} for row, day in zip(rows, expected_dates)]
 
     @classmethod
-    def _parse(cls, response: dict, start_date: date, end_date: date, candidate_places: dict[int, dict[str, Any]], preferences: dict[str, Any], interests: list[str], regeneration: dict[str, str] | None) -> GeneratedPlanDraft:
+    def _parse(cls, response: dict, start_date: date, end_date: date, candidate_places: dict[int, dict[str, Any]], preferences: dict[str, Any], interests: list[str], regeneration: dict[str, str] | None, repairs: list[dict[str, Any]] | None = None) -> GeneratedPlanDraft:
         try:
             content = response["message"]["content"]
         except (KeyError, TypeError):
@@ -311,6 +331,9 @@ class ExaonePlanGenerationProvider:
             found_dates = set()
             item_count = 0
             seen_place_ids: dict[int, date] = {}
+            # (day position, item position, reason) of each repeated place_id;
+            # repaired after the whole answer passed every other check.
+            duplicates: list[tuple[int, int, str]] = []
             for row in day_rows:
                 if not isinstance(row, dict) or not isinstance(row.get("visit_date"), str) or not isinstance(row.get("items"), list):
                     cls._parse_error("invalid_day")
@@ -353,12 +376,13 @@ class ExaonePlanGenerationProvider:
                     if place_id is not None:
                         if place_id in seen_place_ids:
                             first_date = seen_place_ids[place_id].isoformat()
-                            cls._parse_error(
+                            duplicates.append((len(parsed_days), len(items), (
                                 f"duplicate_place_id:{place_id};"
                                 f"first_date={first_date};"
                                 f"again_date={visit_date.isoformat()}"
-                            )
-                        seen_place_ids[place_id] = visit_date
+                            )))
+                        else:
+                            seen_place_ids[place_id] = visit_date
                     if not isinstance(start_value, str) or not isinstance(end_value, str):
                         cls._parse_error("invalid_time")
                     try:
@@ -404,6 +428,8 @@ class ExaonePlanGenerationProvider:
                 parsed_days.append(PlanDraftDay(visit_date, items))
             if [day.visit_date for day in parsed_days] != sorted(found_dates) or not item_count:
                 cls._parse_error("missing_trip_date")
+            if duplicates:
+                cls._repair_duplicates(parsed_days, duplicates, candidate_places, set(seen_place_ids), repairs, preferences)
             # Trip dates are backend facts. Missing model days are safe to
             # retain as non-factual free time; generation service may replace
             # those slots with unused verified candidates.
@@ -417,6 +443,97 @@ class ExaonePlanGenerationProvider:
             return GeneratedPlanDraft(days=parsed_days)
         except (KeyError, TypeError, ValueError, json.JSONDecodeError):
             cls._parse_error("invalid_response")
+
+    @staticmethod
+    def _replacement_fits(candidate: dict[str, Any], visit_date: date, start: str, end: str) -> bool:
+        """Only facts we hold: no dated events, and no verified hours that exclude the slot."""
+        if candidate.get("event_start_date") is not None or candidate.get("event_end_date") is not None:
+            return False
+        hours = candidate.get("opening_hours")
+        if not isinstance(hours, dict):
+            return True  # unverified hours stay UNKNOWN for validation; never assumed open or closed
+        verified = type("VerifiedHours", (), {"opening_hours": hours, "verification_status": "VERIFIED"})()
+        return opening_hours_match(verified, visit_date, time.fromisoformat(start), time.fromisoformat(end)) is not False
+
+    @classmethod
+    def _repair_duplicates(cls, days: list[PlanDraftDay], duplicates: list[tuple[int, int, str]], candidate_places: dict[int, dict[str, Any]], used: set[int], repairs: list[dict[str, Any]] | None, preferences: dict[str, Any] | None = None) -> None:
+        """Deterministic fix for a repeated place_id, else the normal retry.
+
+        The first occurrence (an anchor included) is always kept.  Each later
+        occurrence takes, in the same time slot, the first unused candidate of
+        the same item type and activity kind (anchors first, then candidate
+        order).  Times are untouched, so no overlap can appear.  If any repeat
+        has no such candidate, nothing is changed and the usual
+        duplicate_place_id validation error drives the AI retry.
+
+        Route safety (Phase 3B): when the stops around the slot have stored
+        coordinates, a replacement must have coordinates too and stay within
+        the walking-tolerance radius of each neighbour (or no farther than the
+        repeated place was); the nearest such candidate wins.
+        """
+        planned = []
+        taken = set(used)
+        position = {place_id: index for index, place_id in enumerate(candidate_places)}
+        order = sorted(candidate_places, key=lambda place_id: (not candidate_places[place_id].get("is_anchor"), position[place_id]))
+        limit = REPLACEMENT_MAX_METERS_BY_WALKING.get((preferences or {}).get("walking_tolerance"), REPLACEMENT_MAX_METERS)
+
+        def point(place):
+            if place.get("latitude") is None or place.get("longitude") is None:
+                return None
+            return type("Point", (), {"latitude": place["latitude"], "longitude": place["longitude"]})()
+
+        for day_index, item_index, reason in duplicates:
+            day = days[day_index]
+            item = day.items[item_index]
+            original = candidate_places[item.place_id]
+            kind = original.get("activity_kind")
+            before = next((entry for entry in reversed(day.items[:item_index]) if entry.place_id is not None), None)
+            after = next((entry for entry in day.items[item_index + 1:] if entry.place_id is not None), None)
+            neighbours = [point(candidate_places[entry.place_id]) for entry in (before, after) if entry is not None]
+            neighbours = [neighbour for neighbour in neighbours if neighbour is not None]
+
+            def route_cost(place_id):
+                """None when the replacement would lengthen an unverified leg past the limit."""
+                if not neighbours:
+                    return 0.0
+                here = point(candidate_places[place_id])
+                if here is None:
+                    return None
+                total = 0.0
+                for neighbour in neighbours:
+                    leg = distance_meters(here, neighbour)
+                    was = distance_meters(point(original), neighbour) if point(original) is not None else None
+                    if leg is None or leg > max(limit, was or 0):
+                        return None
+                    total += leg
+                return total
+
+            options = []
+            for place_id in order:
+                if (place_id in taken
+                        or cls._canonical_item_type(candidate_places[place_id].get("category")) != item.item_type
+                        or candidate_places[place_id].get("activity_kind") != kind
+                        or not cls._replacement_fits(candidate_places[place_id], day.visit_date, item.start_time, item.end_time)):
+                    continue
+                cost = route_cost(place_id)
+                if cost is not None:
+                    options.append((cost, len(options), place_id))
+            replacement_id = min(options)[2] if options else None
+            if replacement_id is None:
+                logger.info("EXAONE duplicate place not repairable: %s", reason)
+                cls._parse_error(reason)
+            taken.add(replacement_id)
+            planned.append((day, item_index, item, replacement_id, reason))
+        for day, item_index, item, replacement_id, reason in planned:
+            replacement = candidate_places[replacement_id]
+            day.items[item_index] = PlanDraftItem(item.sequence, item.item_type, str(replacement.get("name") or item.title).strip(), replacement_id, item.start_time, item.end_time, item.recommendation_reason)
+            record = {"reason": reason, "visit_date": day.visit_date.isoformat(), "sequence": item.sequence, "replacement_place_id": replacement_id}
+            logger.info(
+                "EXAONE duplicate place repaired: %s sequence=%s replacement_place_id=%s",
+                reason, item.sequence, replacement_id,
+            )
+            if repairs is not None:
+                repairs.append(record)
 
     def _generate(self, trip: Any, preferences: Any, companions: Any, interests: Any, preference_context: Any, places: Any, regeneration: dict[str, str] | None = None) -> GeneratedPlanDraft:
         trip, preferences, companions, interests, preference_context, places = self._validated_input(trip, preferences, companions, interests, preference_context, places)
@@ -436,9 +553,25 @@ class ExaonePlanGenerationProvider:
         days_schema["items"]["properties"]["visit_date"] = {"type": "string", "enum": trip_dates}
 
         candidate_map = {place["place_id"]: place for place in destination_places}
+        user_content = self._payload(
+            trip,
+            preferences,
+            companions,
+            interests,
+            preference_context,
+            destination_places,
+            regeneration,
+        )
+        num_predict = min(
+            PLAN_OUTPUT_BASE_TOKENS + PLAN_OUTPUT_TOKENS_PER_DAY * len(trip_dates),
+            self.num_ctx,
+        )
 
         last_validation_reason: str | None = None
-        for attempt in range(2):
+        # Per-call outcome for diagnostics (benchmarks, logs). Codes only: no
+        # prompt, answer text or personal data is kept here.
+        self.call_diagnostics: list[dict[str, Any]] = []
+        for attempt in range(MAX_SCHEMA_RETRY_MODEL_CALLS):
             attempt_prompt = system_prompt
 
             if attempt == 1:
@@ -457,26 +590,30 @@ class ExaonePlanGenerationProvider:
                     "Use only the supplied candidate place_id values."
                 )
 
-            response = self.client.chat(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": attempt_prompt},
-                    {
-                        "role": "user",
-                        "content": self._payload(
-                            trip,
-                            preferences,
-                            companions,
-                            interests,
-                            preference_context,
-                            destination_places,
-                            regeneration,
-                        ),
-                    },
-                ],
-                format_schema=format_schema,
-                options={"temperature": 0, "num_ctx": self.num_ctx},
-            )
+            started_at = monotonic()
+            response = None
+            error_code = None
+            try:
+                response = self.client.chat(
+                    model=self.model,
+                    messages=[
+                        {"role": "system", "content": attempt_prompt},
+                        {"role": "user", "content": user_content},
+                    ],
+                    format_schema=format_schema,
+                    options={"temperature": 0, "num_ctx": self.num_ctx, "num_predict": num_predict},
+                )
+            except AppError as exc:
+                error_code = exc.code
+                self._record_call(attempt, response, "failed", exc.code, None, will_retry=False)
+                raise
+            finally:
+                self._log_model_call(
+                    attempt, started_at, response, error_code,
+                    days=len(trip_dates), candidates=len(destination_places),
+                    system_chars=len(attempt_prompt), payload_chars=len(user_content),
+                    num_predict=num_predict,
+                )
 
             content = (
                 response.get("message", {}).get("content")
@@ -485,16 +622,11 @@ class ExaonePlanGenerationProvider:
                 else None
             )
 
-            if isinstance(content, str):
-                logger.info(
-                    "EXAONE raw response content: %s",
-                    content[:MAX_RAW_RESPONSE_LOG_CHARS],
-                )
-            else:
-                logger.info("EXAONE raw response content unavailable")
 
+
+            repairs: list[dict[str, Any]] = []
             try:
-                return self._parse(
+                draft = self._parse(
                     response,
                     trip["start_date"],
                     trip["end_date"],
@@ -502,15 +634,61 @@ class ExaonePlanGenerationProvider:
                     preferences,
                     interests,
                     regeneration,
+                    repairs,
                 )
             except AppError as exc:
-                if exc.code != "EXAONE_INVALID_RESPONSE" or attempt == 1:
+                will_retry = exc.code == "EXAONE_INVALID_RESPONSE" and attempt + 1 < MAX_SCHEMA_RETRY_MODEL_CALLS
+                self._record_call(attempt, response, "invalid", exc.code, getattr(exc, "validation_reason", None), will_retry)
+                if not will_retry:
                     raise
 
                 last_validation_reason = getattr(exc, "validation_reason", None)
                 logger.info("EXAONE plan failed strict validation; retrying once")
+                continue
+            self._record_call(attempt, response, "repaired" if repairs else "valid", None, None, will_retry=False, repairs=repairs)
+            return draft
 
         self._provider_error()
+
+    def _record_call(self, attempt: int, response: Any, result: str, error_code: str | None, validation_reason: str | None, will_retry: bool, repairs: list[dict[str, Any]] | None = None) -> None:
+        """Keep and log one call's outcome. validation_reason is a backend code."""
+        stats = response if isinstance(response, dict) else {}
+        record = {
+            "call": attempt + 1,
+            "result": result,
+            "error_code": error_code,
+            "validation_reason": validation_reason,
+            "will_retry": will_retry,
+            "done_reason": stats.get("done_reason"),
+        }
+        if repairs:
+            record["repairs"] = repairs
+        self.call_diagnostics.append(record)
+        logger.info(
+            "exaone_model_validation model=%s call=%s/%s result=%s error=%s validation_reason=%s will_retry=%s done_reason=%s repairs=%s",
+            self.model, attempt + 1, MAX_SCHEMA_RETRY_MODEL_CALLS, result, error_code,
+            validation_reason, will_retry, record["done_reason"], len(repairs or []),
+        )
+
+    def _log_model_call(self, attempt: int, started_at: float, response: Any, error_code: str | None, **sizes: int) -> None:
+        """Log where one Ollama call spent its time. No prompt or answer text."""
+        stats = response if isinstance(response, dict) else {}
+
+        def ms(key: str) -> int | None:
+            value = stats.get(key)
+            return round(value / 1_000_000) if isinstance(value, (int, float)) else None
+
+        logger.info(
+            "exaone_model_call model=%s call=%s/%s elapsed_ms=%s timeout_s=%s error=%s "
+            "days=%s candidates=%s system_chars=%s payload_chars=%s num_ctx=%s num_predict=%s "
+            "load_ms=%s prompt_tokens=%s prompt_ms=%s output_tokens=%s output_ms=%s done_reason=%s",
+            self.model, attempt + 1, MAX_SCHEMA_RETRY_MODEL_CALLS,
+            round((monotonic() - started_at) * 1000), getattr(self, "timeout", None), error_code,
+            sizes["days"], sizes["candidates"], sizes["system_chars"], sizes["payload_chars"],
+            self.num_ctx, sizes["num_predict"],
+            ms("load_duration"), stats.get("prompt_eval_count"), ms("prompt_eval_duration"),
+            stats.get("eval_count"), ms("eval_duration"), stats.get("done_reason"),
+        )
 
     def generate_plan(self, trip: dict[str, Any], preferences: dict[str, Any], companions: list[dict[str, Any]], interests: list[str], preference_context: dict[str, Any], places: list[dict[str, Any]]) -> GeneratedPlanDraft:
         return self._generate(trip, preferences, companions, interests, preference_context, places)

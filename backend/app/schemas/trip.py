@@ -21,6 +21,9 @@ class TripPreferenceInput(BaseModel):
     avoid_stairs: bool | None = None
     avoid_hills: bool | None = None
     taxi_allowed: bool | None = None
+    # This is an itinerary-scoped choice, stored in trip_preferences rather
+    # than changing the user's profile preference.
+    travel_style: TravelStyle | None = None
 
 
 class TripCreate(BaseModel):
